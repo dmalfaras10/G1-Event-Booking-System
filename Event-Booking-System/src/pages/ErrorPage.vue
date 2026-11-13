@@ -2,7 +2,7 @@
   <div class="notfound">
     <h1>404</h1>
     <p>We couldn't find that page.</p>
-    <RouterLink :to="{ name: 'event-details' }" class="back-link">Back to the event</RouterLink>
+    <RouterLink :to="{ name: 'home' }" class="back-link">Back to Home</RouterLink>
   </div>
 </template>
 
