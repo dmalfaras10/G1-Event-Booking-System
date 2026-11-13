@@ -1,0 +1,21 @@
+:root {
+    --bg-primary: #0b0b0c;
+    --bg-surface: #141416;
+    --bg-surface-hover: #1c1c1f;
+    --gold-accent: #f3c64f;
+    --gold-accent-hover: #e0b23a;
+    --gold-muted: #b89535;
+    --magenta-badge: #9e1c4e;
+    --text-main: #f4f4f5;
+    --text-muted: #9ca3af;
+    --border-subtle: rgba(255, 255, 255, 0.08);
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: "Inter", sans-serif;
+}
