@@ -1,218 +1,216 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { useRouter } from 'vue-router'
+import { categoriesData, announcementsData, eventsData } from '../data/eventsData.js'
 
-// --- STATE FOR SEARCH, FILTERS & VIEW MODE ---
+const router = useRouter()
+
+// --- DATA STATE ---
+const categories = categoriesData
+const announcements = ref(announcementsData)
+const events = ref(eventsData)
+
+// --- SEARCH, FILTER & VIEW STATE ---
 const searchQuery = ref('')
 const selectedCategory = ref('All')
 const selectedLocation = ref('All')
 const selectedVenue = ref('All')
 const selectedGenre = ref('All')
-const selectedMonth = ref('All')
-const selectedDate = ref('All')
 const maxPrice = ref(15000)
 const sortBy = ref('date-asc')
 const viewMode = ref('grid') // 'grid' or 'agenda'
 const activeAnnouncementIndex = ref(0)
 
-// --- ANNOUNCEMENTS & PROMOTIONS DATA ---
-const announcements = ref([
-  {
-    id: 1,
-    type: 'PROMO',
-    icon: 'bi-gem',
-    title: 'Gold & Silver VIP Presale Now Open',
-    message: 'Members enjoy up to 20% automatic checkout discounts and priority seat locks on all November & December shows.',
-    ctaText: 'View VIP Plans'
-  },
-  {
-    id: 2,
-    type: 'ANNOUNCEMENT',
-    icon: 'bi-megaphone-fill',
-    title: 'Additional Seats Released: Neon Noir Symphony',
-    message: 'Due to high demand at The Palace Pool Club (Nov 21), 25 additional Silver Sky-Deck seats are now open for booking.',
-    ctaText: 'Filter Nov Events'
-  },
-  {
-    id: 3,
-    type: 'HOLIDAY OFFER',
-    icon: 'bi-stars',
-    title: 'Early Bird Holiday Bundle',
-    message: 'Book 4 or more Bronze or Silver tier tickets on December Gala events to receive complimentary lounge drink vouchers.',
-    ctaText: 'See Dec Events'
-  }
-])
+// --- DATE RANGE PICKER STATE ---
+const isDatePickerOpen = ref(false)
+const datePickerRef = ref(null)
+const minSelectableIso = '2026-11-13' // Dates before this show strikethrough
+const baseCalendarDate = ref(new Date(2026, 10, 1)) // Nov 2026 (0-indexed month)
 
-// --- MOCK EVENTS DATA ---
-const events = ref([
-  {
-    _id: 'evt-001',
-    eventName: 'Neon Noir Symphony: Manila Edition',
-    artistName: 'Nocturne Philharmonic & DJ Kaito',
-    eventCategory: 'Live Concert',
-    genre: 'Electronic & Orchestral',
-    venueName: 'The Palace Pool Club',
-    location: 'BGC, Taguig',
-    eventStartDateTime: '2026-11-21T20:00:00',
-    dateBadge: 'NOV 21',
-    dayOfWeek: 'SAT',
-    dayNumber: '21',
-    monthShort: 'NOV',
-    monthKey: '2026-11',
-    timeFormatted: '8:00 PM PHT',
-    startingPrice: 4800,
-    availabilityStatus: 'Selling Fast', // Available | Selling Fast | Low Stock | Sold Out
-    remainingTickets: 18,
-    allocatedPercent: 85,
-    promoBanner: '15% Off with Gold VIP',
-    announcement: 'Includes Sky-Deck Lounge Access',
-    eventImage: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=80',
-    eventDescription: 'Experience an immersive nocturnal audiovisual takeover blending a 24-piece live string ensemble with deep melodic synth sets.'
-  },
-  {
-    _id: 'evt-002',
-    eventName: 'Solitary Harmonics: Acoustic Piano Night',
-    artistName: 'Nils Frahm & Guests',
-    eventCategory: 'Classical & Gala',
-    genre: 'Classical & Ambient',
-    venueName: 'Samsung Performing Arts Theater',
-    location: 'Makati City',
-    eventStartDateTime: '2026-11-28T19:30:00',
-    dateBadge: 'NOV 28',
-    dayOfWeek: 'SAT',
-    dayNumber: '28',
-    monthShort: 'NOV',
-    monthKey: '2026-11',
-    timeFormatted: '7:30 PM PHT',
-    startingPrice: 3600,
-    availabilityStatus: 'Available',
-    remainingTickets: 64,
-    allocatedPercent: 52,
-    promoBanner: 'Early Bird Promo',
-    announcement: 'Doors open at 6:30 PM for acoustic check',
-    eventImage: 'https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?auto=format&fit=crop&w=900&q=80',
-    eventDescription: 'An intimate three-hour improvisational performance on grand upright piano and vintage analog modular synthesizers.'
-  },
-  {
-    _id: 'evt-003',
-    eventName: 'Winter Masquerade at The Fort',
-    artistName: 'Manila Chamber Quintet',
-    eventCategory: 'Classical & Gala',
-    genre: 'Orchestral Fusion',
-    venueName: 'Shangri-La Grand Ballroom',
-    location: 'BGC, Taguig',
-    eventStartDateTime: '2026-12-05T19:00:00',
-    dateBadge: 'DEC 05',
-    dayOfWeek: 'SAT',
-    dayNumber: '05',
-    monthShort: 'DEC',
-    monthKey: '2026-12',
-    timeFormatted: '7:00 PM PHT',
-    startingPrice: 8500,
-    availabilityStatus: 'Low Stock',
-    remainingTickets: 7,
-    allocatedPercent: 94,
-    promoBanner: 'Complimentary Champagne',
-    announcement: 'Strict Black Tie & Mask Dress Code',
-    eventImage: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?auto=format&fit=crop&w=900&q=80',
-    eventDescription: 'Step into an evening of velvet elegance, Vivaldi Recomposed under candlelight, and curated four-course dinner pairings.'
-  },
-  {
-    _id: 'evt-004',
-    eventName: 'Midnight Saxophone Salon',
-    artistName: 'The Harlem Speakeasy Quartet',
-    eventCategory: 'Jazz & Lounge',
-    genre: 'Jazz & Bebop',
-    venueName: 'The Spirits Library',
-    location: 'Makati City',
-    eventStartDateTime: '2026-12-12T21:30:00',
-    dateBadge: 'DEC 12',
-    dayOfWeek: 'SAT',
-    dayNumber: '12',
-    monthShort: 'DEC',
-    monthKey: '2026-12',
-    timeFormatted: '9:30 PM PHT',
-    startingPrice: 2800,
-    availabilityStatus: 'Selling Fast',
-    remainingTickets: 14,
-    allocatedPercent: 82,
-    promoBanner: 'Silver & Gold Priority',
-    announcement: 'Includes 1 Rare Single Malt Pairing',
-    eventImage: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80',
-    eventDescription: 'An intimate 80-seat speakeasy jazz session featuring brass standards, private banquette service, and late-night jam sessions.'
-  },
-  {
-    _id: 'evt-005',
-    eventName: 'Velvet Indie Sessions: Where Time Goes',
-    artistName: 'The Coastal Drift Collective',
-    eventCategory: 'Live Concert',
-    genre: 'Indie Rock',
-    venueName: 'Solaire Theatre',
-    location: 'Pasay City',
-    eventStartDateTime: '2026-12-19T20:00:00',
-    dateBadge: 'DEC 19',
-    dayOfWeek: 'SAT',
-    dayNumber: '19',
-    monthShort: 'DEC',
-    monthKey: '2026-12',
-    timeFormatted: '8:00 PM PHT',
-    startingPrice: 3000,
-    availabilityStatus: 'Available',
-    remainingTickets: 95,
-    allocatedPercent: 40,
-    promoBanner: '10% Bronze Member Perks',
-    announcement: 'Vinyl merch booth opens at 6:00 PM',
-    eventImage: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=900&q=80',
-    eventDescription: 'Warm analog guitars and nostalgic indie rock anthems performed live in an acoustically engineered theater setting.'
-  },
-  {
-    _id: 'evt-006',
-    eventName: '2027 Gold Champagne NYE Gala',
-    artistName: 'International Guest DJs & Pyro Symphony',
-    eventCategory: 'Nightlife & DJ',
-    genre: 'House & Pop',
-    venueName: 'Okada Manila Cove',
-    location: 'Pasay City',
-    eventStartDateTime: '2026-12-31T21:00:00',
-    dateBadge: 'DEC 31',
-    dayOfWeek: 'THU',
-    dayNumber: '31',
-    monthShort: 'DEC',
-    monthKey: '2026-12',
-    timeFormatted: '9:00 PM PHT',
-    startingPrice: 12000,
-    availabilityStatus: 'Sold Out',
-    remainingTickets: 0,
-    allocatedPercent: 100,
-    promoBanner: 'Waitlist Open for VIP',
-    announcement: 'Midnight Manila Bay Pyrotechnics Show',
-    eventImage: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80',
-    eventDescription: 'Ring in 2027 poolside by Manila Bay inside the glass dome with international headliners and unlimited vintage bubbly.'
-  }
-])
+// Committed range used for filtering
+const appliedStartDate = ref('')
+const appliedEndDate = ref('')
 
-// --- FILTER OPTIONS COMPUTED FROM DATA ---
-const categories = ['All', 'Live Concert', 'Classical & Gala', 'Jazz & Lounge', 'Nightlife & DJ']
+// Draft range inside the open popover
+const tempStartDate = ref('')
+const tempEndDate = ref('')
+const isSelectingEnd = ref(false)
+
+const weekDays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+const monthNamesShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+
+// --- CALENDAR GENERATION HELPERS ---
+const toIsoDate = (year, month, day) => {
+  const m = String(month + 1).padStart(2, '0')
+  const d = String(day).padStart(2, '0')
+  return `${year}-${m}-${d}`
+}
+
+const formatToDDMMYYYY = (isoStr) => {
+  if (!isoStr) return ''
+  const [y, m, d] = isoStr.split('-')
+  return `${m}-${d}-${y}`
+}
+
+const buildCalendarMonth = (year, month) => {
+  const firstDayWeekIdx = new Date(year, month, 1).getDay()
+  const daysInMonth = new Date(year, month + 1, 0).getDate()
+  const daysInPrevMonth = new Date(year, month, 0).getDate()
+
+  const cells = []
+
+  // Leading days from previous month
+  for (let i = firstDayWeekIdx - 1; i >= 0; i--) {
+    const dayNum = daysInPrevMonth - i
+    const prevDate = new Date(year, month - 1, dayNum)
+    cells.push({
+      key: `prev-${dayNum}`,
+      dayNumber: dayNum,
+      iso: toIsoDate(prevDate.getFullYear(), prevDate.getMonth(), dayNum),
+      isCurrentMonth: false,
+      isPast: true
+    })
+  }
+
+  // Current month days
+  for (let d = 1; d <= daysInMonth; d++) {
+    const iso = toIsoDate(year, month, d)
+    cells.push({
+      key: `curr-${iso}`,
+      dayNumber: d,
+      iso,
+      isCurrentMonth: true,
+      isPast: iso < minSelectableIso
+    })
+  }
+
+  // Trailing days from next month to fill 42 cells (6 rows)
+  const remaining = 42 - cells.length
+  for (let n = 1; n <= remaining; n++) {
+    const nextDate = new Date(year, month + 1, n)
+    cells.push({
+      key: `next-${n}`,
+      dayNumber: n,
+      iso: toIsoDate(nextDate.getFullYear(), nextDate.getMonth(), n),
+      isCurrentMonth: false,
+      isPast: false
+    })
+  }
+
+  return {
+    title: `${monthNamesShort[month]} ${year}`,
+    cells
+  }
+}
+
+const displayedCalendars = computed(() => {
+  const y1 = baseCalendarDate.value.getFullYear()
+  const m1 = baseCalendarDate.value.getMonth()
+  const rightDate = new Date(y1, m1 + 1, 1)
+  return [
+    buildCalendarMonth(y1, m1),
+    buildCalendarMonth(rightDate.getFullYear(), rightDate.getMonth())
+  ]
+})
+
+const shiftCalendarMonths = (delta) => {
+  baseCalendarDate.value = new Date(
+    baseCalendarDate.value.getFullYear(),
+    baseCalendarDate.value.getMonth() + delta,
+    1
+  )
+}
+
+const openDatePicker = () => {
+  tempStartDate.value = appliedStartDate.value || minSelectableIso
+  tempEndDate.value = appliedEndDate.value || tempStartDate.value
+  isSelectingEnd.value = false
+  isDatePickerOpen.value = !isDatePickerOpen.value
+}
+
+const selectCalendarDay = (cell) => {
+  if (!cell.isCurrentMonth || cell.isPast) return
+
+  if (!isSelectingEnd.value) {
+    tempStartDate.value = cell.iso
+    tempEndDate.value = cell.iso
+    isSelectingEnd.value = true
+  } else {
+    if (cell.iso < tempStartDate.value) {
+      tempEndDate.value = tempStartDate.value
+      tempStartDate.value = cell.iso
+    } else {
+      tempEndDate.value = cell.iso
+    }
+    isSelectingEnd.value = false
+  }
+}
+
+const isDaySelectedEndpoint = (cell) => {
+  if (!cell.isCurrentMonth) return false
+  return cell.iso === tempStartDate.value || cell.iso === tempEndDate.value
+}
+
+const isDayInRange = (cell) => {
+  if (!cell.isCurrentMonth || !tempStartDate.value || !tempEndDate.value) return false
+  return cell.iso > tempStartDate.value && cell.iso < tempEndDate.value
+}
+
+const tempRangeFooterText = computed(() => {
+  if (!tempStartDate.value) return 'No date range selected'
+  const start = formatToDDMMYYYY(tempStartDate.value)
+  const end = formatToDDMMYYYY(tempEndDate.value || tempStartDate.value)
+  return `${start} ~ ${end}`
+})
+
+const appliedRangeInputText = computed(() => {
+  if (!appliedStartDate.value) return ''
+  const start = formatToDDMMYYYY(appliedStartDate.value)
+  const end = formatToDDMMYYYY(appliedEndDate.value || appliedStartDate.value)
+  return `${start} ~ ${end}`
+})
+
+const clearDateRange = () => {
+  tempStartDate.value = ''
+  tempEndDate.value = ''
+  appliedStartDate.value = ''
+  appliedEndDate.value = ''
+  isSelectingEnd.value = false
+}
+
+const cancelDateRange = () => {
+  tempStartDate.value = appliedStartDate.value
+  tempEndDate.value = appliedEndDate.value
+  isSelectingEnd.value = false
+  isDatePickerOpen.value = false
+}
+
+const applyDateRange = () => {
+  appliedStartDate.value = tempStartDate.value
+  appliedEndDate.value = tempEndDate.value || tempStartDate.value
+  isSelectingEnd.value = false
+  isDatePickerOpen.value = false
+}
+
+// Close popover when clicking outside
+const handleClickOutside = (event) => {
+  if (datePickerRef.value && !datePickerRef.value.contains(event.target)) {
+    isDatePickerOpen.value = false
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('mousedown', handleClickOutside)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('mousedown', handleClickOutside)
+})
+
+// --- DROPDOWN FILTER OPTIONS ---
 const locations = computed(() => ['All', ...new Set(events.value.map(e => e.location))])
 const venues = computed(() => ['All', ...new Set(events.value.map(e => e.venueName))])
 const genres = computed(() => ['All', ...new Set(events.value.map(e => e.genre))])
-
-const months = [
-  { label: 'All Months', value: 'All' },
-  { label: 'November 2026', value: '2026-11' },
-  { label: 'December 2026', value: '2026-12' }
-]
-
-// Interactive calendar dates derived from events
-const calendarDates = computed(() => {
-  return events.value.map(e => ({
-    dateIso: e.eventStartDateTime.split('T')[0],
-    dayOfWeek: e.dayOfWeek,
-    dayNumber: e.dayNumber,
-    monthShort: e.monthShort,
-    monthKey: e.monthKey,
-    eventName: e.eventName
-  }))
-})
 
 // --- FILTERED & SORTED EVENTS ---
 const filteredEvents = computed(() => {
@@ -235,12 +233,13 @@ const filteredEvents = computed(() => {
         selectedVenue.value === 'All' || evt.venueName === selectedVenue.value
       const matchesGenre =
         selectedGenre.value === 'All' || evt.genre === selectedGenre.value
-      const matchesMonth =
-        selectedMonth.value === 'All' || evt.monthKey === selectedMonth.value
-      const matchesDate =
-        selectedDate.value === 'All' ||
-        evt.eventStartDateTime.startsWith(selectedDate.value)
       const matchesPrice = evt.startingPrice <= maxPrice.value
+
+      const eventDateIso = evt.eventStartDateTime.split('T')[0]
+      const matchesDateRange =
+        !appliedStartDate.value ||
+        (eventDateIso >= appliedStartDate.value &&
+          eventDateIso <= (appliedEndDate.value || appliedStartDate.value))
 
       return (
         matchesSearch &&
@@ -248,9 +247,8 @@ const filteredEvents = computed(() => {
         matchesLocation &&
         matchesVenue &&
         matchesGenre &&
-        matchesMonth &&
-        matchesDate &&
-        matchesPrice
+        matchesPrice &&
+        matchesDateRange
       )
     })
     .sort((a, b) => {
@@ -263,10 +261,8 @@ const filteredEvents = computed(() => {
     })
 })
 
-// --- HELPER FUNCTIONS ---
-const formatPrice = (value) => {
-  return '₱' + Number(value).toLocaleString('en-PH')
-}
+// --- OTHER HELPERS & NAVIGATION ---
+const formatPrice = (value) => '₱' + Number(value).toLocaleString('en-PH')
 
 const getAvailabilityBadgeClass = (status) => {
   switch (status) {
@@ -283,26 +279,24 @@ const getAvailabilityBadgeClass = (status) => {
   }
 }
 
-const toggleCalendarDate = (dateIso) => {
-  selectedDate.value = selectedDate.value === dateIso ? 'All' : dateIso
-}
-
 const resetFilters = () => {
   searchQuery.value = ''
   selectedCategory.value = 'All'
   selectedLocation.value = 'All'
   selectedVenue.value = 'All'
   selectedGenre.value = 'All'
-  selectedMonth.value = 'All'
-  selectedDate.value = 'All'
   maxPrice.value = 15000
   sortBy.value = 'date-asc'
+  clearDateRange()
 }
 
 const cycleAnnouncement = (direction) => {
   const total = announcements.value.length
-  activeAnnouncementIndex.value =
-    (activeAnnouncementIndex.value + direction + total) % total
+  activeAnnouncementIndex.value = (activeAnnouncementIndex.value + direction + total) % total
+}
+
+const goToEventDetails = (eventId) => {
+  router.push({ name: 'EventDetails', params: { id: eventId } })
 }
 </script>
 
@@ -322,7 +316,7 @@ const cycleAnnouncement = (direction) => {
                 <span class="hero-badge py-1 px-2">
                   {{ announcements[activeAnnouncementIndex].type }}
                 </span>
-                <span class="small text-muted">
+                <span class="small text-secondary-light">
                   {{ activeAnnouncementIndex + 1 }} / {{ announcements.length }}
                 </span>
               </div>
@@ -335,7 +329,7 @@ const cycleAnnouncement = (direction) => {
             </div>
           </div>
 
-          <div class="d-flex align-items-center justify-content-between justify-content-lg-end gap-2 flex-shrink-0">
+          <div class="d-flex align-items-center justify-content-end gap-2 flex-shrink-0">
             <button
               type="button"
               class="btn btn-slider-ctrl btn-sm"
@@ -356,7 +350,7 @@ const cycleAnnouncement = (direction) => {
         </div>
       </section>
 
-      <!-- 2. PAGE HEADER & SEARCH BAR -->
+      <!-- 2. PAGE HEADER & KEYWORD SEARCH BAR -->
       <section class="mb-4">
         <div class="row align-items-end g-3">
           <div class="col-lg-6">
@@ -393,16 +387,16 @@ const cycleAnnouncement = (direction) => {
         </div>
       </section>
 
-      <!-- 3. CATEGORY PILLS & VIEW TOGGLE BAR -->
+      <!-- 3. CATEGORY PILLS, TICKETMASTER-STYLE DATE RANGE PICKER & FILTERS -->
       <section class="filter-panel rounded-4 p-3 p-md-4 mb-4">
-        <div class="d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3 pb-3 border-bottom border-secondary border-opacity-25">
+        <div class="d-flex flex-column flex-xl-row align-items-xl-center justify-content-between gap-3 pb-3 border-bottom border-secondary border-opacity-25">
           <!-- Category Taxonomy Pills -->
           <div class="d-flex flex-wrap gap-2">
             <button
               v-for="cat in categories"
               :key="cat"
               type="button"
-              class="btn btn-sm rounded-pill px-3 py-2 fw-semibold transition-all"
+              class="btn btn-sm rounded-pill px-3 py-2 fw-semibold"
               :class="selectedCategory === cat ? 'btn-login' : 'btn-register'"
               @click="selectedCategory = cat"
             >
@@ -410,42 +404,146 @@ const cycleAnnouncement = (direction) => {
             </button>
           </div>
 
-          <!-- View Switcher (Grid vs Agenda) & Month Quick Filter -->
-          <div class="d-flex align-items-center gap-2 align-self-start align-self-lg-center">
-            <select
-              v-model="selectedMonth"
-              class="form-select form-select-sm dark-select"
-              aria-label="Filter by month"
-            >
-              <option v-for="m in months" :key="m.value" :value="m.value">
-                {{ m.label }}
-              </option>
-            </select>
+          <!-- Ticketmaster-Style Date Range Picker + View Mode Icons -->
+          <div class="d-flex align-items-center gap-2 flex-wrap">
+            <div ref="datePickerRef" class="position-relative date-range-wrapper">
+              <div
+                class="input-group input-group-sm date-range-trigger"
+                :class="{ active: isDatePickerOpen || appliedStartDate }"
+                @click="openDatePicker"
+              >
+                <span class="input-group-text date-trigger-icon">
+                  <i class="bi bi-calendar3"></i>
+                </span>
+                <input
+                  type="text"
+                  readonly
+                  class="form-control date-trigger-input shadow-none"
+                  placeholder="Select date range"
+                  :value="appliedRangeInputText"
+                />
+              </div>
 
-            <div class="btn-group view-toggle-group" role="group" aria-label="View toggle">
+              <!-- Dual-Month Calendar Popover -->
+              <div v-if="isDatePickerOpen" class="date-range-popover rounded-3 shadow-lg p-3">
+                <!-- Navigation Arrows -->
+                <button
+                  type="button"
+                  class="btn btn-sm cal-nav-btn cal-nav-prev"
+                  @click.stop="shiftCalendarMonths(-1)"
+                  aria-label="Previous month"
+                >
+                  <i class="bi bi-chevron-left"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sm cal-nav-btn cal-nav-next"
+                  @click.stop="shiftCalendarMonths(1)"
+                  aria-label="Next month"
+                >
+                  <i class="bi bi-chevron-right"></i>
+                </button>
+
+                <!-- Two Side-by-Side Months -->
+                <div class="row g-4">
+                  <div
+                    v-for="cal in displayedCalendars"
+                    :key="cal.title"
+                    class="col-12 col-md-6"
+                  >
+                    <div class="text-center fw-bold text-white mb-2 cal-month-title">
+                      {{ cal.title }}
+                    </div>
+
+                    <div class="cal-grid cal-weekdays mb-1">
+                      <span
+                        v-for="wd in weekDays"
+                        :key="wd"
+                        class="text-center fw-bold small text-secondary-light"
+                      >
+                        {{ wd }}
+                      </span>
+                    </div>
+
+                    <div class="cal-grid">
+                      <button
+                        v-for="cell in cal.cells"
+                        :key="cell.key"
+                        type="button"
+                        class="cal-day-btn"
+                        :class="{
+                          'cal-day-outside': !cell.isCurrentMonth,
+                          'cal-day-past': cell.isCurrentMonth && cell.isPast,
+                          'cal-day-selected': isDaySelectedEndpoint(cell),
+                          'cal-day-in-range': isDayInRange(cell)
+                        }"
+                        :disabled="!cell.isCurrentMonth || cell.isPast"
+                        @click.stop="selectCalendarDay(cell)"
+                      >
+                        {{ cell.dayNumber }}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Popover Footer: Range Preview + Clear / Cancel / Apply -->
+                <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2 pt-3 mt-3 border-top border-secondary border-opacity-25">
+                  <span class="small fw-semibold text-warning">
+                    {{ tempRangeFooterText }}
+                  </span>
+
+                  <div class="d-flex align-items-center gap-2 justify-content-end">
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-register px-3"
+                      @click.stop="clearDateRange"
+                    >
+                      Clear
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-cancel-range px-3"
+                      @click.stop="cancelDateRange"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-sm btn-login px-3"
+                      @click.stop="applyDateRange"
+                    >
+                      Apply
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Grid / Agenda View Switcher -->
+            <div class="btn-group" role="group" aria-label="View toggle">
               <button
                 type="button"
-                class="btn btn-sm"
+                class="btn btn-sm px-2.5"
                 :class="viewMode === 'grid' ? 'btn-login' : 'btn-register'"
                 @click="viewMode = 'grid'"
-                title="Card Grid View"
+                title="Grid View"
               >
-                <i class="bi bi-grid-3x3-gap-fill"></i>
+                <i class="bi bi-grid-fill"></i>
               </button>
               <button
                 type="button"
-                class="btn btn-sm"
+                class="btn btn-sm px-2.5"
                 :class="viewMode === 'agenda' ? 'btn-login' : 'btn-register'"
                 @click="viewMode = 'agenda'"
-                title="Calendar Agenda View"
+                title="List View"
               >
-                <i class="bi bi-calendar3-week"></i>
+                <i class="bi bi-list-ul"></i>
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Multi-Criteria Dropdown Filters: Location, Venue, Genre, Price, Sort -->
+        <!-- Dropdown Filters: Location, Venue, Genre, Price, Sort -->
         <div class="row g-3 pt-3 align-items-end">
           <div class="col-6 col-md-4 col-lg-2">
             <label class="form-label small text-secondary-light mb-1">
@@ -509,44 +607,6 @@ const cycleAnnouncement = (direction) => {
             </select>
           </div>
         </div>
-
-        <!-- 4. INTERACTIVE CALENDAR DATE DISCOVERY STRIP -->
-        <div class="pt-3 mt-3 border-top border-secondary border-opacity-25">
-          <div class="d-flex align-items-center justify-content-between mb-2">
-            <span class="small fw-semibold text-secondary-light">
-              <i class="bi bi-calendar-event text-warning me-1"></i>Interactive Date Discovery (Click a date to filter):
-            </span>
-            <button
-              v-if="selectedDate !== 'All'"
-              type="button"
-              class="btn btn-link btn-sm text-warning p-0 text-decoration-none"
-              @click="selectedDate = 'All'"
-            >
-              Show All Dates
-            </button>
-          </div>
-
-          <div class="d-flex gap-2 overflow-auto pb-1 calendar-strip">
-            <button
-              v-for="d in calendarDates"
-              :key="d.dateIso"
-              type="button"
-              class="calendar-date-pill rounded-3 p-2 text-center flex-shrink-0"
-              :class="{ active: selectedDate === d.dateIso }"
-              @click="toggleCalendarDate(d.dateIso)"
-            >
-              <span class="d-block extra-small text-uppercase fw-bold date-pill-day">
-                {{ d.dayOfWeek }}
-              </span>
-              <span class="d-block fs-5 fw-bold text-white lh-1 my-1">
-                {{ d.dayNumber }}
-              </span>
-              <span class="d-block extra-small text-secondary-light">
-                {{ d.monthShort }}
-              </span>
-            </button>
-          </div>
-        </div>
       </section>
 
       <!-- RESULTS COUNT & RESET LINK -->
@@ -564,7 +624,7 @@ const cycleAnnouncement = (direction) => {
         </button>
       </div>
 
-      <!-- 5A. EVENT LISTINGS: 3-COLUMN CARD GRID VIEW -->
+      <!-- 4A. EVENT LISTINGS: 3-COLUMN CARD GRID VIEW -->
       <section v-if="viewMode === 'grid' && filteredEvents.length > 0" class="mb-5">
         <div class="row g-4">
           <div
@@ -573,7 +633,6 @@ const cycleAnnouncement = (direction) => {
             class="col-md-6 col-lg-4"
           >
             <div class="card event-card h-100 rounded-4 overflow-hidden">
-              <!-- Image + Availability Badge + Date Badge -->
               <div class="position-relative">
                 <img
                   :src="event.eventImage"
@@ -581,7 +640,6 @@ const cycleAnnouncement = (direction) => {
                   :alt="event.eventName"
                 />
 
-                <!-- Top-Left Real-Time Availability Badge -->
                 <span
                   class="availability-badge"
                   :class="getAvailabilityBadgeClass(event.availabilityStatus)"
@@ -590,12 +648,10 @@ const cycleAnnouncement = (direction) => {
                   {{ event.availabilityStatus }}
                 </span>
 
-                <!-- Top-Right Date Badge (Matches mte repo style) -->
                 <span class="event-date-badge">
                   <i class="bi bi-calendar3 me-1"></i>{{ event.dateBadge }}
                 </span>
 
-                <!-- Bottom Image Overlay Promo Tag -->
                 <div class="card-promo-overlay px-3 py-1 d-flex justify-content-between align-items-center">
                   <span class="extra-small fw-semibold text-warning">
                     <i class="bi bi-lightning-charge-fill me-1"></i>{{ event.promoBanner }}
@@ -606,14 +662,19 @@ const cycleAnnouncement = (direction) => {
                 </div>
               </div>
 
-              <!-- Card Body -->
               <div class="card-body d-flex flex-column p-4">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                   <span class="event-category">{{ event.eventCategory }}</span>
                   <span class="extra-small text-secondary-light">{{ event.genre }}</span>
                 </div>
 
-                <h5 class="card-title fw-bold mb-1">{{ event.eventName }}</h5>
+                <h5
+                  class="card-title fw-bold mb-1"
+                  style="cursor: pointer;"
+                  @click="goToEventDetails(event._id)"
+                >
+                  {{ event.eventName }}
+                </h5>
                 <p class="small text-warning mb-2 fw-medium">
                   <i class="bi bi-person-badge me-1"></i>{{ event.artistName }}
                 </p>
@@ -622,19 +683,16 @@ const cycleAnnouncement = (direction) => {
                   {{ event.eventDescription }}
                 </p>
 
-                <!-- Venue & Location -->
                 <p class="card-text small mb-2">
                   <i class="bi bi-geo-alt me-1"></i>{{ event.venueName }} &bull;
                   <span class="text-white">{{ event.location }}</span>
                 </p>
 
-                <!-- Event Announcement Notice -->
                 <div class="announcement-chip rounded-2 px-2 py-1 mb-3 extra-small">
                   <i class="bi bi-info-circle text-warning me-1"></i>
                   {{ event.announcement }}
                 </div>
 
-                <!-- Seat Capacity Allocation Bar -->
                 <div class="mb-3">
                   <div class="d-flex justify-content-between extra-small mb-1">
                     <span class="text-secondary-light">Allocated Capacity</span>
@@ -655,7 +713,6 @@ const cycleAnnouncement = (direction) => {
                   </div>
                 </div>
 
-                <!-- Price & CTA Footer -->
                 <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top border-secondary border-opacity-25">
                   <div>
                     <small class="d-block card-starting-text">Starting at</small>
@@ -669,6 +726,7 @@ const cycleAnnouncement = (direction) => {
                     class="btn btn-sm px-3 py-2"
                     :class="event.availabilityStatus === 'Sold Out' ? 'btn-secondary disabled' : 'btn-login'"
                     :disabled="event.availabilityStatus === 'Sold Out'"
+                    @click="goToEventDetails(event._id)"
                   >
                     <i
                       class="bi me-1"
@@ -683,7 +741,7 @@ const cycleAnnouncement = (direction) => {
         </div>
       </section>
 
-      <!-- 5B. EVENT LISTINGS: CALENDAR AGENDA ROW VIEW (Adapted from Stitch's 4-Row Schedule) -->
+      <!-- 4B. EVENT LISTINGS: CALENDAR AGENDA LIST VIEW -->
       <section v-else-if="viewMode === 'agenda' && filteredEvents.length > 0" class="mb-5">
         <div class="d-flex flex-column gap-3">
           <div
@@ -692,21 +750,18 @@ const cycleAnnouncement = (direction) => {
             class="agenda-row rounded-4 p-3 p-md-4 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3"
           >
             <div class="d-flex align-items-center gap-3">
-              <!-- Date Box -->
               <div class="agenda-date-box rounded-3 text-center d-flex flex-column justify-content-center flex-shrink-0">
                 <span class="extra-small fw-bold text-warning text-uppercase">{{ event.dayOfWeek }}</span>
                 <span class="fs-4 fw-bold text-white lh-1 my-1">{{ event.dayNumber }}</span>
                 <span class="extra-small text-secondary-light">{{ event.monthShort }}</span>
               </div>
 
-              <!-- Thumbnail -->
               <img
                 :src="event.eventImage"
                 :alt="event.eventName"
                 class="agenda-thumb rounded-3 d-none d-sm-block flex-shrink-0"
               />
 
-              <!-- Event Summary -->
               <div>
                 <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
                   <span class="badge bg-dark border border-secondary text-warning">
@@ -720,7 +775,13 @@ const cycleAnnouncement = (direction) => {
                     {{ event.availabilityStatus }}
                   </span>
                 </div>
-                <h5 class="fw-bold text-white mb-1">{{ event.eventName }}</h5>
+                <h5
+                  class="fw-bold text-white mb-1"
+                  style="cursor: pointer;"
+                  @click="goToEventDetails(event._id)"
+                >
+                  {{ event.eventName }}
+                </h5>
                 <p class="small text-secondary-light mb-0">
                   <i class="bi bi-person-badge text-warning me-1"></i>{{ event.artistName }} &nbsp;|&nbsp;
                   <i class="bi bi-geo-alt text-warning me-1"></i>{{ event.venueName }}, {{ event.location }}
@@ -728,7 +789,6 @@ const cycleAnnouncement = (direction) => {
               </div>
             </div>
 
-            <!-- Right Side Capacity, Price & Button -->
             <div class="d-flex flex-wrap align-items-center justify-content-between justify-content-lg-end gap-4 pt-2 pt-lg-0 border-top border-lg-0 border-secondary border-opacity-25">
               <div class="text-lg-end">
                 <span class="d-block extra-small text-secondary-light">{{ event.promoBanner }}</span>
@@ -747,6 +807,7 @@ const cycleAnnouncement = (direction) => {
                 class="btn btn-sm px-3 py-2"
                 :class="event.availabilityStatus === 'Sold Out' ? 'btn-secondary disabled' : 'btn-login'"
                 :disabled="event.availabilityStatus === 'Sold Out'"
+                @click="goToEventDetails(event._id)"
               >
                 <i class="bi bi-ticket-perforated me-1"></i>
                 {{ event.availabilityStatus === 'Sold Out' ? 'Sold Out' : 'Select Seats' }}
@@ -756,19 +817,19 @@ const cycleAnnouncement = (direction) => {
         </div>
       </section>
 
-      <!-- EMPTY STATE (TSD Use Case 2 Alternate Flow 4a) -->
+      <!-- EMPTY STATE -->
       <section v-else class="text-center py-5 my-4 filter-panel rounded-4">
         <i class="bi bi-calendar-x display-4 text-warning mb-3 d-block"></i>
         <h4 class="fw-bold text-white">No Matching Events Found</h4>
         <p class="text-secondary-light small mx-auto mb-4" style="max-width: 440px;">
-          No events match your current search or filter criteria. Try clearing your filters or adjusting your maximum ticket price.
+          No events match your current search or selected date range. Try clearing your filters or adjusting your date range.
         </p>
         <button type="button" class="btn btn-login px-4 py-2" @click="resetFilters">
           <i class="bi bi-arrow-counterclockwise me-1"></i>Clear Filters &amp; View All
         </button>
       </section>
 
-      <!-- 6. VIP MEMBERSHIP & PRESALE PROMOTION BANNER (Distilled from Stitch Showcase) -->
+      <!-- 5. VIP MEMBERSHIP & PRESALE PROMOTION BANNER -->
       <section class="py-3">
         <div class="card event-card p-4 p-md-5 rounded-4 border-warning border-opacity-50 position-relative overflow-hidden">
           <div class="row align-items-center g-4">
@@ -811,7 +872,6 @@ const cycleAnnouncement = (direction) => {
 </template>
 
 <style scoped>
-/* Inherits root variables from src/assets/main.css */
 .main-wrapper {
   background:
     radial-gradient(circle at 85% 20%, rgba(158, 28, 78, 0.16), transparent 50%),
@@ -891,27 +951,134 @@ const cycleAnnouncement = (direction) => {
   background: var(--gold-accent);
 }
 
-/* Interactive Calendar Strip */
-.calendar-date-pill {
-  min-width: 72px;
-  background-color: var(--bg-primary);
-  border: 1px solid var(--border-subtle);
+/* Ticketmaster-Style Date Range Picker */
+.date-range-trigger {
+  width: 255px;
   cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-primary);
   transition: all 0.2s ease;
 }
 
-.calendar-date-pill:hover,
-.calendar-date-pill.active {
-  background-color: rgba(243, 198, 79, 0.14);
+.date-range-trigger:hover,
+.date-range-trigger.active {
   border-color: var(--gold-accent);
-  transform: translateY(-2px);
+  box-shadow: 0 0 0 2px rgba(243, 198, 79, 0.2);
 }
 
-.date-pill-day {
+.date-trigger-icon {
+  background-color: var(--bg-surface);
+  border: none;
+  border-right: 1px solid var(--border-subtle);
   color: var(--gold-accent);
 }
 
-/* Shared Buttons & Badges from mte repo */
+.date-trigger-input {
+  background-color: transparent !important;
+  border: none !important;
+  color: var(--text-main) !important;
+  font-size: 0.84rem;
+  cursor: pointer;
+}
+
+.date-trigger-input::placeholder {
+  color: var(--text-muted);
+}
+
+.date-range-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 560px;
+  max-width: 92vw;
+  background-color: var(--bg-surface);
+  border: 1px solid rgba(243, 198, 79, 0.35);
+  z-index: 1050;
+}
+
+.cal-month-title {
+  font-size: 0.95rem;
+}
+
+.cal-nav-btn {
+  position: absolute;
+  top: 12px;
+  color: var(--text-main);
+  background: transparent;
+  border: none;
+}
+
+.cal-nav-btn:hover {
+  color: var(--gold-accent);
+}
+
+.cal-nav-prev {
+  left: 12px;
+}
+
+.cal-nav-next {
+  right: 12px;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.cal-day-btn {
+  height: 34px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 0.82rem;
+  font-weight: 500;
+  transition: all 0.15s ease;
+}
+
+.cal-day-btn:hover:not(:disabled) {
+  background-color: rgba(243, 198, 79, 0.2);
+  color: var(--gold-accent);
+}
+
+.cal-day-outside {
+  color: rgba(156, 163, 175, 0.3);
+  cursor: default;
+}
+
+.cal-day-past {
+  color: rgba(156, 163, 175, 0.45);
+  text-decoration: line-through;
+  cursor: not-allowed;
+}
+
+.cal-day-selected {
+  background-color: var(--gold-accent) !important;
+  color: #0b0b0c !important;
+  font-weight: 700;
+}
+
+.cal-day-in-range {
+  background-color: rgba(243, 198, 79, 0.16);
+  color: var(--gold-accent);
+  border-radius: 0;
+}
+
+.btn-cancel-range {
+  background-color: #2b2b30;
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+  font-size: 0.85rem;
+}
+
+.btn-cancel-range:hover {
+  background-color: #38383f;
+  color: #ffffff;
+}
+
+/* Shared Buttons & Badges */
 .hero-badge {
   background-color: rgba(158, 28, 78, 0.25);
   border: 1px solid var(--magenta-badge);
@@ -1021,7 +1188,6 @@ const cycleAnnouncement = (direction) => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.45);
 }
 
-/* Real-time Availability Badges */
 .availability-badge {
   position: absolute;
   top: 14px;
