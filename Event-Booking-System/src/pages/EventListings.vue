@@ -773,7 +773,7 @@ const cycleAnnouncement = (direction) => {
         <div class="card event-card p-4 p-md-5 rounded-4 border-warning border-opacity-50 position-relative overflow-hidden">
           <div class="row align-items-center g-4">
             <div class="col-lg-8">
-              <span class="hero-badge mb-2 d-inline-block">
+              <span class="hero-badge mb-2 d-inline-block p-2">
                 <i class="bi bi-gem me-1"></i>VIP Membership Perks
               </span>
               <h3 class="fw-bold text-white mt-1 mb-2">
