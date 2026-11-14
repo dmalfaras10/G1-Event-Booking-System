@@ -12,6 +12,7 @@ import EventDetailsPage from './pages/EventDetailsPage.vue'
 import LoginPage from './pages/LoginPage.vue'
 import RegisterPage from './pages/RegisterPage.vue'
 import LogoutPage from './pages/LogoutPage.vue'
+import ForgotPassword from './pages/ForgotPassword.vue'
 import ErrorPage from './pages/ErrorPage.vue'
 
 const routes = [
@@ -19,6 +20,7 @@ const routes = [
   { path: '/', name: 'home', component: HomePage },
   { path: '/register', name: 'Register', component: RegisterPage },
   { path: '/login', name: 'Login', component: LoginPage },
+  { path: '/forgot-password', name: 'Forgot-Password', component: ForgotPassword },
   { path: '/logout', name: 'logout', component: LogoutPage},
   { path: '/event/event-details1', name: 'event-details', component: EventDetailsPage },
   { path: '/events', name: 'EventListings',  component: EventListingsPage},
