@@ -3,66 +3,83 @@
     <!-- ============ LEFT COLUMN: EVENT CONTENT ============ -->
     <div class="event-content">
 
-      <!-- Hero banner -->
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb">
+        <a href="#">Performances</a><span class="crumb-sep">/</span>
+        <a href="#">Classical &amp; Orchestral</a><span class="crumb-sep">/</span>
+        <span class="crumb-current">Nocturne Philharmonic Gala</span>
+      </nav>
+
+      <!-- Hero banner (switches when a thumbnail below is clicked) -->
       <div class="banner">
-        <div class="banner-inner">
-          <div class="badge-row">
-            <span class="badge badge-magenta">Exclusive Lincoln Center Sanctum</span>
-            <span class="badge badge-dark">Private Patron Allotment</span>
+        <div class="banner-media">
+          <!-- TODO: fill in the src values in heroImages (script) — banner auto-switches on thumb click -->
+          <img v-if="heroImages[activeImage]?.src" :key="activeImage" :src="heroImages[activeImage].src" class="banner-img" alt="">
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-magenta">Exclusive Lincoln Center Sanctum</span>
+          <span class="badge badge-dark">Private Patron Allotment</span>
+        </div>
+        <div class="banner-strip">
+          <div class="strip-left">
+            <i class="bi bi-megaphone-fill"></i> Meyer Sound Constellation
+            <span class="strip-sep">|</span>
+            <span class="strip-detail">Reverbation RT60 = 1.82s</span>
           </div>
-          <div class="banner-visual">
-            <div class="hall-glow"></div>
-            <div class="stage">
-              <div class="curtains"></div>
-              <div class="piano"></div>
-              <div class="spotlight"></div>
-            </div>
-            <div class="banner-overlay-text">
-              <span class="kicker">Autumnal Sanctum Series // Volume IV</span>
-            </div>
+          <div class="strip-right">
+            <i class="bi bi-bank2"></i> 14 Master Box Suites Left
           </div>
         </div>
       </div>
 
-      <span class="event-subtitle">AUTUMNAL SANCTUM SERIES // VOLUME IV</span>
+      <!-- Gallery thumbnails (click to switch the hero banner) -->
+      <div class="thumb-row">
+        <div v-for="(img, i) in heroImages" :key="i"
+             :class="['thumb', { active: activeImage === i }]"
+             @click="activeImage = i">
+          <!-- TODO: thumbnails render automatically once src is set in heroImages -->
+        </div>
+      </div>
+
+      <span class="event-kicker"><i class="bi bi-lightning-charge-fill"></i> Autumnal Sanctum Series // Volume IV</span>
       <h1 class="event-title">
         Nocturne Philharmonic: An Evening of Chopin &amp; Debussy at David Geffen Hall
       </h1>
 
-      <!-- Meta row: 4 quick facts -->
+      <!-- Meta row: 4 quick facts in a single panel -->
       <div class="meta-grid">
         <div class="meta-card">
           <div class="meta-label">Date &amp; Evening</div>
-          <div class="meta-value">Sat, Oct 28, 2026</div>
+          <div class="meta-value"><i class="bi bi-calendar-event"></i> Sat, Oct 28, 2026</div>
           <div class="meta-sub">Doors &amp; Lounge open at 18:30</div>
         </div>
         <div class="meta-card">
           <div class="meta-label">Curtain Protocol</div>
-          <div class="meta-value">19:30 Sharp</div>
-          <div class="meta-sub">Black Tie / Velvet</div>
+          <div class="meta-value"><i class="bi bi-clock"></i> 19:30 Sharp</div>
+          <div class="meta-sub">Doors &amp; Lounge from 18:30</div>
         </div>
         <div class="meta-card">
           <div class="meta-label">Sanctum Venue</div>
-          <div class="meta-value">David Geffen Hall</div>
+          <div class="meta-value"><i class="bi bi-bank2"></i> David Geffen Hall</div>
           <div class="meta-sub">Lincoln Center, NYC</div>
         </div>
         <div class="meta-card">
           <div class="meta-label">Dress Attire</div>
-          <div class="meta-value">Style Colonel</div>
+          <div class="meta-value"><i class="bi bi-suit-diamond"></i> Black Tie / Velvet</div>
           <div class="meta-sub">Stiletto Salon Etiquette</div>
         </div>
       </div>
 
-      <!-- Section tabs -->
+      <!-- Section tabs (switch the content panel below) -->
       <div class="section-tabs">
-        <span class="tab active">Program Notes &amp; Repertoire</span>
-        <span class="tab">Orchestra Lineup</span>
-        <span class="tab">Acoustic Blueprint</span>
-        <span class="tab">Sommelier Pairing</span>
+        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-journal-text"></i> Program Notes &amp; Repertoire</span>
+        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Orchestra Lineup</span>
+        <span :class="['tab', { active: activeTab === 'acoustic' }]" @click="activeTab = 'acoustic'"><i class="bi bi-rulers"></i> Acoustic Blueprint</span>
+        <span :class="['tab', { active: activeTab === 'sommelier' }]" @click="activeTab = 'sommelier'"><i class="bi bi-cup-straw"></i> Sommelier Pairing</span>
       </div>
 
-      <!-- Description -->
-      <section class="event-section">
+      <!-- Tab panel: Program Notes & Repertoire -->
+      <section v-if="activeTab === 'program'" class="event-section">
         <p class="lead">
           Immerse your senses in a transcendent nocturnal exploration celebrating the impressionist
           architecture of Claude Debussy and the poetic virtuosity of Frédéric Chopin. Specially
@@ -77,20 +94,113 @@
         </p>
       </section>
 
-      <!-- Curated Movement Schedule -->
-      <section class="event-section">
+      <!-- Curated Movement Schedule (part of Program Notes & Repertoire) -->
+      <section v-if="activeTab === 'program'" class="event-section">
         <div class="section-head">
           <h2 class="section-title">Curated Movement Schedule</h2>
           <span class="intermission">Intermission at 20:45 (25 min)</span>
         </div>
         <div class="movements">
           <div v-for="(m, i) in movements" :key="i" class="movement-row">
-            <div class="movement-num">{{ i + 1 }}</div>
-            <div class="movement-work">{{ m.work }}</div>
-            <div class="movement-detail">{{ m.detail }}</div>
+            <div class="movement-num">{{ roman(i) }}</div>
+            <div class="movement-main">
+              <div class="movement-work">{{ m.work }}</div>
+              <div class="movement-detail">{{ m.detail }}</div>
+            </div>
             <div class="movement-tempo">{{ m.tempo }}</div>
           </div>
         </div>
+      </section>
+
+      <!-- Tab panel: Orchestra Lineup (placeholder content) -->
+      <section v-else-if="activeTab === 'lineup'" class="event-section">
+        <div class="section-head">
+          <h2 class="section-title">Orchestra Lineup</h2>
+          <span class="artist-profiles">71 Musicians Onstage</span>
+        </div>
+        <div class="lineup-grid">
+          <div class="lineup-card">
+            <div class="lineup-name">Strings</div>
+            <div class="lineup-detail">32 players — 12 First Violins · 10 Second Violins · 6 Violas · 4 Cellos, led by the Concertmaster's desk.</div>
+            <div class="lineup-count">32 Players</div>
+          </div>
+          <div class="lineup-card">
+            <div class="lineup-name">Woodwinds</div>
+            <div class="lineup-detail">Dual flutes, oboes, clarinets &amp; bassoons — with solo cor anglais for the Nocturnes.</div>
+            <div class="lineup-count">8 Players</div>
+          </div>
+          <div class="lineup-card">
+            <div class="lineup-name">Brass</div>
+            <div class="lineup-detail">Dual French horns, dual trumpets &amp; tenor trombone — muted for the impressionist passages.</div>
+            <div class="lineup-count">5 Players</div>
+          </div>
+          <div class="lineup-card">
+            <div class="lineup-name">Harp, Piano &amp; Percussion</div>
+            <div class="lineup-detail">1892 Hamburg Steinway Centennial D-274, dual harps, timpani &amp; celesta.</div>
+            <div class="lineup-count">5 Players</div>
+          </div>
+          <div class="lineup-card">
+            <div class="lineup-name">Guest Female Choir</div>
+            <div class="lineup-detail">16-voice chamber choir — Sirènes movement, positioned in the First Tier balcony.</div>
+            <div class="lineup-count">16 Voices</div>
+          </div>
+          <div class="lineup-card">
+            <div class="lineup-name">Featured Soloists</div>
+            <div class="lineup-detail">Alistair Vance, piano — Viviano Atalian, guest concertmaster — Julian von Berg, podium.</div>
+            <div class="lineup-count">3 Guest Artists</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab panel: Acoustic Blueprint (placeholder content) -->
+      <section v-else-if="activeTab === 'acoustic'" class="event-section">
+        <div class="section-head">
+          <h2 class="section-title">Acoustic Blueprint</h2>
+          <span class="artist-profiles">Hall Calibration</span>
+        </div>
+        <div class="movements">
+          <div class="spec-row">
+            <span class="spec-name">Reverberation Time (RT60)</span>
+            <span class="spec-value">1.82 s — full concert configuration</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-name">Dispersion System</span>
+            <span class="spec-value">Meyer Sound Constellation — 96 elements, concealed in the ceiling coffers</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-name">Acoustic Sweet Spot</span>
+            <span class="spec-value">Parquet Rows E–H — ±2 dB dispersion tolerance</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-name">Hall Volume</span>
+            <span class="spec-value">27,400 m³ adjustable chamber — velvet dampening panels engaged at 19:15</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-name">Box Suite Isolation</span>
+            <span class="spec-value">Private mezzanine envelope — acoustic decoupling at 38 dB attenuation</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab panel: Sommelier Pairing (placeholder content) -->
+      <section v-else-if="activeTab === 'sommelier'" class="event-section">
+        <div class="section-head">
+          <h2 class="section-title">Sommelier Pairing</h2>
+          <span class="artist-profiles">Curated by House Sommelier</span>
+        </div>
+        <div class="movements">
+          <div v-for="(p, i) in pairings" :key="i" class="movement-row">
+            <div class="movement-main">
+              <div class="movement-work">{{ p.name }}</div>
+              <div class="movement-detail">{{ p.detail }}</div>
+            </div>
+            <div class="movement-tempo">{{ p.pour }}</div>
+          </div>
+        </div>
+        <p class="pairing-note">
+          <i class="bi bi-cup-straw"></i>
+          The Champagne reception is included with every admission; reserve pours are complimentary for Founder Tier patrons.
+        </p>
       </section>
 
       <!-- Resident Virtuosos & Maestro -->
@@ -101,17 +211,21 @@
         </div>
         <div class="artist-grid">
           <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-avatar">
-              <i class="bi bi-person-circle"></i>
-            </div>
-            <div class="artist-info">
-              <div class="artist-role">{{ a.role }}</div>
-              <div class="artist-name">{{ a.name }}</div>
-              <div class="artist-city">{{ a.city }}</div>
-              <p class="artist-bio">{{ a.bio }}</p>
-              <div class="artist-badges">
-                <span v-for="(b, bi) in a.badges" :key="bi" class="artist-badge">{{ b }}</span>
+            <div class="artist-head">
+              <div class="artist-avatar">
+                <!-- TODO: replace with artist photo: <img src="..." class="artist-photo" alt=""> -->
               </div>
+              <div class="artist-id">
+                <div class="artist-role">{{ a.role }}</div>
+                <div class="artist-name">{{ a.name }}</div>
+                <div class="artist-city">{{ a.city }}</div>
+              </div>
+            </div>
+            <p class="artist-bio">{{ a.bio }}</p>
+            <div class="artist-badges">
+              <span v-for="(b, bi) in a.badges" :key="bi" class="artist-badge">
+                <i :class="['bi', b.icon]"></i> {{ b.text }}
+              </span>
             </div>
           </div>
         </div>
@@ -120,16 +234,16 @@
       <!-- Access Protocol -->
       <section class="event-section access-protocol">
         <div class="access-head">
-          <h3 class="access-title">Access Protocol</h3>
-          <span class="access-loc">West 65th St &amp; Columbus Ave</span>
+          <span class="access-kicker">Access Protocol</span>
+          <span class="access-loc"><i class="bi bi-geo-alt"></i> West 65th St &amp; Columbus Ave</span>
         </div>
-        <div class="access-body">
-          <div class="access-left">Private Porte-Cochère &amp; Lounge Entry</div>
-          <div class="access-right">White-Glove Usher Escort</div>
+        <h3 class="access-title">Private Porte-Cochère &amp; Lounge Entry</h3>
+        <div class="access-map">
+          <!-- TODO: replace with map image: <img src="..." class="map-img" alt=""> -->
         </div>
         <div class="access-gate">
-          <span class="gate-icon">📍</span>
-          <span class="gate-text">David Geffen Hall Patrons VIP Gate 3</span>
+          <span class="gate-left"><i class="bi bi-geo-alt"></i> David Geffen Hall Patrons VIP Gate 3</span>
+          <span class="gate-right">White-Glove Usher Escort</span>
         </div>
       </section>
 
@@ -451,9 +565,34 @@ const movements = ref([
   { work: 'Debussy: Nocturnes (Nuages, Fêtes, Sirènes)', detail: 'Full Orchestra with 16‑Voice Female Choir / 26 Minutes', tempo: 'Très lent · Animé' },
 ])
 
+// ---- Tab panels ----
+const activeTab = ref('program')
+
+// ---- Hero gallery ----
+// TODO: put your image paths here — src '' keeps the gradient placeholder until filled in.
+const heroImages = ref([
+  { src: '', alt: 'David Geffen Hall — patron view' },
+  { src: '', alt: 'Grand chandelier & boxes' },
+  { src: '', alt: 'Orchestra on stage' },
+  { src: '', alt: 'Master box suite' },
+])
+const activeImage = ref(0)
+
+const pairings = ref([
+  { name: 'Dom Pérignon Vintage 2013', detail: 'Épernay, France · Disgorged 2021 — served fluted at the Porte-Cochère lounge', pour: 'Doors Pour · 18:30' },
+  { name: 'Chablis Grand Cru “Les Clos” 2019', detail: 'William Fèvre, Burgundy — kinetic minerality to mirror the Nocturnes', pour: 'First Interlude · 20:45' },
+  { name: 'Château d’Yquem 2011', detail: 'Sauternes, half-bottle service — apricot & saffron finish for the encore', pour: 'Encore Pour · 21:40' },
+])
+
 const artists = ref([
-  { role: 'Featured Soloist', name: 'Alistair Vance', city: 'Hamburg Steinway Resident', bio: 'Three‑time International Chopin Piano Prize medalist, celebrated for a rare pianism that the Financial Times called “an otherworldly suspension of acoustic time.”', badges: ['Carnegie Hall Resident', '14× Deutscher Schallplattenpreis'] },
-  { role: 'Musical Director', name: 'Julian von Berg', city: 'Vienna Philharmonic Alumnus', bio: 'Directing the Nocturne Philharmonic into its fifteenth season, Julian has previously conducted the Royal Concertgebouw and Vienna Philharmonic in historical French romantic repertoires.', badges: ['Order of Arts &amp; Letters', '32 World Premieres'] },
+  { role: 'Featured Soloist', name: 'Alistair Vance', city: 'Hamburg Steinway Laureate', bio: 'Three‑time International Chopin Piano Prize medalist, celebrated for a rare pianism that the Financial Times called “an otherworldly suspension of acoustic time.”', badges: [
+    { icon: 'bi-bank2', text: 'Carnegie Hall Resident' },
+    { icon: 'bi-award', text: '14× Deutscher Schallplattenpreis' },
+  ]},
+  { role: 'Musical Director', name: 'Julian von Berg', city: 'Conductor, Laureate', bio: 'Directing the Nocturne Philharmonic into its fifteenth season, Julian has previously conducted the Royal Concertgebouw and Vienna Philharmonic in historical French romantic repertoires.', badges: [
+    { icon: 'bi-patch-check', text: 'Order of Arts et des Lettres' },
+    { icon: 'bi-disc', text: '32 World Premieres' },
+  ]},
 ])
 
 // ---- Booking state ----
@@ -485,6 +624,8 @@ const serviceFee = computed(() => Math.round((tiersSubtotal.value + addonsSubtot
 const orderTotal = computed(() => tiersSubtotal.value + addonsSubtotal.value + serviceFee.value)
 
 // ---- Formatters ----
+const ROMANS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
+const roman = (i) => ROMANS[i] ?? (i + 1)
 const ticketCode = (n) => `G1-NC-${String(selectedTierId.value).slice(-4).toUpperCase()}-${String(n).padStart(3, '0')}`
 const seatFor = (n) => String.fromCharCode(65 + (n - 1)) + (10 + (n - 1))
 
@@ -544,6 +685,7 @@ function resetFlow() {
   --text-main: #f4f4f5;
   --text-muted: #9ca3af;
   --border-subtle: rgba(255, 255, 255, 0.08);
+  --font-serif: "Playfair Display", Georgia, "Times New Roman", serif;
 }
 body { background: var(--bg-primary); color: var(--text-main); font-family: "Inter", sans-serif; }
 
@@ -575,19 +717,29 @@ body { background: var(--bg-primary); color: var(--text-main); font-family: "Int
 .event-content { min-width: 0; }
 .booking-panel { position: sticky; top: 1rem; align-self: start; }
 
+/* Breadcrumb */
+.breadcrumb {
+  display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
+  font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.7px; margin-bottom: 0.85rem;
+}
+.breadcrumb a { color: var(--gold-accent); text-decoration: none; }
+.breadcrumb a:hover { text-decoration: underline; }
+.crumb-sep { color: var(--text-muted); font-weight: 400; }
+.crumb-current { color: var(--gold-accent); }
+
 /* Banner */
 .banner {
   position: relative;
-  height: 300px;
+  height: 420px;
   border-radius: 1rem;
   overflow: hidden;
-  background: #0a0a0b;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: flex-end;
+  background: linear-gradient(135deg, #16161a 0%, #1e1e24 55%, #2a2a32 100%);
 }
-.banner-inner { position: relative; width: 100%; height: 100%; padding: 1rem; }
-.badge-row { display: flex; gap: 0.5rem; margin-bottom: auto; }
+.banner-media { position: absolute; inset: 0; }
+.banner-img { width: 100%; height: 100%; object-fit: cover; animation: banner-fade 0.35s ease; }
+@keyframes banner-fade { from { opacity: 0; } to { opacity: 1; } }
+.badge-row { position: absolute; top: 1rem; left: 1rem; display: flex; gap: 0.5rem; z-index: 3; flex-wrap: wrap; }
 .badge {
   font-size: 0.7rem;
   font-weight: 800;
@@ -598,173 +750,200 @@ body { background: var(--bg-primary); color: var(--text-main); font-family: "Int
 }
 .badge-magenta { background: var(--magenta-badge); color: #fff; }
 .badge-dark { background: rgba(255,255,255,0.10); color: var(--text-main); border: 1px solid var(--border-subtle); }
+.banner-strip {
+  position: absolute; left: 0; right: 0; bottom: 0; z-index: 3;
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  padding: 0.55rem 1rem;
+  background: rgba(5,5,6,0.72);
+  backdrop-filter: blur(4px);
+  font-size: 0.72rem; font-weight: 700; color: var(--text-main);
+}
+.strip-left, .strip-right { display: flex; align-items: center; gap: 0.45rem; text-transform: uppercase; letter-spacing: 0.5px; }
+.strip-sep { color: var(--text-muted); font-weight: 400; }
+.strip-detail { color: var(--text-muted); font-weight: 600; text-transform: none; letter-spacing: 0.2px; }
+.strip-right i { color: var(--gold-accent); }
 
-.banner-visual {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #141416 0%, #1c1c1f 60%, #24242a 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+/* Gallery thumbnails */
+.thumb-row { display: flex; gap: 0.6rem; margin-top: 0.6rem; margin-bottom: 1.25rem; }
+.thumb {
+  flex: 1; height: 64px; border-radius: 0.5rem; overflow: hidden;
+  background: linear-gradient(135deg, #17171a 0%, #222228 100%);
+  border: 2px solid var(--border-subtle); cursor: pointer;
 }
-.hall-glow {
-  position: absolute;
-  width: 220px; height: 220px;
-  background: radial-gradient(circle, rgba(243,198,79,0.15) 0%, transparent 70%);
-  top: -60px; left: -60px;
-  filter: blur(28px);
-  z-index: 0;
-}
-.stage { position: relative; z-index: 2; width: 300px; height: 140px; }
-.curtains {
-  position: absolute; bottom: 0; left: 0; right: 0; height: 55px;
-  background: repeating-linear-gradient(to right, #1a1a1c 0, #1a1a1c 14px, #121213 14px, #121213 28px);
-  border-top: 2px solid #0b0b0c;
-}
-.piano {
-  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-  width: 150px; height: 40px;
-  background: repeating-linear-gradient(to right, #0a0a0b 0, #0a0a0b 10px, #1a1a1c 10px, #1a1a1c 20px);
-  border-radius: 4px 4px 0 0;
-  box-shadow: 0 -6px 18px rgba(0,0,0,0.6);
-}
-.spotlight {
-  position: absolute; top: 10px; left: 50%; transform: translateX(-50%);
-  width: 120px; height: 90px;
-  background: radial-gradient(circle at 50% 100%, rgba(243,198,79,0.25) 0%, transparent 70%);
-  border-radius: 50%;
-  filter: blur(12px);
-  z-index: 1;
-}
-.banner-overlay-text { position: absolute; bottom: 1rem; left: 1rem; z-index: 5; }
-.kicker {
-  font-family: "Montserrat", sans-serif;
-  font-size: 0.8rem; font-weight: 800; text-transform: uppercase;
-  letter-spacing: 0.8px; color: var(--text-muted); display: block; margin-bottom: 0.2rem;
-}
+.thumb.active { border-color: var(--gold-accent); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; }
 
 /* Title */
-.event-title {
-  font-family: "Montserrat", sans-serif;
-  font-size: 2.15rem; font-weight: 800; line-height: 1.12;
-  margin: 0 0 0.35rem 0; letter-spacing: -0.5px;
+.event-kicker {
+  display: flex; align-items: center; gap: 0.4rem;
+  font-size: 0.72rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.8px; color: var(--gold-accent); margin-bottom: 0.5rem;
 }
-.event-subtitle {
-  display: block; font-size: 1.35rem; font-weight: 600; color: var(--gold-accent);
-  margin-top: 0.25rem; letter-spacing: -0.3px;
+.event-title {
+  font-family: var(--font-serif);
+  font-size: 2.6rem; font-weight: 700; line-height: 1.15;
+  margin: 0 0 1.1rem 0; letter-spacing: -0.5px;
 }
 
-/* Meta grid */
+/* Meta grid: single panel split into 4 fact columns */
 .meta-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0.75rem;
-  margin-bottom: 1.25rem;
-}
-.meta-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 0.75rem;
-  padding: 0.85rem 1rem;
+  margin-bottom: 1.25rem;
+  overflow: hidden;
 }
+.meta-card { padding: 0.85rem 1rem; border-left: 1px solid var(--border-subtle); }
+.meta-card:first-child { border-left: none; }
 .meta-label {
   font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
   letter-spacing: 0.7px; color: var(--text-muted); margin-bottom: 0.2rem;
 }
 .meta-value { font-size: 0.92rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.12rem; }
+.meta-value i { color: var(--gold-accent); margin-right: 0.15rem; }
 .meta-sub { font-size: 0.75rem; color: #8a8a93; }
 
-/* Section tabs */
+/* Section tabs: gold underline style */
 .section-tabs {
-  display: flex; gap: 0.5rem;
-  margin-bottom: 1.25rem; flex-wrap: wrap;
+  display: flex; gap: 1.4rem; flex-wrap: wrap;
+  border-bottom: 1px solid var(--border-subtle);
+  margin-bottom: 1.4rem;
 }
 .tab {
+  display: flex; align-items: center; gap: 0.4rem;
   font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
   letter-spacing: 0.5px; color: var(--text-muted);
-  padding: 0.45rem 0.9rem; border: 1px solid var(--border-subtle);
-  border-radius: 2rem; background: transparent; cursor: pointer;
+  padding: 0.25rem 0 0.65rem; border: none; border-bottom: 2px solid transparent;
+  background: transparent; cursor: pointer;
 }
-.tab.active { border-color: var(--gold-accent); color: var(--gold-accent); background: rgba(243,198,79,0.08); }
+.tab i { font-size: 0.9rem; }
+.tab:hover { color: var(--text-main); }
+.tab.active { color: var(--gold-accent); border-bottom-color: var(--gold-accent); }
 
 /* Sections */
-.event-section { margin-bottom: 1.75rem; }
+.event-section { margin-bottom: 2.25rem; }
 .section-head {
   display: flex; justify-content: space-between; align-items: baseline;
-  margin-bottom: 0.9rem;
+  margin-bottom: 1rem;
 }
 .section-title {
-  font-family: "Montserrat", sans-serif;
-  font-size: 1.05rem; font-weight: 800; margin: 0;
-  text-transform: uppercase; letter-spacing: 0.5px;
+  font-family: var(--font-serif);
+  font-size: 1.35rem; font-weight: 700; margin: 0;
+  letter-spacing: 0;
 }
-.artist-profiles { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); }
+.artist-profiles { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: var(--gold-accent); }
 .intermission {
   font-size: 0.72rem; font-weight: 800; text-transform: uppercase;
   letter-spacing: 0.6px; color: var(--gold-accent);
 }
 .lead { font-size: 0.92rem; line-height: 1.7; color: #d9d9de; margin: 0 0 0.9rem 0; }
 
-/* Movements */
+/* Movements: serif roman numerals, work + detail stacked, tempo right */
 .movements { display: flex; flex-direction: column; gap: 0.65rem; }
 .movement-row {
-  display: flex; gap: 0.9rem;
+  display: flex; align-items: flex-start; gap: 1rem;
   background: var(--bg-surface); border: 1px solid var(--border-subtle);
-  border-radius: 0.75rem; padding: 0.85rem 1rem;
+  border-radius: 0.75rem; padding: 0.95rem 1.1rem;
 }
 .movement-num {
-  width: 26px; height: 26px; border-radius: 50%; background: var(--gold-accent);
-  color: #0b0b0c; font-weight: 800; font-size: 0.8rem; display: flex;
-  align-items: center; justify-content: center; flex-shrink: 0;
+  font-family: var(--font-serif); font-size: 1.15rem; font-weight: 700;
+  color: var(--gold-accent); width: 1.6rem; flex-shrink: 0; line-height: 1.3;
 }
-.movement-work { flex: 1; font-weight: 700; font-size: 0.9rem; margin-bottom: 0.1rem; }
-.movement-detail { font-size: 0.82rem; color: #b9b9c1; margin-bottom: 0.1rem; }
-.movement-tempo { font-size: 0.78rem; color: var(--gold-accent); font-style: italic; }
+.movement-main { flex: 1; min-width: 0; }
+.movement-work { font-family: var(--font-serif); font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem; }
+.movement-detail { font-size: 0.78rem; color: var(--text-muted); }
+.movement-tempo { font-size: 0.78rem; color: var(--text-muted); font-style: italic; flex-shrink: 0; }
 
-/* Artists */
-.artist-grid { display: flex; gap: 1rem; }
+/* Orchestra Lineup cards */
+.lineup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.lineup-card {
+  background: var(--bg-surface); border: 1px solid var(--border-subtle);
+  border-radius: 0.75rem; padding: 1rem 1.1rem;
+}
+.lineup-name { font-family: var(--font-serif); font-weight: 700; font-size: 1.05rem; margin-bottom: 0.35rem; }
+.lineup-detail { font-size: 0.8rem; line-height: 1.55; color: #b9b9c1; }
+.lineup-count {
+  margin-top: 0.6rem; font-size: 0.66rem; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.5px; color: var(--gold-accent);
+}
+
+/* Acoustic Blueprint spec rows */
+.spec-row {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 1.5rem;
+  background: var(--bg-surface); border: 1px solid var(--border-subtle);
+  border-radius: 0.75rem; padding: 0.95rem 1.1rem;
+}
+.spec-name { font-family: var(--font-serif); font-weight: 700; font-size: 1rem; flex-shrink: 0; }
+.spec-value { font-size: 0.8rem; color: var(--text-muted); text-align: right; line-height: 1.5; }
+
+/* Sommelier Pairing */
+.pairing-note {
+  display: flex; align-items: baseline; gap: 0.45rem;
+  margin-top: 0.9rem; font-size: 0.78rem; color: #b9b9c1;
+}
+.pairing-note i { color: var(--gold-accent); flex-shrink: 0; }
+
+/* Artists: photo header + full-width bio + icon badges */
+.artist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .artist-card {
-  flex: 1; background: var(--bg-surface); border: 1px solid var(--border-subtle);
-  border-radius: 0.85rem; padding: 1rem; display: flex; gap: 0.85rem;
+  background: var(--bg-surface); border: 1px solid var(--border-subtle);
+  border-radius: 0.85rem; padding: 1.1rem;
+  display: flex; flex-direction: column;
 }
+.artist-head { display: flex; gap: 0.9rem; margin-bottom: 0.8rem; }
 .artist-avatar {
-  width: 50px; height: 50px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--gold-accent), var(--gold-accent-hover));
-  color: #0b0b0c; display: flex; align-items: center; justify-content: center;
-  font-size: 1.4rem; flex-shrink: 0;
+  width: 62px; height: 62px; border-radius: 0.5rem; flex-shrink: 0; overflow: hidden;
+  background: linear-gradient(135deg, #1d1d21 0%, #2c2c33 100%);
+  border: 1px solid var(--border-subtle);
 }
-.artist-info { flex: 1; }
+.artist-photo { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); }
+.artist-id { flex: 1; min-width: 0; }
 .artist-role { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gold-accent); margin-bottom: 0.1rem; }
-.artist-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.2rem; color: var(--text-main); }
-.artist-city { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.45rem; }
-.artist-bio { font-size: 0.82rem; line-height: 1.5; color: #c1c1c7; margin: 0 0 0.6rem 0; }
-.artist-badges { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.artist-name { font-family: var(--font-serif); font-weight: 700; font-size: 1.2rem; margin-bottom: 0.15rem; color: var(--text-main); }
+.artist-city { font-size: 0.72rem; font-weight: 700; color: var(--gold-accent); }
+.artist-bio { font-size: 0.82rem; line-height: 1.55; color: #c1c1c7; margin: 0 0 0.9rem 0; }
+.artist-badges { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 0.75rem; margin-top: auto; }
 .artist-badge {
-  font-size: 0.62rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
-  color: var(--gold-accent); border: 1px solid rgba(243,198,79,0.35);
-  padding: 0.2rem 0.55rem; border-radius: 0.3rem;
+  display: flex; align-items: center; gap: 0.35rem;
+  font-size: 0.6rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;
+  color: var(--gold-accent);
 }
+.artist-badge i { font-size: 0.8rem; flex-shrink: 0; }
 
-/* Access Protocol */
-.access-protocol { margin-top: 0.5rem; }
+/* Access Protocol: panel with map placeholder + gate strip */
+.access-protocol {
+  margin-top: 0.5rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 0.75rem;
+  padding: 1.1rem 1.25rem 1.25rem;
+}
 .access-head {
   display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: 0.75rem;
 }
-.access-title { font-size: 0.85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin: 0; color: var(--text-main); }
-.access-loc { font-size: 0.72rem; font-weight: 700; color: var(--gold-accent); }
-.access-body {
-  display: flex; justify-content: space-between;
-  background: var(--bg-surface); border: 1px solid var(--border-subtle);
-  border-radius: 0.75rem; padding: 0.9rem 1rem;
+.access-kicker { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: var(--gold-accent); }
+.access-loc { font-size: 0.72rem; font-weight: 700; color: var(--text-muted); }
+.access-loc i { color: var(--gold-accent); }
+.access-title {
+  font-family: var(--font-serif); font-size: 1.45rem; font-weight: 700;
+  margin: 0.35rem 0 1rem; color: var(--text-main);
 }
-.access-left, .access-right { font-size: 0.88rem; font-weight: 700; }
+.access-map {
+  height: 240px; border-radius: 0.6rem; margin-bottom: 1rem;
+  background: linear-gradient(135deg, #101013 0%, #17171b 100%);
+  border: 1px solid var(--border-subtle);
+}
+.map-img { width: 100%; height: 100%; object-fit: cover; border-radius: 0.6rem; }
 .access-gate {
-  display: flex; align-items: center; gap: 0.55rem;
-  margin-top: 0.75rem; font-size: 0.8rem; color: #b9b9c1;
+  display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+  background: #060607; border: 1px solid var(--border-subtle);
+  border-radius: 0.5rem; padding: 0.65rem 0.9rem;
 }
-.gate-icon { color: var(--gold-accent); }
+.gate-left { display: flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; font-weight: 700; }
+.gate-left i { color: var(--gold-accent); }
+.gate-right { font-size: 0.66rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: var(--gold-accent); }
 
 /* Booking panel */
 .booking-card {
@@ -917,8 +1096,20 @@ body { background: var(--bg-primary); color: var(--text-main); font-family: "Int
 @media (max-width: 1024px) {
   .event-page { grid-template-columns: 1fr; gap: 1.5rem; padding: 1.5rem 1rem 3rem; }
   .booking-panel { position: static; }
+  .banner { height: 320px; }
   .meta-grid { grid-template-columns: repeat(2, 1fr); }
-  .artist-grid { flex-direction: column; }
+  .meta-card:nth-child(odd) { border-left: none; }
+  .meta-card:nth-child(n+3) { border-top: 1px solid var(--border-subtle); }
+  .artist-grid { grid-template-columns: 1fr; }
+  .lineup-grid { grid-template-columns: 1fr; }
+  .section-tabs { gap: 1rem; }
+}
+@media (max-width: 640px) {
+  .event-title { font-size: 1.9rem; }
+  .banner-strip { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+  .thumb-row { flex-wrap: wrap; }
+  .thumb { min-width: 40%; }
+  .movement-row { flex-wrap: wrap; }
 }
 @media (max-width: 480px) {
   /* Stack name/price above the description on very narrow panels */
