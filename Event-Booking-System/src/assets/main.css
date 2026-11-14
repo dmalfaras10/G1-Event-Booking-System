@@ -140,14 +140,32 @@ body {
     transition: color 0.2s ease;
 }
 
-.navbar-search-input {
-    background: transparent;
-    border: none;
-    color: var(--text-main);
+/* Override Bootstrap .form-control white background on focus/autofill */
+.navbar-search-input,
+.navbar-search-input:focus,
+.navbar-search-input:active {
+    background-color: transparent !important;
+    border: none !important;
+    color: var(--text-main) !important;
     font-size: 0.825rem;
     padding: 0.2rem 0;
     box-shadow: none !important;
     outline: none !important;
+    caret-color: var(--gold-accent);
+}
+
+/* Fix browser autofill white background */
+.navbar-search-input:-webkit-autofill,
+.navbar-search-input:-webkit-autofill:hover,
+.navbar-search-input:-webkit-autofill:focus {
+    -webkit-text-fill-color: var(--text-main) !important;
+    -webkit-box-shadow: 0 0 0px 1000px var(--bg-primary) inset !important;
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+.navbar-search-input::-webkit-search-cancel-button {
+    filter: invert(1) opacity(0.6);
+    cursor: pointer;
 }
 
 .navbar-search-input::placeholder {
@@ -165,18 +183,24 @@ body {
     border-radius: 4px;
     margin-left: 0.4rem;
     letter-spacing: 0.5px;
+    transition: border-color 0.2s ease, color 0.2s ease;
 }
 
 .navbar-search-wrapper:hover,
 .navbar-search-wrapper:focus-within,
 .navbar-search-wrapper.active {
-    background-color: var(--bg-primary);
-    border-color: var(--gold-accent);
-    box-shadow: 0 0 12px rgba(243, 198, 79, 0.15);
+    background-color: var(--bg-surface) !important;
+    border-color: var(--gold-accent) !important;
+    box-shadow: 0 0 14px rgba(243, 198, 79, 0.2);
 }
 
 .navbar-search-wrapper:hover .navbar-search-icon,
 .navbar-search-wrapper:focus-within .navbar-search-icon {
+    color: var(--gold-accent);
+}
+
+.navbar-search-wrapper:focus-within .navbar-search-shortcut {
+    border-color: rgba(243, 198, 79, 0.35);
     color: var(--gold-accent);
 }
 
@@ -185,7 +209,7 @@ body {
     top: calc(100% + 8px);
     left: 0;
     right: 0;
-    background-color: var(--bg-surface);
+    background-color: var(--bg-surface) !important;
     border: 1px solid var(--border-subtle);
     z-index: 1050;
     max-height: 360px;
@@ -193,26 +217,36 @@ body {
 }
 
 .navbar-search-result-item {
-    background-color: transparent;
-    color: var(--text-main);
-    border-color: var(--border-subtle);
-    transition: background-color 0.2s ease;
+    background-color: transparent !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-subtle) !important;
+    border-left: 2px solid transparent !important;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
-.navbar-search-result-item:hover {
-    background-color: var(--bg-surface-hover);
-    color: var(--text-main);
+.navbar-search-result-item:hover,
+.navbar-search-result-item:focus {
+    background-color: rgba(243, 198, 79, 0.12) !important;
+    border-left-color: var(--gold-accent) !important;
+    color: var(--gold-accent) !important;
+}
+
+.navbar-search-result-item:hover .navbar-result-title,
+.navbar-search-result-item:focus .navbar-result-title {
+    color: var(--gold-accent);
 }
 
 .navbar-result-thumb {
     width: 40px;
     height: 40px;
     flex-shrink: 0;
+    border: 1px solid var(--border-subtle);
 }
 
 .navbar-result-title {
     font-size: 0.85rem;
     color: var(--text-main);
+    transition: color 0.2s ease;
 }
 
 .navbar-btn-register {
