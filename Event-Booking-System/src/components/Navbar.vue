@@ -38,12 +38,12 @@ const handleSelectEvent = (event) => {
 		<div class="container">
 			<!-- Brand Logo & Search Bar Group on Left -->
 			<div class="d-flex align-items-center gap-3 position-relative">
-				<a class="navbar-brand d-flex align-items-center gap-2 m-0" href="#">
+				<router-link class="navbar-brand d-flex align-items-center gap-2 m-0" to="/">
 					<span class="navbar-brand-emblem">
 						<i class="bi bi-vinyl-fill"></i>
 					</span>
 					<span class="navbar-brand-text">G<span class="navbar-brand-hyphen">-</span>ONE</span>
-				</a>
+				</router-link>
 
 				<!-- Search Bar -->
 				<div class="navbar-search-form d-none d-md-block">
@@ -135,14 +135,14 @@ const handleSelectEvent = (event) => {
 
 				<ul class="navbar-nav mx-auto mb-3 mb-lg-0 gap-1">
 					<li class="navbar-nav-item nav-item">
-						<a class="navbar-nav-link nav-link active" href="#">
+						<router-link class="navbar-nav-link nav-link active" to="/">
 							<i class="bi bi-house-door me-1"></i>Home
-						</a>
+						</router-link>
 					</li>
 					<li class="navbar-nav-item nav-item">
-						<a class="navbar-nav-link nav-link" href="#">
+						<router-link class="navbar-nav-link nav-link" to="/events">
 							<i class="bi bi-calendar-event me-1"></i>Events
-						</a>
+						</router-link>
 					</li>
 					<li class="navbar-nav-item nav-item">
 						<a class="navbar-nav-link nav-link" href="#">

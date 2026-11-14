@@ -1,6 +1,8 @@
 <script setup>
 import { computed } from 'vue'
 import { eventsData } from '../data/eventsData.js'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const props = defineProps({
 	events: {
@@ -33,6 +35,10 @@ const featuredSlides = computed(() => {
 
 const formatPrice = (price) => {
 	return `₱${Number(price).toLocaleString('en-PH')}`
+}
+
+const goToEventDetails = (eventId) => {
+  router.push({ name: 'EventDetails', params: { id: eventId } })
 }
 </script>
 
@@ -152,7 +158,7 @@ const formatPrice = (price) => {
 												class="btn featured-btn-details"
 												title="View Details"
 												aria-label="View Details"
-												@click="emit('view-event', event)"
+												@click="goToEventDetails(event._id)"
 											>
 												<i class="bi bi-compass"></i>
 											</button>
@@ -161,7 +167,7 @@ const formatPrice = (price) => {
 												type="button"
 												class="btn featured-btn-buy px-3 py-2"
 												:disabled="event.remainingTickets === 0"
-												@click="emit('buy-ticket', event)"
+												@click="goToEventDetails(event._id)"
 											>
 												<i
 													:class="
