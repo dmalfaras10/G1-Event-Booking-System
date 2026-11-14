@@ -32,7 +32,7 @@ const filteredEvents = computed(() => {
 const handleSelectEvent = (event) => {
 	searchQuery.value = ''
 	isSearchOpen.value = false
-	router.push({ name: 'EventDetails', params: { id: eventId } })
+	router.push({ name: 'EventDetails', params: { id: event._id } })
 }
 </script>
 
@@ -161,17 +161,111 @@ const handleSelectEvent = (event) => {
 				</ul>
 				<!-- Auth Buttons -->
 				<div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2">
-					<router-link to="/register" class="btn navbar-btn-register" v-if="!user.email">
-						<i class="bi bi-person-plus me-1"></i>Register
-					</router-link>
-					<router-link to="/login" class="btn navbar-btn-login" v-if="!user.email">
-						<i class="bi bi-box-arrow-in-right me-1"></i>Login
-					</router-link>
-					<router-link to="/logout" class="btn navbar-btn-login" v-else>
-						<i class="bi bi-box-arrow-in-right me-1"></i>Logout
-					</router-link>
+					<template v-if="!user.email">
+						<router-link to="/register" class="btn navbar-btn-register">
+							<i class="bi bi-person-plus me-1"></i>Register
+						</router-link>
+						<router-link to="/login" class="btn navbar-btn-login">
+							<i class="bi bi-box-arrow-in-right me-1"></i>Login
+						</router-link>
+					</template>
+
+					<!-- Logged-in User Dropdown -->
+					<div class="dropdown" v-else>
+						<button
+							class="btn navbar-btn-login dropdown-toggle d-flex align-items-center justify-content-center gap-2 w-100"
+							type="button"
+							id="userMenuDropdown"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+						>
+							<i class="bi bi-person-circle"></i>
+							<span>{{ user.firstName || user.email }}</span>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-end navbar-user-dropdown shadow-lg rounded-4 mt-2" aria-labelledby="userMenuDropdown">
+							<li>
+								<router-link class="dropdown-item d-flex align-items-center gap-2" to="/profile">
+									<i class="bi bi-person"></i>My Profile
+								</router-link>
+							</li>
+							<li>
+								<router-link class="dropdown-item d-flex align-items-center gap-2" to="/tickets">
+									<i class="bi bi-ticket-perforated"></i>My Ticket
+								</router-link>
+							</li>
+							<li><hr class="dropdown-divider" /></li>
+							<li>
+								<router-link class="dropdown-item dropdown-item-logout d-flex align-items-center gap-2" to="/logout">
+									<i class="bi bi-box-arrow-right"></i>Logout
+								</router-link>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
 	</nav>
 </template>
+
+<style scoped>
+	.navbar-user-dropdown {
+		background-color: var(--bg-surface);
+		border: 1px solid var(--border-subtle);
+		padding: 0.5rem;
+		min-width: 200px;
+		box-shadow: 0 12px 32px rgba(0, 0, 0, 0.65);
+	}
+
+	.navbar-user-dropdown .dropdown-item {
+		color: var(--text-main);
+		font-size: 0.9rem;
+		font-weight: 500;
+		padding: 0.6rem 0.85rem;
+		border-radius: 0.5rem;
+		transition: background-color 0.2s ease, color 0.2s ease;
+	}
+
+	.navbar-user-dropdown .dropdown-item i {
+		color: var(--gold-accent);
+		font-size: 1rem;
+		transition: transform 0.2s ease;
+	}
+
+	.navbar-user-dropdown .dropdown-item:hover,
+	.navbar-user-dropdown .dropdown-item:focus {
+		background-color: var(--bg-surface-hover);
+		color: var(--gold-accent);
+	}
+
+	.navbar-user-dropdown .dropdown-item:hover i {
+		transform: translateX(2px);
+	}
+
+	.navbar-user-dropdown .dropdown-item.router-link-active {
+		background-color: rgba(243, 198, 79, 0.12);
+		color: var(--gold-accent);
+	}
+
+	.navbar-user-dropdown .dropdown-divider {
+		border-top: 1px solid var(--border-subtle);
+		margin: 0.4rem 0;
+	}
+
+	.navbar-user-dropdown .dropdown-item-logout {
+		color: #f87171;
+	}
+
+	.navbar-user-dropdown .dropdown-item-logout i {
+		color: #f87171;
+	}
+
+	.navbar-user-dropdown .dropdown-item-logout:hover,
+	.navbar-user-dropdown .dropdown-item-logout:focus {
+		background-color: rgba(158, 28, 78, 0.2);
+		color: #fca5a5;
+	}
+
+	.navbar-user-dropdown .dropdown-item-logout:hover i {
+		color: #fca5a5;
+	}
+</style>
