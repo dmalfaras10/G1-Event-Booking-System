@@ -1,7 +1,8 @@
 <script setup>
 import { computed } from 'vue'
-import { eventsData } from '../data/eventsData.js'
 import { useRouter } from 'vue-router'
+import { eventsData } from '../data/eventsData.js'
+
 const router = useRouter()
 
 const props = defineProps({
@@ -21,10 +22,8 @@ const props = defineProps({
 
 const emit = defineEmits(['buy-ticket', 'view-event'])
 
-// Enforce max 6 featured events
 const featuredEvents = computed(() => props.events.slice(0, 6))
 
-// Chunk featured events into groups for carousel slides
 const featuredSlides = computed(() => {
 	const chunks = []
 	for (let i = 0; i < featuredEvents.value.length; i += props.itemsPerSlide) {

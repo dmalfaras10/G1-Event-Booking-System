@@ -4,12 +4,12 @@
             <div class="row g-4 pb-4 footer-divider-row">
                 <!-- Brand Column -->
                 <div class="col-lg-4">
-                    <a class="footer-brand d-inline-flex align-items-center gap-2 mb-3" href="#">
+                    <router-link class="footer-brand d-inline-flex align-items-center gap-2 mb-3" to="/">
                         <span class="footer-brand-emblem">
                             <i class="bi bi-vinyl-fill"></i>
                         </span>
                         <span class="footer-brand-text">G<span class="footer-brand-hyphen">-</span>ONE</span>
-                    </a>
+                    </router-link>
                     <p class="small mb-3 pe-lg-4">
                         Your premier destination for exclusive live events, VIP experiences, and unforgettable performances.
                     </p>
@@ -25,8 +25,8 @@
                 <div class="col-6 col-md-4 col-lg-2">
                     <h6 class="footer-col-title">Quick Links</h6>
                     <ul class="list-unstyled small d-flex flex-column gap-2">
-                        <li><a href="#"><i class="bi bi-chevron-right small me-1 footer-text-gold"></i>Home</a></li>
-                        <li><a href="#"><i class="bi bi-chevron-right small me-1 footer-text-gold"></i>Events</a></li>
+                        <li><router-link to="/"><i class="bi bi-chevron-right small me-1 footer-text-gold"></i>Home</router-link></li>
+                        <li><router-link to="/events"><i class="bi bi-chevron-right small me-1 footer-text-gold"></i>Events</router-link></li>
                         <li><a href="#"><i class="bi bi-chevron-right small me-1 footer-text-gold"></i>VIP</a></li>
                         <li><a href="#"><i class="bi bi-chevron-right small me-1 footer-text-gold"></i>About</a></li>
                         <li><a href="#"><i class="bi bi-chevron-right small me-1 footer-text-gold"></i>Contact</a></li>

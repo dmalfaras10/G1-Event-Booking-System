@@ -1,6 +1,9 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { eventsData } from '../data/eventsData.js'
+
+const router = useRouter()
 
 const props = defineProps({
 	events: {
@@ -8,8 +11,6 @@ const props = defineProps({
 		default: () => eventsData
 	}
 })
-
-const emit = defineEmits(['buy-ticket', 'view-event'])
 
 const searchQuery = ref('')
 const isSearchOpen = ref(false)
@@ -29,7 +30,7 @@ const filteredEvents = computed(() => {
 const handleSelectEvent = (event) => {
 	searchQuery.value = ''
 	isSearchOpen.value = false
-	emit('view-event', event)
+	router.push({ name: 'EventDetails', params: { id: eventId } })
 }
 </script>
 
@@ -44,7 +45,6 @@ const handleSelectEvent = (event) => {
 					</span>
 					<span class="navbar-brand-text">G<span class="navbar-brand-hyphen">-</span>ONE</span>
 				</router-link>
-
 				<!-- Search Bar -->
 				<div class="navbar-search-form d-none d-md-block">
 					<div class="navbar-search-wrapper" :class="{ 'active': isSearchOpen && searchQuery.trim() }">
@@ -59,7 +59,6 @@ const handleSelectEvent = (event) => {
 						/>
 						<span class="navbar-search-shortcut">⌘K</span>
 					</div>
-
 					<!-- Search Results Live Dropdown -->
 					<div v-if="isSearchOpen && searchQuery.trim()" class="navbar-search-dropdown shadow-lg rounded-4 overflow-hidden">
 						<div v-if="filteredEvents.length > 0" class="list-group list-group-flush">
@@ -83,7 +82,6 @@ const handleSelectEvent = (event) => {
 					</div>
 				</div>
 			</div>
-
 			<!-- Mobile Toggler -->
 			<button
 				class="navbar-toggler"
@@ -96,7 +94,6 @@ const handleSelectEvent = (event) => {
 			>
 				<span class="navbar-toggler-icon"></span>
 			</button>
-
 			<!-- Navigation Links & Actions -->
 			<div class="collapse navbar-collapse" id="mainNav">
 				<!-- Mobile Search Bar -->
@@ -132,10 +129,10 @@ const handleSelectEvent = (event) => {
 						</div>
 					</div>
 				</div>
-
+				<!-- Main Navigation  -->
 				<ul class="navbar-nav mx-auto mb-3 mb-lg-0 gap-1">
 					<li class="navbar-nav-item nav-item">
-						<router-link class="navbar-nav-link nav-link active" to="/">
+						<router-link class="navbar-nav-link nav-link" to="/">
 							<i class="bi bi-house-door me-1"></i>Home
 						</router-link>
 					</li>
@@ -160,7 +157,6 @@ const handleSelectEvent = (event) => {
 						</a>
 					</li>
 				</ul>
-
 				<!-- Auth Buttons -->
 				<div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2">
 					<a href="#" class="btn navbar-btn-register">

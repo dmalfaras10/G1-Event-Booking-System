@@ -102,29 +102,9 @@ body {
 
 .navbar-main .navbar-nav-link:hover,
 .navbar-main .navbar-nav-link:focus {
-    color: var(--text-main);
-    background-color: var(--bg-surface-hover);
-}
-
-.navbar-main .navbar-nav-link.active {
     color: var(--gold-accent);
     background-color: rgba(243, 198, 79, 0.08);
     font-weight: 600;
-}
-
-@media (min-width: 992px) {
-    .navbar-main .navbar-nav-link.active::after {
-        content: "";
-        position: absolute;
-        bottom: 4px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 18px;
-        height: 2px;
-        border-radius: 2px;
-        background-color: var(--gold-accent);
-        box-shadow: 0 0 8px var(--gold-accent);
-    }
 }
 
 .navbar-text-gold {

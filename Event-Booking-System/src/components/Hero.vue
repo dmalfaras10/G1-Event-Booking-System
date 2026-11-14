@@ -1,6 +1,9 @@
 <script setup>
 import { computed } from 'vue'
+import { useRouter } from 'vue-router'
 import { eventsData } from '../data/eventsData.js'
+
+const router = useRouter()
 
 const props = defineProps({
     events: {
@@ -17,9 +20,11 @@ const props = defineProps({
     }
 })
 
-const emit = defineEmits(['buy-ticket', 'view-event'])
-
 const featuredEvents = computed(() => props.events.slice(0, 3))
+
+const handleSelectEvent = (event) => {
+    router.push({ name: 'EventDetails', params: { id: event._id } })
+}
 </script>
 
 <template>
@@ -108,7 +113,7 @@ const featuredEvents = computed(() => props.events.slice(0, 3))
                                         type="button"
                                         class="btn hero-btn-gold px-4 py-2"
                                         :disabled="event.remainingTickets === 0"
-                                        @click="emit('buy-ticket', event)"
+                                        @click="handleSelectEvent(event)"
                                     >
                                         <i class="bi bi-ticket-perforated-fill me-2"></i>
                                         Buy Tickets
@@ -117,7 +122,7 @@ const featuredEvents = computed(() => props.events.slice(0, 3))
                                     <button
                                         type="button"
                                         class="btn hero-btn-surface px-4 py-2"
-                                        @click="emit('view-event', event)"
+                                        @click="handleSelectEvent(event)"
                                     >
                                         <i class="bi bi-compass me-2"></i>
                                         Explore Details
