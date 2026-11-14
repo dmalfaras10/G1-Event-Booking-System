@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import { createPinia } from 'pinia';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'bootstrap-icons/font/bootstrap-icons.min.css';
@@ -8,11 +9,17 @@ import App from './App.vue'
 import HomePage from './pages/HomePage.vue'
 import EventListingsPage from './pages/EventListingsPage.vue';
 import EventDetailsPage from './pages/EventDetailsPage.vue'
+import LoginPage from './pages/LoginPage.vue'
+import RegisterPage from './pages/RegisterPage.vue'
+import LogoutPage from './pages/LogoutPage.vue'
 import ErrorPage from './pages/ErrorPage.vue'
 
 const routes = [
 
   { path: '/', name: 'home', component: HomePage },
+  { path: '/register', name: 'Register', component: RegisterPage },
+  { path: '/login', name: 'Login', component: LoginPage },
+  { path: '/logout', name: 'logout', component: LogoutPage},
   { path: '/event/event-details1', name: 'event-details', component: EventDetailsPage },
   { path: '/events', name: 'EventListings',  component: EventListingsPage},
   { path: '/events/:id', name: 'EventDetails', component: EventDetailsPage, props: true},
@@ -25,4 +32,4 @@ const router = createRouter({
   routes,
 })
 
-createApp(App).use(router).mount('#app') 
+createApp(App).use(router).use(createPinia()).mount('#app') 

@@ -2,7 +2,9 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { eventsData } from '../data/eventsData.js'
+import { useGlobalStore} from '../stores/global.js';
 
+const { user } = useGlobalStore();
 const router = useRouter()
 
 const props = defineProps({
@@ -159,12 +161,15 @@ const handleSelectEvent = (event) => {
 				</ul>
 				<!-- Auth Buttons -->
 				<div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2">
-					<a href="#" class="btn navbar-btn-register">
+					<router-link to="/register" class="btn navbar-btn-register" v-if="!user.email">
 						<i class="bi bi-person-plus me-1"></i>Register
-					</a>
-					<a href="#" class="btn navbar-btn-login">
+					</router-link>
+					<router-link to="/login" class="btn navbar-btn-login" v-if="!user.email">
 						<i class="bi bi-box-arrow-in-right me-1"></i>Login
-					</a>
+					</router-link>
+					<router-link to="/logout" class="btn navbar-btn-login" v-else>
+						<i class="bi bi-box-arrow-in-right me-1"></i>Logout
+					</router-link>
 				</div>
 			</div>
 		</div>

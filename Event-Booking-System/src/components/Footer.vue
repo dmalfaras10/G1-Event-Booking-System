@@ -1,3 +1,8 @@
+<script setup>
+import { useGlobalStore} from '../stores/global.js';
+const { user } = useGlobalStore();
+</script>
+
 <template>
     <footer class="footer-section pt-5 pb-4 mt-auto">
         <div class="container">
@@ -36,8 +41,8 @@
                 <div class="col-6 col-md-4 col-lg-3">
                     <h6 class="footer-col-title">Account &amp; Support</h6>
                     <ul class="list-unstyled small d-flex flex-column gap-2">
-                        <li><a href="#"><i class="bi bi-chevron-right small me-1 footer-text-gold"></i>Create Account</a></li>
-                        <li><a href="#"><i class="bi bi-chevron-right small me-1 footer-text-gold"></i>Member Login</a></li>
+                        <li><router-link :to="user?.email ? '' : '/register'"><i class="bi bi-chevron-right small me-1 footer-text-gold"></i>Create Account</router-link></li>
+                        <li><router-link :to="user?.email ? '' : '/login'"><i class="bi bi-chevron-right small me-1 footer-text-gold"></i>Member Login</router-link></li>
                         <li><a href="#"><i class="bi bi-chevron-right small me-1 footer-text-gold"></i>Help Center</a></li>
                     </ul>
                 </div>

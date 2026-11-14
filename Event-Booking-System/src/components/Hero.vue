@@ -28,7 +28,7 @@ const handleSelectEvent = (event) => {
 </script>
 
 <template>
-    <section id="hero" class="hero-section pt-4 pb-2 px-3 px-md-4 px-lg-5">
+    <section class="hero-section py-5 px-3 px-md-4 px-lg-5">
         <div
             :id="carouselId"
             class="carousel slide carousel-fade hero-carousel-wrapper rounded-4 overflow-hidden"
