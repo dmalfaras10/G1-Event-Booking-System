@@ -1,0 +1,678 @@
+<template>
+  <div class="event-page">
+    <!-- ============ LEFT COLUMN: EVENT CONTENT ============ -->
+    <div class="event-content">
+
+      <!-- Breadcrumb -->
+      <nav class="breadcrumb">
+        <a href="#">Performances</a><span class="crumb-sep">/</span>
+        <a href="#">Jazz &amp; Lounge</a><span class="crumb-sep">/</span>
+        <span class="crumb-current">Midnight Saxophone Salon</span>
+      </nav>
+
+      <!-- Hero banner (switches when a thumbnail below is clicked) -->
+      <div class="banner">
+        <div class="banner-media">
+          <!-- TODO: fill in the src values in heroImages (script) — banner auto-switches on thumb click -->
+          <img v-if="heroImages[activeImage]?.src" :key="activeImage" :src="heroImages[activeImage].src" class="banner-img" alt="">
+        </div>
+        <div class="badge-row">
+          <span class="badge badge-magenta">Silver &amp; Gold Priority</span>
+          <span class="badge badge-dark">Includes 1 Rare Single Malt Pairing</span>
+        </div>
+        <div class="banner-strip">
+          <div class="strip-left">
+            <i class="bi bi-cup-hot"></i> The Spirits Library — Listening Room
+            <span class="strip-sep">|</span>
+            <span class="strip-detail">80 seats · No amplification</span>
+          </div>
+          <div class="strip-right">
+            <i class="bi bi-ticket-perforated"></i> 14 Seats Left
+          </div>
+        </div>
+      </div>
+
+      <!-- Gallery thumbnails (click to switch the hero banner) -->
+      <div class="thumb-row">
+        <div v-for="(img, i) in heroImages" :key="i"
+             :class="['thumb', { active: activeImage === i }]"
+             @click="activeImage = i">
+          <!-- TODO: thumbnails render automatically once src is set in heroImages -->
+        </div>
+      </div>
+
+      <span class="event-kicker"><i class="bi bi-moon-stars-fill"></i> Makati Speakeasy Series // Volume III</span>
+      <h1 class="event-title">
+        Midnight Saxophone Salon: An 80-Seat Bebop Session at The Spirits Library
+      </h1>
+
+      <!-- Meta row: 4 quick facts in a single panel -->
+      <div class="meta-grid">
+        <div class="meta-card">
+          <div class="meta-label">Date &amp; Evening</div>
+          <div class="meta-value"><i class="bi bi-calendar-event"></i> Sat, Dec 12, 2026</div>
+          <div class="meta-sub">Members’ door from 21:00</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">First Set</div>
+          <div class="meta-value"><i class="bi bi-clock"></i> 21:30 Sharp</div>
+          <div class="meta-sub">Two sets · one jam session</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">Venue</div>
+          <div class="meta-value"><i class="bi bi-geo-alt"></i> The Spirits Library</div>
+          <div class="meta-sub">Makati City</div>
+        </div>
+        <div class="meta-card">
+          <div class="meta-label">Dress Code</div>
+          <div class="meta-value"><i class="bi bi-person-badge"></i> Speakeasy Smart</div>
+          <div class="meta-sub">No phones on the floor</div>
+        </div>
+      </div>
+
+      <!-- Section tabs (switch the content panel below) -->
+      <div class="section-tabs">
+        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Set List &amp; Sessions</span>
+        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> The Quartet</span>
+        <span :class="['tab', { active: activeTab === 'acoustic' }]" @click="activeTab = 'acoustic'"><i class="bi bi-soundwave"></i> Listening Room</span>
+        <span :class="['tab', { active: activeTab === 'sommelier' }]" @click="activeTab = 'sommelier'"><i class="bi bi-cup-straw"></i> Spirits Pairing</span>
+      </div>
+
+      <!-- Tab panel: Program Notes & Repertoire -->
+      <section v-if="activeTab === 'program'" class="event-section">
+        <p class="lead">
+          An intimate eighty-seat speakeasy jazz session behind an unmarked door on Chino Roces, where brass standards are played acoustically at conversational volume and the bar never closes.
+        </p>
+        <p class="lead">
+          The Harlem Speakeasy Quartet plays two sets with a guest on muted trumpet, then hands the room over for a late jam session — sign up at the bar, and the quartet will call you up.
+        </p>
+      </section>
+
+      <!-- Curated Movement Schedule (part of Program Notes & Repertoire) -->
+      <section v-if="activeTab === 'program'" class="event-section">
+        <div class="section-head">
+          <h2 class="section-title">Set List &amp; Session Times</h2>
+          <span class="intermission">Two sets · one jam session</span>
+        </div>
+        <div class="movements">
+          <div v-for="(m, i) in movements" :key="i" class="movement-row">
+            <div class="movement-num">{{ roman(i) }}</div>
+            <div class="movement-main">
+              <div class="movement-work">{{ m.work }}</div>
+              <div class="movement-detail">{{ m.detail }}</div>
+            </div>
+            <div class="movement-tempo">{{ m.tempo }}</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab panel: Orchestra Lineup (placeholder content) -->
+      <section v-else-if="activeTab === 'lineup'" class="event-section">
+        <div class="section-head">
+          <h2 class="section-title">The Quartet</h2>
+          <span class="artist-profiles">4 Players · 1 Guest</span>
+        </div>
+        <div class="lineup-grid">
+          <div class="lineup-card">
+            <div class="lineup-name">Tenor &amp; Bari Sax</div>
+            <div class="lineup-detail">Tenor and baritone saxophones carrying the hard-bop lead lines.</div>
+            <div class="lineup-count">1 Player</div>
+          </div>
+          <div class="lineup-card">
+            <div class="lineup-name">Alto Sax &amp; Flute</div>
+            <div class="lineup-detail">Alto sax doubling on flute for the ballad set.</div>
+            <div class="lineup-count">1 Player</div>
+          </div>
+          <div class="lineup-card">
+            <div class="lineup-name">Upright Bass</div>
+            <div class="lineup-detail">Acoustic bass, no pickup, played pizzicato throughout.</div>
+            <div class="lineup-count">1 Player</div>
+          </div>
+          <div class="lineup-card">
+            <div class="lineup-name">Drums</div>
+            <div class="lineup-detail">Brushes only for the first set; sticks after the single malt pour.</div>
+            <div class="lineup-count">1 Player</div>
+          </div>
+          <div class="lineup-card">
+            <div class="lineup-name">Piano</div>
+            <div class="lineup-detail">Upright piano, lid closed, played only for the late jam session.</div>
+            <div class="lineup-count">1 Player</div>
+          </div>
+          <div class="lineup-card">
+            <div class="lineup-name">Guest</div>
+            <div class="lineup-detail">Muted trumpet sitting in for Set II and the jam.</div>
+            <div class="lineup-count">1 Guest</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab panel: Acoustic Blueprint (placeholder content) -->
+      <section v-else-if="activeTab === 'acoustic'" class="event-section">
+        <div class="section-head">
+          <h2 class="section-title">Listening Room</h2>
+          <span class="artist-profiles">Room Calibration</span>
+        </div>
+        <div class="movements">
+          <div class="spec-row">
+            <span class="spec-name">Room</span>
+            <span class="spec-value">The Spirits Library — 80 seats, 1,100-bottle back bar</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-name">Reverberation Time (RT60)</span>
+            <span class="spec-value">0.6 s — heavily damped by carpet and book-lined walls</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-name">Amplification</span>
+            <span class="spec-value">None — acoustic quartet, no PA, no monitors</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-name">Acoustic Sweet Spot</span>
+            <span class="spec-value">Banquettes 1–4 along the east wall — ±1.5 dB</span>
+          </div>
+          <div class="spec-row">
+            <span class="spec-name">House Rule</span>
+            <span class="spec-value">No photography on the floor; phones stay at the bar</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab panel: Sommelier Pairing (placeholder content) -->
+      <section v-else-if="activeTab === 'sommelier'" class="event-section">
+        <div class="section-head">
+          <h2 class="section-title">Spirits Pairing</h2>
+          <span class="artist-profiles">Curated by the Back Bar</span>
+        </div>
+        <div class="movements">
+          <div v-for="(p, i) in pairings" :key="i" class="movement-row">
+            <div class="movement-main">
+              <div class="movement-work">{{ p.name }}</div>
+              <div class="movement-detail">{{ p.detail }}</div>
+            </div>
+            <div class="movement-tempo">{{ p.pour }}</div>
+          </div>
+        </div>
+        <p class="pairing-note">
+          <i class="bi bi-cup-straw"></i>
+          Silver and Gold ticket holders receive one complimentary single malt pour. Bronze guests may add a pour at checkout.
+        </p>
+      </section>
+
+      <!-- Resident Virtuosos & Maestro -->
+      <section class="event-section">
+        <div class="section-head">
+          <h2 class="section-title">Featured Artists</h2>
+          <span class="artist-profiles">Artist Profiles</span>
+        </div>
+        <div class="artist-grid">
+          <div v-for="(a, i) in artists" :key="i" class="artist-card">
+            <div class="artist-head">
+              <div class="artist-avatar">
+                <!-- TODO: replace with artist photo: <img src="..." class="artist-photo" alt=""> -->
+              </div>
+              <div class="artist-id">
+                <div class="artist-role">{{ a.role }}</div>
+                <div class="artist-name">{{ a.name }}</div>
+                <div class="artist-city">{{ a.city }}</div>
+              </div>
+            </div>
+            <p class="artist-bio">{{ a.bio }}</p>
+            <div class="artist-badges">
+              <span v-for="(b, bi) in a.badges" :key="bi" class="artist-badge">
+                <i :class="['bi', b.icon]"></i> {{ b.text }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Access Protocol -->
+      <section class="event-section access-protocol">
+        <div class="access-head">
+          <span class="access-kicker">Access Protocol</span>
+          <span class="access-loc"><i class="bi bi-geo-alt"></i> Makati City</span>
+        </div>
+        <h3 class="access-title">Unmarked Door &amp; Listening Room Entry</h3>
+        <div class="access-map">
+          <!-- TODO: replace with map image: <img src="..." class="map-img" alt=""> -->
+        </div>
+        <div class="access-gate">
+          <span class="gate-left"><i class="bi bi-geo-alt"></i> The Spirits Library — Rear Door, Chino Roces</span>
+          <span class="gate-right">Members’ Usher</span>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- ============ RIGHT COLUMN: BOOKING PANEL ============ -->
+    <div class="booking-panel">
+      <div class="booking-card">
+
+        <!-- Allocation header -->
+        <div class="allocation">
+          <span class="alloc-badge">Patron Allocation</span>
+          <span class="alloc-badge alloc-active">Founder Allocation Active</span>
+        </div>
+
+        <!-- Price range -->
+        <div class="price-range">
+          <span class="price-big">₱2,800 — ₱6,500</span>
+          <span class="price-sub">/ attendee</span>
+        </div>
+        <p class="price-note">Every admission includes one rare single malt pour and a listening-room programme.</p>
+
+        <!-- Tier selector title -->
+        <div class="tier-title">
+          <span class="tier-label">Select Your Banquette</span>
+        </div>
+
+        <!-- Ticket tiers -->
+        <div class="tiers">
+          <div v-for="tier in tiers" :key="tier.id"
+               :class="['tier-card', { selected: selectedTierId === tier.id }]"
+               @click="selectTier(tier)">
+            <input type="radio" :name="eventId" :id="tier.id"
+                   :checked="selectedTierId === tier.id" @change="selectTier(tier)" class="tier-radio">
+            <div class="tier-body">
+              <div class="tier-name-row">
+                <span class="tier-name">{{ tier.name }}</span>
+                <span class="tier-price">{{ peso(tier.price) }}</span>
+              </div>
+              <p class="tier-desc">{{ tier.desc }}</p>
+              <span v-if="tier.badge" class="tier-badge">{{ tier.badge }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Attendees -->
+        <div class="attendees">
+          <label class="att-label">Attendees</label>
+          <div class="att-control">
+            <button class="att-btn" :disabled="!selectedTier || qty <= 1" @click="changeQty(-1)">−</button>
+            <span class="att-qty">{{ qty }}</span>
+            <button class="att-btn" :disabled="!selectedTier || qty >= maxQty" @click="changeQty(1)">+</button>
+          </div>
+          <span class="att-note">Max 6 seats per patron order</span>
+        </div>
+
+        <!-- Sold-out guard -->
+        <div v-if="allSoldOut" class="alert alert-danger mt-3">
+          <i class="bi bi-exclamation-triangle-fill"></i> All seating tiers are currently sold out.
+        </div>
+
+        <!-- Add-ons -->
+        <div class="addons-section">
+          <h4 class="addons-title">Bespoke Concierge Add-ons</h4>
+          <div v-for="(a, i) in addons" :key="i" class="addon-row">
+            <label class="addon-label">
+              <input type="checkbox" v-model="a.selected" class="addon-checkbox">
+              <span class="addon-check"></span>
+              <div class="addon-main">
+                <div class="addon-name">{{ a.name }}</div>
+                <div class="addon-price">+{{ peso(a.price) }} / seat</div>
+              </div>
+              <span class="addon-desc">{{ a.desc }}</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Order summary: dynamic line items derived from user selection -->
+        <div class="order-summary">
+          <div v-if="selectedTier" class="order-line">
+            <span class="order-line-name">Pass Allocation ({{ selectedTier.name }} × {{ qty }})</span>
+            <span class="order-line-price">{{ peso(tiersSubtotal) }}</span>
+          </div>
+          <div v-for="a in selectedAddons" :key="a.name" class="order-line">
+            <span class="order-line-name">{{ a.name }} (× {{ qty }})</span>
+            <span class="order-line-price">{{ peso(a.price * qty) }}</span>
+          </div>
+          <div v-if="serviceFee > 0" class="order-line">
+            <span class="order-line-name">Concierge &amp; Facilities Surcharge (10%)</span>
+            <span class="order-line-price">{{ peso(serviceFee) }}</span>
+          </div>
+          <div v-if="!selectedTier && selectedAddons.length === 0" class="order-empty">
+            Select a seating tier to see your order summary.
+          </div>
+          <div class="order-divider"></div>
+          <!-- TOTAL INVESTMENT left, Taxes Included right, big total below -->
+          <div class="order-total-header">
+            <span class="order-total-label">TOTAL INVESTMENT</span>
+            <span class="order-tax-right">Taxes Included</span>
+          </div>
+          <span class="order-total-big">{{ peso(orderTotal) }}</span>
+        </div>
+
+        <!-- Checkout -->
+        <button class="btn btn-gold w-100 checkout-btn" :disabled="!canCheckout" @click="goToPayment">
+          {{ canCheckout ? 'Proceed to Secure Checkout' : 'Select seating to continue' }}
+        </button>
+        <p class="secure-note">256-Bit Encrypted Concession Handoff · 100% Verified</p>
+
+      </div>
+
+      <!-- Special Patron Accommodations (completely separate from booking card) -->
+      <div class="patron-accom">
+        <div class="accom-row">
+          <span class="accom-icon">🎟️</span>
+          <div class="accom-text">
+            <div class="accom-title">Special Patron Accommodations?</div>
+            <div class="accom-sub">Speak directly with Head Concierge Vivienne at ext. 408 for ADA seating or dietary requests.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============ STEP: PAYMENT ============ -->
+    <div v-if="step === 'payment'" class="step-payment">
+      <div class="container mx-auto px-4 py-5" style="max-width:900px;">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+              <div class="card-body p-4 p-md-5">
+                <nav class="mb-4">
+                  <a class="text-decoration-none" @click="step='select'">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Seating Selection
+                  </a>
+                </nav>
+                <h2 class="h4 mb-3">Complete Your Booking</h2>
+                <p class="text-muted mb-4">Review your order and enter payment details to confirm your tickets.</p>
+
+                <div class="order-mini card bg-dark border-secondary mb-4 p-3">
+                  <div class="d-flex justify-content-between mb-2">
+                    <span class="text-muted small">{{ qty }} × {{ selectedTier?.name }}</span>
+                    <span>{{ peso((selectedTier?.price || 0) * qty) }}</span>
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <span class="fw-bold">Total to Pay</span>
+                    <span class="fw-bold text-gold">{{ peso(orderTotal) }}</span>
+                  </div>
+                </div>
+
+                <form @submit.prevent="processPayment" class="needs-validation">
+                  <div class="mb-3">
+                    <label class="form-label small fw-semibold text-uppercase">Cardholder Name</label>
+                    <input v-model="pay.cardholder" type="text" class="form-control bg-dark border-secondary text-light" placeholder="Name on card" required>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label small fw-semibold text-uppercase">Card Number</label>
+                    <input v-model="pay.number" type="text" class="form-control bg-dark border-secondary text-light" placeholder="1234 5678 9012 3456" required>
+                  </div>
+                  <div class="row g-3">
+                    <div class="col-6 mb-3">
+                      <label class="form-label small fw-semibold text-uppercase">Expiry</label>
+                      <input v-model="pay.expiry" type="text" class="form-control bg-dark border-secondary text-light" placeholder="MM/YY" required>
+                    </div>
+                    <div class="col-6 mb-3">
+                      <label class="form-label small fw-semibold text-uppercase">CVC</label>
+                      <input v-model="pay.cvc" type="text" class="form-control bg-dark border-secondary text-light" placeholder="123" required maxlength="4">
+                    </div>
+                  </div>
+                  <div class="form-check mb-4">
+                    <input class="form-check-input" v-model="pay.terms" id="terms" required>
+                    <label class="form-check-label small text-muted" for="terms">
+                      I agree to the <a href="#" class="text-gold text-decoration-none">Booking Rules &amp; Policies</a> and refund terms.
+                    </label>
+                  </div>
+                  <button class="btn btn-gold w-100 py-3 fw-bold text-uppercase letter-spaced" :disabled="payProcessing">
+                    {{ payProcessing ? 'Processing Payment…' : 'Pay Now' }}
+                  </button>
+                </form>
+                <p class="small text-muted mt-3 text-center">Your card details are never stored. Payment processed through a secure gateway.</p>
+                <div v-if="payError" class="alert alert-danger mt-3">{{ payError }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ STEP: CONFIRMATION ============ -->
+    <div v-if="step === 'confirmation'" class="step-confirmation">
+      <div class="container mx-auto px-4 py-5" style="max-width:1000px;">
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="confirm-hero text-center mb-4">
+              <span class="badge bg-success text-dark fw-bold letter-spaced small px-3 py-2">
+                <i class="bi bi-check-circle-fill me-1"></i>Booking Confirmed
+              </span>
+              <h1 class="h3 mb-2">Thank you, <span class="text-gold">{{ userName }}</span></h1>
+              <p class="text-muted">Your booking is confirmed and your digital e-tickets are ready.</p>
+            </div>
+
+            <div class="card border-0 shadow-sm bg-dark">
+              <div class="card-body p-4">
+                <h3 class="h6 fw-bold text-uppercase letter-spaced text-muted mb-3">Booking Summary</h3>
+                <div class="row g-3">
+                  <div class="col-6">
+                    <div class="recap-item">
+                      <span class="recap-label text-muted small">Event</span>
+                      <div class="recap-value">{{ eventName }}</div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="recap-item">
+                      <span class="recap-label text-muted small">Venue</span>
+                      <div class="recap-value">{{ venueName }}</div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="recap-item">
+                      <span class="recap-label text-muted small">Date &amp; Time</span>
+                      <div class="recap-value">{{ dateLong }} · {{ time24 }}</div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="recap-item">
+                      <span class="recap-label text-muted small">Seating Tier</span>
+                      <div class="recap-value">{{ selectedTier?.name }}</div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="recap-item">
+                      <span class="recap-label text-muted small">Attendees</span>
+                      <div class="recap-value">{{ qty }}</div>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <div class="recap-item">
+                      <span class="recap-label text-muted small">Total Paid</span>
+                      <div class="recap-value fw-bold text-gold">{{ peso(orderTotal) }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <div class="card border-0 shadow-sm bg-dark sticky-top" style="top:1rem;">
+              <div class="card-body p-4">
+                <h3 class="h6 fw-bold text-uppercase letter-spaced text-muted mb-3">
+                  <i class="bi bi-ticket-perforated me-1 text-gold"></i>Digital E-Tickets
+                </h3>
+                <div class="etickets">
+                  <div v-for="n in qty" :key="n" class="eticket mb-3 p-3 border border-secondary rounded bg-black">
+                    <div class="eticket-head d-flex justify-content-between align-items-start mb-2">
+                      <div>
+                        <div class="eticket-event fw-bold text-gold small">{{ eventName }}</div>
+                        <div class="eticket-venue text-muted small">{{ venueName }}</div>
+                        <div class="eticket-when text-muted small">{{ dateShort }} · {{ time24 }}</div>
+                      </div>
+                      <div class="text-end">
+                        <div class="eticket-tier fw-bold">{{ selectedTier?.name }}</div>
+                        <div class="eticket-seat text-muted small">Seat {{ seatFor(n) }}</div>
+                      </div>
+                    </div>
+                    <div class="eticket-code d-flex align-items-center gap-2">
+                      <span class="code-label text-muted small fw-semibold">Ticket Code</span>
+                      <div class="code-value fw-bold letter-spaced small">{{ ticketCode(n) }}</div>
+                      <div class="qr ms-auto">
+                        <i class="bi bi-qr-code text-muted"></i>
+                      </div>
+                    </div>
+                    <div class="eticket-actions mt-2 d-flex gap-2">
+                      <button class="btn btn-outline-gold btn-sm flex-fill" @click="dlTicket(n)">Download PDF</button>
+                      <button class="btn btn-outline-gold btn-sm flex-fill" @click="walletTicket(n)">Add to Wallet</button>
+                    </div>
+                  </div>
+                </div>
+                <p class="eticket-note text-muted small mt-3 text-center">
+                  <i class="bi bi-info-circle me-1"></i> Present your e‑ticket (QR code) at the venue entrance. Each ticket code is single‑use.
+                </p>
+                <div class="d-grid gap-2">
+                  <button class="btn btn-gold py-2 fw-bold" @click="dlAllTickets">Download All Tickets (PDF)</button>
+                  <button class="btn btn-outline-gold py-2 fw-bold text-uppercase letter-spaced" @click="resetFlow">Book Another Event</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onUnmounted } from 'vue'
+
+const eventId = 'evt-004'
+const eventName = 'Midnight Saxophone Salon'
+const venueName = 'The Spirits Library'
+const dateLong = 'Sat, Dec 12, 2026'
+const dateShort = 'Sat, Dec 12'
+const time24 = '21:30'
+
+const tiers = ref([
+  { id: 'tier_bronze', name: 'Bronze — Bar Stool', price: 2800, capacity: 14,
+    desc: 'A stool at the back bar with full sight lines to the quartet.', badge: null },
+  { id: 'tier_silver', name: 'Silver — Banquette Seat', price: 4500, capacity: 12,
+    desc: 'A seat at an east-wall banquette with full table service.', badge: 'Includes Single Malt Pour' },
+  { id: 'tier_gold', name: 'Gold — Private Booth', price: 6500, capacity: 4,
+    desc: 'Private booth for four with a dedicated pour from the back-bar reserve.', badge: 'Most Requested' },
+])
+
+const addons = ref([
+  { name: 'Late Jam Session Sign-Up', price: 800, desc: 'A guaranteed slot in the 23:30 jam with the quartet.', selected: false },
+  { name: 'Rare Single Malt Flight', price: 1600, desc: 'Three additional 25 ml pours from the back-bar reserve.', selected: false },
+])
+
+const movements = ref([
+  { work: 'Set I — Brass Standards', detail: 'Bop standards, tenor and alto sax, upright bass · 40 Minutes', tempo: '21:30' },
+  { work: 'Single Malt Pour No. 1', detail: 'Rare 18-year single malt, poured at the table', tempo: '22:15' },
+  { work: 'Set II — Ballads & Blues', detail: 'Slow-tempo quartet with muted trumpet · 35 Minutes', tempo: '22:30' },
+  { work: 'Late Jam Session', detail: 'Open to the room — sign up at the bar · 30 Minutes', tempo: '23:30' },
+])
+
+// ---- Tab panels ----
+const activeTab = ref('program')
+
+// ---- Hero gallery ----
+// TODO: put your image paths here — src '' keeps the gradient placeholder until filled in.
+const heroImages = ref([
+  { src: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80', alt: 'Dimly lit speakeasy bar' },
+  { src: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80', alt: 'Saxophone under a single lamp' },
+  { src: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80', alt: 'Back-bar single malt reserve' },
+  { src: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80', alt: 'Banquette seating along the wall' },
+])
+const activeImage = ref(0)
+
+const pairings = ref([
+  { name: 'Rare Single Malt', detail: 'Islay, 18 years · 25 ml pour, served neat', pour: '22:15 · Set I Break' },
+  { name: 'Aged Rum Flight', detail: 'Three rums — Barbados, Jamaica and Martinique', pour: '23:20 · Jam Session' },
+  { name: 'Smoked Pear Soda', detail: 'Zero-proof, house-made and smoked over applewood', pour: 'Throughout' },
+])
+
+const artists = ref([
+  { role: 'Bandleader', name: 'Cornelius “Chip” Barnes', city: 'New York → Manila', bio: 'A tenor player who came up in the Harlem loft scene and recorded for Blue Note in the late seventies. He now leads the Speakeasy Quartet on an annual Manila residency.', badges: [
+    { icon: 'bi-vinyl', text: 'Blue Note · 1978' },
+    { icon: 'bi-award', text: 'Jazz Awards 2019' },
+  ]},
+  { role: 'Pianist', name: 'Dolores Reyes', city: 'Manila Conservatory', bio: 'A Manila Conservatory faculty pianist who has spent a decade in the city’s listening rooms, known for an upright-only style that never once touches a keyboard with amplification.', badges: [
+    { icon: 'bi-music-note-list', text: 'Upright Only' },
+    { icon: 'bi-patch-check', text: 'Aliw Award 2023' },
+  ]},
+])
+
+// ---- Booking state ----
+const step = ref('select')
+const selectedTierId = ref(null)
+const qty = ref(1)
+const holdExpired = ref(false)
+const payProcessing = ref(false)
+const payError = ref('')
+const userName = ref('Guest')
+
+const pay = ref({ cardholder: '', number: '', expiry: '', cvc: '', terms: false })
+
+// ---- Computed ----
+const selectedTier = computed(() => tiers.value.find(t => t.id === selectedTierId.value))
+const allSoldOut = computed(() => tiers.value.every(t => t.capacity === 0))
+const canCheckout = computed(() => !!selectedTier.value && qty.value > 0 && selectedTier.value.capacity > 0 && !holdExpired.value)
+
+// ---- Attendees ----
+// Per-order cap from the UI note. The effective max is the smaller of the tier's
+// remaining capacity and this per-order cap, so the note and the +/- buttons agree.
+const MAX_SEATS_PER_ORDER = 6
+const maxQty = computed(() => Math.min(selectedTier.value?.capacity ?? MAX_SEATS_PER_ORDER, MAX_SEATS_PER_ORDER))
+
+const tiersSubtotal = computed(() => (selectedTier.value ? selectedTier.value.price * qty.value : 0))
+const selectedAddons = computed(() => addons.value.filter(a => a.selected))
+const addonsSubtotal = computed(() => selectedAddons.value.reduce((s, a) => s + a.price * qty.value, 0))
+const serviceFee = computed(() => Math.round((tiersSubtotal.value + addonsSubtotal.value) * 0.10))
+const orderTotal = computed(() => tiersSubtotal.value + addonsSubtotal.value + serviceFee.value)
+
+// ---- Formatters ----
+const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')
+const ROMANS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
+const roman = (i) => ROMANS[i] ?? (i + 1)
+const ticketCode = (n) => `G1-MSA-${String(selectedTierId.value).slice(-4).toUpperCase()}-${String(n).padStart(3, '0')}`
+const seatFor = (n) => String.fromCharCode(65 + (n - 1)) + (10 + (n - 1))
+
+// ---- Actions ----
+function selectTier(t) {
+  if (t.capacity === 0) return
+  selectedTierId.value = t.id
+  qty.value = Math.min(qty.value, maxQty.value)
+}
+function changeQty(d) {
+  if (!selectedTier.value) return
+  const next = qty.value + d
+  if (next < 1 || next > maxQty.value) return
+  qty.value = next
+}
+
+function goToPayment() {
+  if (!canCheckout.value) return
+  step.value = 'payment'
+}
+
+function processPayment() {
+  if (!pay.value.terms) { payError.value = 'Please accept the booking rules and refund terms.'; return }
+  payProcessing.value = true
+  payError.value = ''
+  setTimeout(() => {
+    const ok = Math.random() > 0.1
+    payProcessing.value = false
+    if (!ok) { payError.value = 'Payment was declined. Please try a different card.'; return }
+    userName.value = 'Guest'
+    step.value = 'confirmation'
+  }, 1500)
+}
+
+function dlTicket(n) { alert(`Downloading e‑ticket PDF: ${ticketCode(n)}`) }
+function walletTicket(n) { alert(`Added ${ticketCode(n)} to wallet.`) }
+function dlAllTickets() { alert(`Downloading all ${qty.value} e‑tickets as a single PDF.`) }
+
+function resetFlow() {
+  step.value = 'select'
+  selectedTierId.value = null
+  qty.value = 1
+  addons.value.forEach(a => a.selected = false)
+  pay.value = { cardholder: '', number: '', expiry: '', cvc: '', terms: false }
+  payError.value = ''
+  holdExpired.value = false
+}
+</script>
+
+<style scoped src="../assets/EventDetailsPage.css"></style>
