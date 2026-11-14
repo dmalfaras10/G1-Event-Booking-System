@@ -30,3 +30,4 @@ import HeroCarousel from '../components/Hero.vue'
 			</div>
 		</section>
 </template>
+
