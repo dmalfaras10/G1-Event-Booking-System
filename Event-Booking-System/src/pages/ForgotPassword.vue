@@ -1,3 +1,37 @@
+<script setup>
+import { ref, watch } from 'vue'
+import { useGlobalStore } from "../stores/global.js";
+import { useRouter } from "vue-router";
+import { Notyf } from 'notyf';
+
+const router = useRouter();
+const notyf = new Notyf();
+const { getUserDetails } = useGlobalStore();
+const isEnabled = ref(false);
+const email = ref("");
+
+watch(email, (currentValue) => {
+    if(currentValue.trim() !== ""){
+        isEnabled.value = true;
+    }
+    else
+    {
+        isEnabled.value = false;
+    }
+});
+
+function handleSubmit (event){
+    event.preventDefault();
+    localStorage.setItem("email", email.value);
+    getUserDetails (email.value);
+
+    notyf.success("Recovery Instructions Sent");
+
+    email.value = "";
+    router.push({ path : '/login'});    
+}
+</script>
+
 <template>
   <div
     data-bs-theme="dark"
@@ -33,7 +67,6 @@
               type="email"
               class="form-control form-control-lg forgot-custom-input"
               placeholder="name@example.com"
-              autocomplete="email"
               required
             />
           </div>
@@ -85,7 +118,6 @@
   color: var(--text-muted);
 }
 
-/* Icon Badge Styling */
 .forgot-icon-container {
   width: 48px;
   height: 48px;
