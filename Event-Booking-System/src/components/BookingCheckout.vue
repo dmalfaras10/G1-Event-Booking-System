@@ -78,7 +78,6 @@
         <!-- ==================== STEP: CONFIRMATION ==================== -->
         <div v-else class="modal-body">
           <div class="confirm-head">
-            <span class="confirm-badge"><i class="bi bi-check-circle-fill"></i> Booking Confirmed</span>
             <h2 class="modal-title">Thank you, <span class="gold">{{ userName }}</span></h2>
             <p class="modal-sub">Your booking is confirmed and your digital e-tickets are ready.</p>
           </div>
