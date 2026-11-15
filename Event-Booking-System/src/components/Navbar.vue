@@ -147,9 +147,9 @@ const handleSelectEvent = (event) => {
 						</a>
 					</li>
 					<li class="navbar-nav-item nav-item">
-						<a class="navbar-nav-link nav-link" href="#">
+						<router-link class="navbar-nav-link nav-link" to="/about">
 							<i class="bi bi-info-circle me-1"></i>About
-						</a>
+						</router-link>
 					</li>
 					<li class="navbar-nav-item nav-item">
 						<a class="navbar-nav-link nav-link" href="#">

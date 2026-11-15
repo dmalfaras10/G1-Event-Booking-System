@@ -9,6 +9,7 @@ import HomePage from './pages/HomePage.vue'
 import EventListingsPage from './pages/EventListingsPage.vue';
 import EventDetailsPage from './pages/EventDetailsPage.vue'
 import ErrorPage from './pages/ErrorPage.vue'
+import AboutContactPage from './pages/AboutContactPage.vue';
 
 const routes = [
 
@@ -16,6 +17,7 @@ const routes = [
   { path: '/event/event-details1', name: 'event-details', component: EventDetailsPage },
   { path: '/events', name: 'EventListings',  component: EventListingsPage},
   { path: '/events/:id', name: 'EventDetails', component: EventDetailsPage, props: true},
+  {path: '/about', name: 'About', component: AboutContactPage},
   { path: '/:pathMatch(.*)*', name: 'not-found', component: ErrorPage }
 
 ]
