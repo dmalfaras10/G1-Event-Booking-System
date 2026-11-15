@@ -20,6 +20,7 @@ import RegisterPage from './pages/RegisterPage.vue'
 import LogoutPage from './pages/LogoutPage.vue'
 import ForgotPassword from './pages/ForgotPassword.vue'
 import ErrorPage from './pages/ErrorPage.vue'
+import AboutContactPage from './pages/AboutContactPage.vue';
 
 // Each event page is referenced by the id set in its own script (evt-001 … evt-006)
 const eventDetailsPages = {
@@ -38,12 +39,15 @@ const routes = [
   { path: '/login', name: 'Login', component: LoginPage },
   { path: '/forgot-password', name: 'Forgot-Password', component: ForgotPassword },
   { path: '/logout', name: 'logout', component: LogoutPage},
-  { path: '/event/event-details1', name: 'event-details', component: EventDetailsPage },
+//   { path: '/event/event-details1', name: 'event-details', component: EventDetailsPage },
   { path: '/events', name: 'EventListings',  component: EventListingsPage},
   { path: '/events/:id', name: 'EventDetails', props: true, component: {
     props: ['id'],
     setup: (props) => () => h(eventDetailsPages[props.id] || EventDetailsPage)
   }},
+  { path: '/events/:id', name: 'EventDetails', component: EventDetailsPage, props: true},
+  { path: '/about', name: 'About', component: AboutContactPage},
+  { path: '/contact', name: 'Contact', component: AboutContactPage},
   { path: '/:pathMatch(.*)*', name: 'not-found', component: ErrorPage }
 
 ]
