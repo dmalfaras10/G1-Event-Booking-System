@@ -14,6 +14,7 @@ import RegisterPage from './pages/RegisterPage.vue'
 import LogoutPage from './pages/LogoutPage.vue'
 import ForgotPassword from './pages/ForgotPassword.vue'
 import ErrorPage from './pages/ErrorPage.vue'
+import AboutContactPage from './pages/AboutContactPage.vue';
 
 const routes = [
 
@@ -25,6 +26,8 @@ const routes = [
   { path: '/event/event-details1', name: 'event-details', component: EventDetailsPage },
   { path: '/events', name: 'EventListings',  component: EventListingsPage},
   { path: '/events/:id', name: 'EventDetails', component: EventDetailsPage, props: true},
+  { path: '/about', name: 'About', component: AboutContactPage},
+  { path: '/contact', name: 'Contact', component: AboutContactPage},
   { path: '/:pathMatch(.*)*', name: 'not-found', component: ErrorPage }
 
 ]
