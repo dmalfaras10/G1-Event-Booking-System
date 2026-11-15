@@ -152,9 +152,9 @@ const handleSelectEvent = (event) => {
 						</router-link>
 					</li>
 					<li class="navbar-nav-item nav-item">
-						<a class="navbar-nav-link nav-link" href="#">
+						<router-link class="navbar-nav-link nav-link" to="/contact">
 							<i class="bi bi-envelope me-1"></i>Contact
-						</a>
+						</router-link>
 					</li>
 				</ul>
 				<!-- Auth Buttons -->

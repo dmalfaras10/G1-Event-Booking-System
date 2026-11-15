@@ -1,5 +1,6 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted, watch, nextTick } from 'vue'
+import { useRoute } from "vue-router"
 import {
   companyStats,
   servicesData,
@@ -9,6 +10,10 @@ import {
   policiesData,
   faqsData
 } from '../data/aboutData.js'
+
+//router
+const route = useRoute();
+
 
 // --- CONTACT FORM STATE & VALIDATION ---
 const form = reactive({
@@ -119,6 +124,36 @@ const scrollToSection = (sectionId) => {
     el.scrollIntoView({ behavior: 'smooth' })
   }
 }
+
+//handle dynamic scrolling to about / contact
+const handleRouteScroll = async () => {
+  await nextTick()
+
+  if (route.path === '/contact') {
+    const contactSection = document.getElementById('contact-section')
+    contactSection?.scrollIntoView({ behavior: 'smooth' })
+  } else {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    })
+  }
+}
+
+//user clicks /contact path
+onMounted(() => {
+  handleRouteScroll()
+});
+
+// switching between paths
+watch(
+  () => route.path,
+  () => {
+    handleRouteScroll()
+  }
+)
+
 </script>
 
 <template>

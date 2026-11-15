@@ -17,7 +17,8 @@ const routes = [
   { path: '/event/event-details1', name: 'event-details', component: EventDetailsPage },
   { path: '/events', name: 'EventListings',  component: EventListingsPage},
   { path: '/events/:id', name: 'EventDetails', component: EventDetailsPage, props: true},
-  {path: '/about', name: 'About', component: AboutContactPage},
+  { path: '/about', name: 'About', component: AboutContactPage},
+  { path: '/contact', name: 'Contact', component: AboutContactPage},
   { path: '/:pathMatch(.*)*', name: 'not-found', component: ErrorPage }
 
 ]
