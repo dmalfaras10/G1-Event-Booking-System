@@ -45,7 +45,6 @@ const routes = [
     props: ['id'],
     setup: (props) => () => h(eventDetailsPages[props.id] || EventDetailsPage)
   }},
-  { path: '/events/:id', name: 'EventDetails', component: EventDetailsPage, props: true},
   { path: '/about', name: 'About', component: AboutContactPage},
   { path: '/contact', name: 'Contact', component: AboutContactPage},
   { path: '/:pathMatch(.*)*', name: 'not-found', component: ErrorPage }
