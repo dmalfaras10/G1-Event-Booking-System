@@ -372,9 +372,11 @@
       :tier-id="selectedTierId || ''"
       :qty="qty"
       :subtotal="(selectedTier?.price || 0) * qty"
+      :add-ons="selectedAddons"
+      :service-fee="serviceFee"
       :total="orderTotal"
       :currency="'₱'"
-      :code-prefix="G1-GCN"
+      :code-prefix="'G1-GCN'"
       @close="step = 'select'"
       @reset="resetFlow"
     />

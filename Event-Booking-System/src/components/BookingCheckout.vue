@@ -23,6 +23,14 @@
               <span class="order-strip-label">{{ qty }} × {{ tierName }}</span>
               <span class="order-strip-value">{{ money(subtotal) }}</span>
             </div>
+            <div v-for="a in addOns" :key="a.name" class="order-strip-row order-strip-row-sub">
+              <span class="order-strip-label">{{ a.name }} (× {{ qty }})</span>
+              <span class="order-strip-value">{{ money(a.price * qty) }}</span>
+            </div>
+            <div v-if="serviceFee > 0" class="order-strip-row">
+              <span class="order-strip-label">Concierge &amp; Facilities Surcharge (10%)</span>
+              <span class="order-strip-value">{{ money(serviceFee) }}</span>
+            </div>
             <div class="order-strip-row order-strip-total">
               <span>Total to Pay</span>
               <span class="order-strip-value gold">{{ money(total) }}</span>
@@ -161,6 +169,8 @@ const props = defineProps({
   tierId: { type: String, default: '' },
   qty: { type: Number, default: 1 },
   subtotal: { type: Number, default: 0 },
+  addOns: { type: Array, default: () => [] },
+  serviceFee: { type: Number, default: 0 },
   total: { type: Number, default: 0 },
   currency: { type: String, default: '₱' },
   codePrefix: { type: String, default: 'G1' },
@@ -318,6 +328,9 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
 }
 .order-strip-label { color: var(--text-muted); }
 .order-strip-value { font-weight: 700; }
+/* Add-on lines sit under the tier line */
+.order-strip-row-sub { padding-left: 0.9rem; font-size: 0.8rem; }
+.order-strip-row-sub .order-strip-label { color: #8a8a93; }
 .order-strip-total {
   border-top: 1px solid var(--border-subtle);
   padding-top: 0.55rem;
