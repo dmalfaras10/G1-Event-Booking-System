@@ -39,13 +39,12 @@ const routes = [
   { path: '/login', name: 'Login', component: LoginPage },
   { path: '/forgot-password', name: 'Forgot-Password', component: ForgotPassword },
   { path: '/logout', name: 'logout', component: LogoutPage},
-//   { path: '/event/event-details1', name: 'event-details', component: EventDetailsPage },
+  { path: '/event/event-details1', name: 'event-details', component: EventDetailsPage },
   { path: '/events', name: 'EventListings',  component: EventListingsPage},
   { path: '/events/:id', name: 'EventDetails', props: true, component: {
     props: ['id'],
     setup: (props) => () => h(eventDetailsPages[props.id] || EventDetailsPage)
   }},
-  { path: '/events/:id', name: 'EventDetails', component: EventDetailsPage, props: true},
   { path: '/about', name: 'About', component: AboutContactPage},
   { path: '/contact', name: 'Contact', component: AboutContactPage},
   { path: '/:pathMatch(.*)*', name: 'not-found', component: ErrorPage }
