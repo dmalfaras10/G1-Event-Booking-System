@@ -1,5 +1,6 @@
 import { createApp, h } from 'vue'
 import { createRouter, createWebHistory } from 'vue-router'
+import { createPinia } from 'pinia';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.min.js';
 import 'bootstrap-icons/font/bootstrap-icons.min.css';
@@ -14,6 +15,10 @@ import EventDetailsPage3 from './pages/EventDetailsPage3.vue'
 import EventDetailsPage4 from './pages/EventDetailsPage4.vue'
 import EventDetailsPage5 from './pages/EventDetailsPage5.vue'
 import EventDetailsPage6 from './pages/EventDetailsPage6.vue'
+import LoginPage from './pages/LoginPage.vue'
+import RegisterPage from './pages/RegisterPage.vue'
+import LogoutPage from './pages/LogoutPage.vue'
+import ForgotPassword from './pages/ForgotPassword.vue'
 import ErrorPage from './pages/ErrorPage.vue'
 
 // Each event page is referenced by the id set in its own script (evt-001 … evt-006)
@@ -29,6 +34,10 @@ const eventDetailsPages = {
 const routes = [
 
   { path: '/', name: 'home', component: HomePage },
+  { path: '/register', name: 'Register', component: RegisterPage },
+  { path: '/login', name: 'Login', component: LoginPage },
+  { path: '/forgot-password', name: 'Forgot-Password', component: ForgotPassword },
+  { path: '/logout', name: 'logout', component: LogoutPage},
   { path: '/event/event-details1', name: 'event-details', component: EventDetailsPage },
   { path: '/events', name: 'EventListings',  component: EventListingsPage},
   { path: '/events/:id', name: 'EventDetails', props: true, component: {
@@ -44,4 +53,4 @@ const router = createRouter({
   routes,
 })
 
-createApp(App).use(router).mount('#app') 
+createApp(App).use(router).use(createPinia()).mount('#app') 
