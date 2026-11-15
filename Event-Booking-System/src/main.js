@@ -39,7 +39,7 @@ const routes = [
   { path: '/login', name: 'Login', component: LoginPage },
   { path: '/forgot-password', name: 'Forgot-Password', component: ForgotPassword },
   { path: '/logout', name: 'logout', component: LogoutPage},
-//   { path: '/event/event-details1', name: 'event-details', component: EventDetailsPage },
+  { path: '/event/event-details1', name: 'event-details', component: EventDetailsPage },
   { path: '/events', name: 'EventListings',  component: EventListingsPage},
   { path: '/events/:id', name: 'EventDetails', props: true, component: {
     props: ['id'],
