@@ -72,10 +72,8 @@
 
       <!-- Section tabs (switch the content panel below) -->
       <div class="section-tabs">
-        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Countdown Programme</span>
-        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Headliners</span>
-        <span :class="['tab', { active: activeTab === 'acoustic' }]" @click="activeTab = 'acoustic'"><i class="bi bi-broadcast"></i> Cove &amp; Pyro</span>
-        <span :class="['tab', { active: activeTab === 'sommelier' }]" @click="activeTab = 'sommelier'"><i class="bi bi-cup-straw"></i> Champagne Service</span>
+        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Event Details</span>
+        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Performer Lineup</span>
       </div>
 
       <!-- Tab panel: Program Notes & Repertoire -->
@@ -146,57 +144,6 @@
         </div>
       </section>
 
-      <!-- Tab panel: Acoustic Blueprint (placeholder content) -->
-      <section v-else-if="activeTab === 'acoustic'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Cove &amp; Pyro</h2>
-          <span class="artist-profiles">Venue Calibration</span>
-        </div>
-        <div class="movements">
-          <div class="spec-row">
-            <span class="spec-name">Venue</span>
-            <span class="spec-value">Okada Manila Cove — glass dome and pool deck, Manila Bay front</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Capacity</span>
-            <span class="spec-value">2,400 guests — sold out</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Dispersion System</span>
-            <span class="spec-value">Dome line array, 16 elements per side, with pool-deck delays</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Pyrotechnics</span>
-            <span class="spec-value">Licensed waterfront display, 12-minute sequence from 23:48</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Curfew</span>
-            <span class="spec-value">Amplified sound ends 03:00 PHT; pyro permit expires 00:15</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Tab panel: Sommelier Pairing (placeholder content) -->
-      <section v-else-if="activeTab === 'sommelier'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Champagne Service</h2>
-          <span class="artist-profiles">Curated by the House Sommelier</span>
-        </div>
-        <div class="movements">
-          <div v-for="(p, i) in pairings" :key="i" class="movement-row">
-            <div class="movement-main">
-              <div class="movement-work">{{ p.name }}</div>
-              <div class="movement-detail">{{ p.detail }}</div>
-            </div>
-            <div class="movement-tempo">{{ p.pour }}</div>
-          </div>
-        </div>
-        <p class="pairing-note">
-          <i class="bi bi-cup-straw"></i>
-          Unlimited vintage Champagne is included with every admission. Waitlist guests will be contacted if seats are released.
-        </p>
-      </section>
-
       <!-- Resident Virtuosos & Maestro -->
       <section class="event-section">
         <div class="section-head">
@@ -222,22 +169,6 @@
               </span>
             </div>
           </div>
-        </div>
-      </section>
-
-      <!-- Access Protocol -->
-      <section class="event-section access-protocol">
-        <div class="access-head">
-          <span class="access-kicker">Access Protocol</span>
-          <span class="access-loc"><i class="bi bi-geo-alt"></i> Pasay City</span>
-        </div>
-        <h3 class="access-title">Private Porte-Cochère &amp; Cove Entry</h3>
-        <div class="access-map">
-          <!-- TODO: replace with map image: <img src="..." class="map-img" alt=""> -->
-        </div>
-        <div class="access-gate">
-          <span class="gate-left"><i class="bi bi-geo-alt"></i> Okada Manila — Cove Gate 1, Waterfront</span>
-          <span class="gate-right">VIP Waitlist Concierge</span>
         </div>
       </section>
 
@@ -427,12 +358,6 @@ const heroImages = ref([
   { src: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80', alt: 'Champagne toast on the deck' },
 ])
 const activeImage = ref(0)
-
-const pairings = ref([
-  { name: 'Vintage Brut', detail: 'Unlimited vintage champagne service from doors', pour: 'Reception · 21:00' },
-  { name: 'Gold Leaf Canapés', detail: 'Passed canapés with a champagne pairing', pour: '22:00' },
-  { name: 'Grand Cru Toast', detail: 'A glass of grand cru at midnight on the pool deck', pour: '00:00' },
-])
 
 const artists = ref([
   { role: 'Headline DJ', name: 'Aurelia Vance', city: 'Ibiza → Manila', bio: 'A headline DJ with a decade-long Ibiza residency and a reputation for sets that run from ambient to peak-time without a visible seam. This is her first Manila New Year’s Eve.', badges: [

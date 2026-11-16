@@ -72,10 +72,8 @@
 
       <!-- Section tabs (switch the content panel below) -->
       <div class="section-tabs">
-        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Program &amp; Set Times</span>
-        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Artist Lineup</span>
-        <span :class="['tab', { active: activeTab === 'acoustic' }]" @click="activeTab = 'acoustic'"><i class="bi bi-broadcast"></i> Venue &amp; Sound</span>
-        <span :class="['tab', { active: activeTab === 'sommelier' }]" @click="activeTab = 'sommelier'"><i class="bi bi-cup-straw"></i> Bar &amp; Pairing</span>
+        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Event Details</span>
+        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Performer Lineup</span>
       </div>
 
       <!-- Tab panel: Program Notes & Repertoire -->
@@ -146,57 +144,6 @@
         </div>
       </section>
 
-      <!-- Tab panel: Acoustic Blueprint (placeholder content) -->
-      <section v-else-if="activeTab === 'acoustic'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Venue &amp; Sound</h2>
-          <span class="artist-profiles">Palace Pool Deck</span>
-        </div>
-        <div class="movements">
-          <div class="spec-row">
-            <span class="spec-name">Coverage</span>
-            <span class="spec-value">Open-air pool deck, 1,800 capacity — 12 line-array elements per side</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Delay System</span>
-            <span class="spec-value">Six ground-stacked delays across the cabana row, time-aligned to 4 ms</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Sweet Spot</span>
-            <span class="spec-value">VIP cabanas, rows 1–3 — ±2.5 dB dispersion tolerance</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Sub Configuration</span>
-            <span class="spec-value">Cardioid end-fire array, 8 × 21″ subs, 38 Hz roll-off</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Curfew</span>
-            <span class="spec-value">Amplified sound ends 23:30 PHT per BGC noise ordinance</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Tab panel: Sommelier Pairing (placeholder content) -->
-      <section v-else-if="activeTab === 'sommelier'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Bar &amp; Pairing</h2>
-          <span class="artist-profiles">Curated by the Sky-Deck Bar Team</span>
-        </div>
-        <div class="movements">
-          <div v-for="(p, i) in pairings" :key="i" class="movement-row">
-            <div class="movement-main">
-              <div class="movement-work">{{ p.name }}</div>
-              <div class="movement-detail">{{ p.detail }}</div>
-            </div>
-            <div class="movement-tempo">{{ p.pour }}</div>
-          </div>
-        </div>
-        <p class="pairing-note">
-          <i class="bi bi-cup-straw"></i>
-          Two drink vouchers are included with every Silver and Gold admission. Bronze guests may add a voucher at checkout.
-        </p>
-      </section>
-
       <!-- Resident Virtuosos & Maestro -->
       <section class="event-section">
         <div class="section-head">
@@ -222,22 +169,6 @@
               </span>
             </div>
           </div>
-        </div>
-      </section>
-
-      <!-- Access Protocol -->
-      <section class="event-section access-protocol">
-        <div class="access-head">
-          <span class="access-kicker">Access Protocol</span>
-          <span class="access-loc"><i class="bi bi-geo-alt"></i> BGC, Taguig</span>
-        </div>
-        <h3 class="access-title">Private Porte-Cochère &amp; Pool Deck Entry</h3>
-        <div class="access-map">
-          <!-- TODO: replace with map image: <img src="..." class="map-img" alt=""> -->
-        </div>
-        <div class="access-gate">
-          <span class="gate-left"><i class="bi bi-geo-alt"></i> The Palace Pool Club — Gate B, 11th Avenue</span>
-          <span class="gate-right">Cabana Concierge Escort</span>
         </div>
       </section>
 
@@ -426,12 +357,6 @@ const heroImages = ref([
   { src: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=80', alt: 'Sky-deck cabana view' },
 ])
 const activeImage = ref(0)
-
-const pairings = ref([
-  { name: 'Neon Noir Spritz', detail: 'Yuzu, butterfly pea and dry sparkling — served at the gates', pour: 'Doors · 19:00' },
-  { name: 'Sky-Deck Sake Flight', detail: 'Three 30 ml pours: Junmai, Ginjo and Nigori', pour: 'Act I · 20:45' },
-  { name: 'Midnight Espresso Martini', detail: 'Cold brew, vanilla and cacao for the B2B finale', pour: 'Encore · 22:50' },
-])
 
 const artists = ref([
   { role: 'Headline Selector', name: 'DJ Kaito', city: 'Tokyo → Manila', bio: 'A fixture of the Tokyo underground, Kaito is known for live modular sets that dissolve the line between DJ booth and orchestra pit. His 2025 Boiler Room Manila set was called “a sunrise in the middle of the night.”', badges: [

@@ -72,10 +72,8 @@
 
       <!-- Section tabs (switch the content panel below) -->
       <div class="section-tabs">
-        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Program &amp; Set List</span>
-        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Performers</span>
-        <span :class="['tab', { active: activeTab === 'acoustic' }]" @click="activeTab = 'acoustic'"><i class="bi bi-soundwave"></i> Venue &amp; Acoustics</span>
-        <span :class="['tab', { active: activeTab === 'sommelier' }]" @click="activeTab = 'sommelier'"><i class="bi bi-cup-straw"></i> Interval Bar</span>
+        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Event Details</span>
+        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Performer Lineup</span>
       </div>
 
       <!-- Tab panel: Program Notes & Repertoire -->
@@ -146,57 +144,6 @@
         </div>
       </section>
 
-      <!-- Tab panel: Acoustic Blueprint (placeholder content) -->
-      <section v-else-if="activeTab === 'acoustic'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Venue &amp; Acoustics</h2>
-          <span class="artist-profiles">Hall Calibration</span>
-        </div>
-        <div class="movements">
-          <div class="spec-row">
-            <span class="spec-name">Hall</span>
-            <span class="spec-value">Samsung Performing Arts Theater — 1,200 seats, shoebox configuration</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Reverberation Time (RT60)</span>
-            <span class="spec-value">1.4 s at 500 Hz, with adjustable banners engaged</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Amplification</span>
-            <span class="spec-value">None — all instruments acoustic, piano lid on full stick</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Acoustic Sweet Spot</span>
-            <span class="spec-value">Orchestra rows C–F — ±1.5 dB dispersion tolerance</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Recording</span>
-            <span class="spec-value">Audience recording prohibited; one room mic feed is archived by the house</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Tab panel: Sommelier Pairing (placeholder content) -->
-      <section v-else-if="activeTab === 'sommelier'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Interval Bar</h2>
-          <span class="artist-profiles">Curated by the House Sommelier</span>
-        </div>
-        <div class="movements">
-          <div v-for="(p, i) in pairings" :key="i" class="movement-row">
-            <div class="movement-main">
-              <div class="movement-work">{{ p.name }}</div>
-              <div class="movement-detail">{{ p.detail }}</div>
-            </div>
-            <div class="movement-tempo">{{ p.pour }}</div>
-          </div>
-        </div>
-        <p class="pairing-note">
-          <i class="bi bi-cup-straw"></i>
-          The interval bar is cashless only. One complimentary soft drink is included with every admission.
-        </p>
-      </section>
-
       <!-- Resident Virtuosos & Maestro -->
       <section class="event-section">
         <div class="section-head">
@@ -222,22 +169,6 @@
               </span>
             </div>
           </div>
-        </div>
-      </section>
-
-      <!-- Access Protocol -->
-      <section class="event-section access-protocol">
-        <div class="access-head">
-          <span class="access-kicker">Access Protocol</span>
-          <span class="access-loc"><i class="bi bi-geo-alt"></i> Makati City</span>
-        </div>
-        <h3 class="access-title">Private Lobby &amp; Cabaret Entry</h3>
-        <div class="access-map">
-          <!-- TODO: replace with map image: <img src="..." class="map-img" alt=""> -->
-        </div>
-        <div class="access-gate">
-          <span class="gate-left"><i class="bi bi-geo-alt"></i> Samsung Performing Arts Theater — Lobby B</span>
-          <span class="gate-right">House Usher Escort</span>
         </div>
       </section>
 
@@ -427,12 +358,6 @@ const heroImages = ref([
   { src: 'https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?auto=format&fit=crop&w=900&q=80', alt: 'Cabaret seating in the round' },
 ])
 const activeImage = ref(0)
-
-const pairings = ref([
-  { name: 'Riesling Kabinett', detail: 'Mosel, Germany · off-dry, served chilled', pour: 'Interval · 20:40' },
-  { name: 'Single Malt Flight', detail: 'Three 15 ml pours — Highland, Speyside and Islay', pour: 'Interval · 20:40' },
-  { name: 'Chamomile & Honey', detail: 'Caffeine-free, served in the lobby after the encore', pour: 'Encore · 21:55' },
-])
 
 const artists = ref([
   { role: 'Featured Artist', name: 'Nils Frahm', city: 'Berlin, Germany', bio: 'A pianist and producer whose felt-damped piano recordings for Erased Tapes have made him one of the most streamed classical artists in the world, and one of the least predictable live.', badges: [

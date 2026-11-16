@@ -72,10 +72,8 @@
 
       <!-- Section tabs (switch the content panel below) -->
       <div class="section-tabs">
-        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Set List &amp; Sessions</span>
-        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> The Quartet</span>
-        <span :class="['tab', { active: activeTab === 'acoustic' }]" @click="activeTab = 'acoustic'"><i class="bi bi-soundwave"></i> Listening Room</span>
-        <span :class="['tab', { active: activeTab === 'sommelier' }]" @click="activeTab = 'sommelier'"><i class="bi bi-cup-straw"></i> Spirits Pairing</span>
+        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Event Details</span>
+        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Performer Lineup</span>
       </div>
 
       <!-- Tab panel: Program Notes & Repertoire -->
@@ -146,57 +144,6 @@
         </div>
       </section>
 
-      <!-- Tab panel: Acoustic Blueprint (placeholder content) -->
-      <section v-else-if="activeTab === 'acoustic'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Listening Room</h2>
-          <span class="artist-profiles">Room Calibration</span>
-        </div>
-        <div class="movements">
-          <div class="spec-row">
-            <span class="spec-name">Room</span>
-            <span class="spec-value">The Spirits Library — 80 seats, 1,100-bottle back bar</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Reverberation Time (RT60)</span>
-            <span class="spec-value">0.6 s — heavily damped by carpet and book-lined walls</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Amplification</span>
-            <span class="spec-value">None — acoustic quartet, no PA, no monitors</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Acoustic Sweet Spot</span>
-            <span class="spec-value">Banquettes 1–4 along the east wall — ±1.5 dB</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">House Rule</span>
-            <span class="spec-value">No photography on the floor; phones stay at the bar</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Tab panel: Sommelier Pairing (placeholder content) -->
-      <section v-else-if="activeTab === 'sommelier'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Spirits Pairing</h2>
-          <span class="artist-profiles">Curated by the Back Bar</span>
-        </div>
-        <div class="movements">
-          <div v-for="(p, i) in pairings" :key="i" class="movement-row">
-            <div class="movement-main">
-              <div class="movement-work">{{ p.name }}</div>
-              <div class="movement-detail">{{ p.detail }}</div>
-            </div>
-            <div class="movement-tempo">{{ p.pour }}</div>
-          </div>
-        </div>
-        <p class="pairing-note">
-          <i class="bi bi-cup-straw"></i>
-          Silver and Gold ticket holders receive one complimentary single malt pour. Bronze guests may add a pour at checkout.
-        </p>
-      </section>
-
       <!-- Resident Virtuosos & Maestro -->
       <section class="event-section">
         <div class="section-head">
@@ -222,22 +169,6 @@
               </span>
             </div>
           </div>
-        </div>
-      </section>
-
-      <!-- Access Protocol -->
-      <section class="event-section access-protocol">
-        <div class="access-head">
-          <span class="access-kicker">Access Protocol</span>
-          <span class="access-loc"><i class="bi bi-geo-alt"></i> Makati City</span>
-        </div>
-        <h3 class="access-title">Unmarked Door &amp; Listening Room Entry</h3>
-        <div class="access-map">
-          <!-- TODO: replace with map image: <img src="..." class="map-img" alt=""> -->
-        </div>
-        <div class="access-gate">
-          <span class="gate-left"><i class="bi bi-geo-alt"></i> The Spirits Library — Rear Door, Chino Roces</span>
-          <span class="gate-right">Members’ Usher</span>
         </div>
       </section>
 
@@ -427,12 +358,6 @@ const heroImages = ref([
   { src: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80', alt: 'Banquette seating along the wall' },
 ])
 const activeImage = ref(0)
-
-const pairings = ref([
-  { name: 'Rare Single Malt', detail: 'Islay, 18 years · 25 ml pour, served neat', pour: '22:15 · Set I Break' },
-  { name: 'Aged Rum Flight', detail: 'Three rums — Barbados, Jamaica and Martinique', pour: '23:20 · Jam Session' },
-  { name: 'Smoked Pear Soda', detail: 'Zero-proof, house-made and smoked over applewood', pour: 'Throughout' },
-])
 
 const artists = ref([
   { role: 'Bandleader', name: 'Cornelius “Chip” Barnes', city: 'New York → Manila', bio: 'A tenor player who came up in the Harlem loft scene and recorded for Blue Note in the late seventies. He now leads the Speakeasy Quartet on an annual Manila residency.', badges: [
