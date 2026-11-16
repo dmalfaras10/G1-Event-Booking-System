@@ -3,13 +3,6 @@
     <!-- ============ LEFT COLUMN: EVENT CONTENT ============ -->
     <div class="event-content">
 
-      <!-- Breadcrumb -->
-      <nav class="breadcrumb">
-        <a href="#">Performances</a><span class="crumb-sep">/</span>
-        <a href="#">Classical &amp; Orchestral</a><span class="crumb-sep">/</span>
-        <span class="crumb-current">Nocturne Philharmonic Gala</span>
-      </nav>
-
       <!-- Hero banner (switches when a thumbnail below is clicked) -->
       <div class="banner">
         <div class="banner-media">
