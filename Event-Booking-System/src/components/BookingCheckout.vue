@@ -23,6 +23,10 @@
               <span class="order-strip-label">{{ qty }} × {{ tierName }}</span>
               <span class="order-strip-value">{{ money(subtotal) }}</span>
             </div>
+            <div v-if="seats.length" class="order-strip-row order-strip-row-sub">
+              <span class="order-strip-label">Seats</span>
+              <span class="order-strip-value">{{ seats.join(', ') }}</span>
+            </div>
             <div v-for="a in addOns" :key="a.name" class="order-strip-row order-strip-row-sub">
               <span class="order-strip-label">{{ a.name }} (× {{ qty }})</span>
               <span class="order-strip-value">{{ money(a.price * qty) }}</span>
@@ -78,7 +82,6 @@
         <!-- ==================== STEP: CONFIRMATION ==================== -->
         <div v-else class="modal-body">
           <div class="confirm-head">
-            <span class="confirm-badge"><i class="bi bi-check-circle-fill"></i> Booking Confirmed</span>
             <h2 class="modal-title">Thank you, <span class="gold">{{ userName }}</span></h2>
             <p class="modal-sub">Your booking is confirmed and your digital e-tickets are ready.</p>
           </div>
@@ -103,6 +106,10 @@
             <div class="summary-item">
               <span class="summary-label">Attendees</span>
               <span class="summary-value">{{ qty }}</span>
+            </div>
+            <div v-if="seats.length" class="summary-item">
+              <span class="summary-label">Seats</span>
+              <span class="summary-value">{{ seats.join(', ') }}</span>
             </div>
             <div class="summary-item">
               <span class="summary-label">Total Paid</span>
@@ -168,6 +175,7 @@ const props = defineProps({
   tierName: { type: String, default: '' },
   tierId: { type: String, default: '' },
   qty: { type: Number, default: 1 },
+  seats: { type: Array, default: () => [] },
   subtotal: { type: Number, default: 0 },
   addOns: { type: Array, default: () => [] },
   serviceFee: { type: Number, default: 0 },
@@ -190,7 +198,8 @@ const money = (v) => props.currency + Number(v || 0).toLocaleString('en-PH')
 
 const ticketCode = (n) =>
   `${props.codePrefix}-${String(props.tierId).slice(-4).toUpperCase()}-${String(n).padStart(3, '0')}`
-const seatFor = (n) => String.fromCharCode(65 + (n - 1)) + (10 + (n - 1))
+const seatFor = (n) =>
+  props.seats[n - 1] || (String.fromCharCode(65 + (n - 1)) + (10 + (n - 1)))
 
 // Lock the page behind the overlay, and let Escape close it.
 const onKeydown = (e) => { if (e.key === 'Escape') emit('close') }

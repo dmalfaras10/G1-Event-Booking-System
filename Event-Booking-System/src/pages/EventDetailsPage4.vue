@@ -3,13 +3,6 @@
     <!-- ============ LEFT COLUMN: EVENT CONTENT ============ -->
     <div class="event-content">
 
-      <!-- Breadcrumb -->
-      <nav class="breadcrumb">
-        <a href="#">Performances</a><span class="crumb-sep">/</span>
-        <a href="#">Jazz &amp; Lounge</a><span class="crumb-sep">/</span>
-        <span class="crumb-current">Midnight Saxophone Salon</span>
-      </nav>
-
       <!-- Hero banner (switches when a thumbnail below is clicked) -->
       <div class="banner">
         <div class="banner-media">
@@ -72,10 +65,8 @@
 
       <!-- Section tabs (switch the content panel below) -->
       <div class="section-tabs">
-        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Set List &amp; Sessions</span>
-        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> The Quartet</span>
-        <span :class="['tab', { active: activeTab === 'acoustic' }]" @click="activeTab = 'acoustic'"><i class="bi bi-soundwave"></i> Listening Room</span>
-        <span :class="['tab', { active: activeTab === 'sommelier' }]" @click="activeTab = 'sommelier'"><i class="bi bi-cup-straw"></i> Spirits Pairing</span>
+        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Event Details</span>
+        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Performer Lineup</span>
       </div>
 
       <!-- Tab panel: Program Notes & Repertoire -->
@@ -146,57 +137,6 @@
         </div>
       </section>
 
-      <!-- Tab panel: Acoustic Blueprint (placeholder content) -->
-      <section v-else-if="activeTab === 'acoustic'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Listening Room</h2>
-          <span class="artist-profiles">Room Calibration</span>
-        </div>
-        <div class="movements">
-          <div class="spec-row">
-            <span class="spec-name">Room</span>
-            <span class="spec-value">The Spirits Library — 80 seats, 1,100-bottle back bar</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Reverberation Time (RT60)</span>
-            <span class="spec-value">0.6 s — heavily damped by carpet and book-lined walls</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Amplification</span>
-            <span class="spec-value">None — acoustic quartet, no PA, no monitors</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Acoustic Sweet Spot</span>
-            <span class="spec-value">Banquettes 1–4 along the east wall — ±1.5 dB</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">House Rule</span>
-            <span class="spec-value">No photography on the floor; phones stay at the bar</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Tab panel: Sommelier Pairing (placeholder content) -->
-      <section v-else-if="activeTab === 'sommelier'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Spirits Pairing</h2>
-          <span class="artist-profiles">Curated by the Back Bar</span>
-        </div>
-        <div class="movements">
-          <div v-for="(p, i) in pairings" :key="i" class="movement-row">
-            <div class="movement-main">
-              <div class="movement-work">{{ p.name }}</div>
-              <div class="movement-detail">{{ p.detail }}</div>
-            </div>
-            <div class="movement-tempo">{{ p.pour }}</div>
-          </div>
-        </div>
-        <p class="pairing-note">
-          <i class="bi bi-cup-straw"></i>
-          Silver and Gold ticket holders receive one complimentary single malt pour. Bronze guests may add a pour at checkout.
-        </p>
-      </section>
-
       <!-- Resident Virtuosos & Maestro -->
       <section class="event-section">
         <div class="section-head">
@@ -205,39 +145,9 @@
         </div>
         <div class="artist-grid">
           <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-head">
-              <div class="artist-avatar">
-                <!-- TODO: replace with artist photo: <img src="..." class="artist-photo" alt=""> -->
-              </div>
-              <div class="artist-id">
-                <div class="artist-role">{{ a.role }}</div>
-                <div class="artist-name">{{ a.name }}</div>
-                <div class="artist-city">{{ a.city }}</div>
-              </div>
-            </div>
+            <div class="artist-name">{{ a.name }}</div>
             <p class="artist-bio">{{ a.bio }}</p>
-            <div class="artist-badges">
-              <span v-for="(b, bi) in a.badges" :key="bi" class="artist-badge">
-                <i :class="['bi', b.icon]"></i> {{ b.text }}
-              </span>
-            </div>
           </div>
-        </div>
-      </section>
-
-      <!-- Access Protocol -->
-      <section class="event-section access-protocol">
-        <div class="access-head">
-          <span class="access-kicker">Access Protocol</span>
-          <span class="access-loc"><i class="bi bi-geo-alt"></i> Makati City</span>
-        </div>
-        <h3 class="access-title">Unmarked Door &amp; Listening Room Entry</h3>
-        <div class="access-map">
-          <!-- TODO: replace with map image: <img src="..." class="map-img" alt=""> -->
-        </div>
-        <div class="access-gate">
-          <span class="gate-left"><i class="bi bi-geo-alt"></i> The Spirits Library — Rear Door, Chino Roces</span>
-          <span class="gate-right">Members’ Usher</span>
         </div>
       </section>
 
@@ -362,6 +272,20 @@
 
     </div>
 
+    <!-- Seat selection sits between tier choice and checkout -->
+    <SeatSelection
+      v-if="step === 'seats'"
+      :event-name="eventName"
+      :venue="venueName"
+      :when="dateLong + ' · ' + time24"
+      :tier="selectedTier"
+      :tiers="tiers"
+      :qty="qty"
+      :initial-seats="selectedSeats"
+      @close="closeSeats"
+      @confirm="onSeatsConfirmed"
+    />
+
     <!-- Checkout steps live in components/BookingCheckout.vue -->
     <BookingCheckout
       v-if="step === 'payment'"
@@ -371,13 +295,14 @@
       :tier-name="selectedTier?.name"
       :tier-id="selectedTierId || ''"
       :qty="qty"
+      :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
       :add-ons="selectedAddons"
       :service-fee="serviceFee"
       :total="orderTotal"
       :currency="'₱'"
       :code-prefix="'G1-MSA'"
-      @close="step = 'select'"
+      @close="step = 'seats'"
       @reset="resetFlow"
     />
   </div>
@@ -386,6 +311,7 @@
 <script setup>
 import { ref, computed, onUnmounted } from 'vue'
 import BookingCheckout from '../components/BookingCheckout.vue'
+import SeatSelection from '../components/SeatSelection.vue'
 
 const eventId = 'evt-004'
 const eventName = 'Midnight Saxophone Salon'
@@ -428,27 +354,16 @@ const heroImages = ref([
 ])
 const activeImage = ref(0)
 
-const pairings = ref([
-  { name: 'Rare Single Malt', detail: 'Islay, 18 years · 25 ml pour, served neat', pour: '22:15 · Set I Break' },
-  { name: 'Aged Rum Flight', detail: 'Three rums — Barbados, Jamaica and Martinique', pour: '23:20 · Jam Session' },
-  { name: 'Smoked Pear Soda', detail: 'Zero-proof, house-made and smoked over applewood', pour: 'Throughout' },
-])
-
 const artists = ref([
-  { role: 'Bandleader', name: 'Cornelius “Chip” Barnes', city: 'New York → Manila', bio: 'A tenor player who came up in the Harlem loft scene and recorded for Blue Note in the late seventies. He now leads the Speakeasy Quartet on an annual Manila residency.', badges: [
-    { icon: 'bi-vinyl', text: 'Blue Note · 1978' },
-    { icon: 'bi-award', text: 'Jazz Awards 2019' },
-  ]},
-  { role: 'Pianist', name: 'Dolores Reyes', city: 'Manila Conservatory', bio: 'A Manila Conservatory faculty pianist who has spent a decade in the city’s listening rooms, known for an upright-only style that never once touches a keyboard with amplification.', badges: [
-    { icon: 'bi-music-note-list', text: 'Upright Only' },
-    { icon: 'bi-patch-check', text: 'Aliw Award 2023' },
-  ]},
+  { name: 'Cornelius “Chip” Barnes', bio: 'A tenor player who came up in the Harlem loft scene and recorded for Blue Note in the late seventies. He now leads the Speakeasy Quartet on an annual Manila residency.' },
+  { name: 'Dolores Reyes', bio: 'A Manila Conservatory faculty pianist who has spent a decade in the city’s listening rooms, known for an upright-only style that never once touches a keyboard with amplification.' },
 ])
 
 // ---- Booking state ----
 const step = ref('select')
 const selectedTierId = ref(null)
 const qty = ref(1)
+const selectedSeats = ref([])
 const holdExpired = ref(false)
 
 // ---- Computed ----
@@ -488,11 +403,22 @@ function changeQty(d) {
 
 function goToPayment() {
   if (!canCheckout.value) return
+  step.value = 'seats'
+}
+
+function onSeatsConfirmed(seats) {
+  selectedSeats.value = seats
   step.value = 'payment'
+}
+
+function closeSeats() {
+  step.value = 'select'
+  selectedSeats.value = []
 }
 
 function resetFlow() {
   step.value = 'select'
+  selectedSeats.value = []
   selectedTierId.value = null
   qty.value = 1
   addons.value.forEach(a => a.selected = false)

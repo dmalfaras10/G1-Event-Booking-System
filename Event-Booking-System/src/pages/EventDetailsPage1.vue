@@ -3,13 +3,6 @@
     <!-- ============ LEFT COLUMN: EVENT CONTENT ============ -->
     <div class="event-content">
 
-      <!-- Breadcrumb -->
-      <nav class="breadcrumb">
-        <a href="#">Performances</a><span class="crumb-sep">/</span>
-        <a href="#">Live Concert</a><span class="crumb-sep">/</span>
-        <span class="crumb-current">Neon Noir Symphony</span>
-      </nav>
-
       <!-- Hero banner (switches when a thumbnail below is clicked) -->
       <div class="banner">
         <div class="banner-media">
@@ -72,10 +65,8 @@
 
       <!-- Section tabs (switch the content panel below) -->
       <div class="section-tabs">
-        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Program &amp; Set Times</span>
-        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Artist Lineup</span>
-        <span :class="['tab', { active: activeTab === 'acoustic' }]" @click="activeTab = 'acoustic'"><i class="bi bi-broadcast"></i> Venue &amp; Sound</span>
-        <span :class="['tab', { active: activeTab === 'sommelier' }]" @click="activeTab = 'sommelier'"><i class="bi bi-cup-straw"></i> Bar &amp; Pairing</span>
+        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Event Details</span>
+        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Performer Lineup</span>
       </div>
 
       <!-- Tab panel: Program Notes & Repertoire -->
@@ -146,57 +137,6 @@
         </div>
       </section>
 
-      <!-- Tab panel: Acoustic Blueprint (placeholder content) -->
-      <section v-else-if="activeTab === 'acoustic'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Venue &amp; Sound</h2>
-          <span class="artist-profiles">Palace Pool Deck</span>
-        </div>
-        <div class="movements">
-          <div class="spec-row">
-            <span class="spec-name">Coverage</span>
-            <span class="spec-value">Open-air pool deck, 1,800 capacity — 12 line-array elements per side</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Delay System</span>
-            <span class="spec-value">Six ground-stacked delays across the cabana row, time-aligned to 4 ms</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Sweet Spot</span>
-            <span class="spec-value">VIP cabanas, rows 1–3 — ±2.5 dB dispersion tolerance</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Sub Configuration</span>
-            <span class="spec-value">Cardioid end-fire array, 8 × 21″ subs, 38 Hz roll-off</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Curfew</span>
-            <span class="spec-value">Amplified sound ends 23:30 PHT per BGC noise ordinance</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Tab panel: Sommelier Pairing (placeholder content) -->
-      <section v-else-if="activeTab === 'sommelier'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Bar &amp; Pairing</h2>
-          <span class="artist-profiles">Curated by the Sky-Deck Bar Team</span>
-        </div>
-        <div class="movements">
-          <div v-for="(p, i) in pairings" :key="i" class="movement-row">
-            <div class="movement-main">
-              <div class="movement-work">{{ p.name }}</div>
-              <div class="movement-detail">{{ p.detail }}</div>
-            </div>
-            <div class="movement-tempo">{{ p.pour }}</div>
-          </div>
-        </div>
-        <p class="pairing-note">
-          <i class="bi bi-cup-straw"></i>
-          Two drink vouchers are included with every Silver and Gold admission. Bronze guests may add a voucher at checkout.
-        </p>
-      </section>
-
       <!-- Resident Virtuosos & Maestro -->
       <section class="event-section">
         <div class="section-head">
@@ -205,39 +145,9 @@
         </div>
         <div class="artist-grid">
           <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-head">
-              <div class="artist-avatar">
-                <!-- TODO: replace with artist photo: <img src="..." class="artist-photo" alt=""> -->
-              </div>
-              <div class="artist-id">
-                <div class="artist-role">{{ a.role }}</div>
-                <div class="artist-name">{{ a.name }}</div>
-                <div class="artist-city">{{ a.city }}</div>
-              </div>
-            </div>
+            <div class="artist-name">{{ a.name }}</div>
             <p class="artist-bio">{{ a.bio }}</p>
-            <div class="artist-badges">
-              <span v-for="(b, bi) in a.badges" :key="bi" class="artist-badge">
-                <i :class="['bi', b.icon]"></i> {{ b.text }}
-              </span>
-            </div>
           </div>
-        </div>
-      </section>
-
-      <!-- Access Protocol -->
-      <section class="event-section access-protocol">
-        <div class="access-head">
-          <span class="access-kicker">Access Protocol</span>
-          <span class="access-loc"><i class="bi bi-geo-alt"></i> BGC, Taguig</span>
-        </div>
-        <h3 class="access-title">Private Porte-Cochère &amp; Pool Deck Entry</h3>
-        <div class="access-map">
-          <!-- TODO: replace with map image: <img src="..." class="map-img" alt=""> -->
-        </div>
-        <div class="access-gate">
-          <span class="gate-left"><i class="bi bi-geo-alt"></i> The Palace Pool Club — Gate B, 11th Avenue</span>
-          <span class="gate-right">Cabana Concierge Escort</span>
         </div>
       </section>
 
@@ -362,6 +272,20 @@
 
     </div>
 
+    <!-- Seat selection sits between tier choice and checkout -->
+    <SeatSelection
+      v-if="step === 'seats'"
+      :event-name="eventName"
+      :venue="venueName"
+      :when="dateLong + ' · ' + time24"
+      :tier="selectedTier"
+      :tiers="tiers"
+      :qty="qty"
+      :initial-seats="selectedSeats"
+      @close="closeSeats"
+      @confirm="onSeatsConfirmed"
+    />
+
     <!-- Checkout steps live in components/BookingCheckout.vue -->
     <BookingCheckout
       v-if="step === 'payment'"
@@ -371,13 +295,14 @@
       :tier-name="selectedTier?.name"
       :tier-id="selectedTierId || ''"
       :qty="qty"
+      :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
       :add-ons="selectedAddons"
       :service-fee="serviceFee"
       :total="orderTotal"
       :currency="'₱'"
       :code-prefix="'G1-NNS'"
-      @close="step = 'select'"
+      @close="step = 'seats'"
       @reset="resetFlow"
     />
   </div>
@@ -386,6 +311,7 @@
 <script setup>
 import { ref, computed, onUnmounted } from 'vue'
 import BookingCheckout from '../components/BookingCheckout.vue'
+import SeatSelection from '../components/SeatSelection.vue'
 
 const eventId = 'evt-001'
 const eventName = 'Neon Noir Symphony: Manila Edition'
@@ -427,27 +353,16 @@ const heroImages = ref([
 ])
 const activeImage = ref(0)
 
-const pairings = ref([
-  { name: 'Neon Noir Spritz', detail: 'Yuzu, butterfly pea and dry sparkling — served at the gates', pour: 'Doors · 19:00' },
-  { name: 'Sky-Deck Sake Flight', detail: 'Three 30 ml pours: Junmai, Ginjo and Nigori', pour: 'Act I · 20:45' },
-  { name: 'Midnight Espresso Martini', detail: 'Cold brew, vanilla and cacao for the B2B finale', pour: 'Encore · 22:50' },
-])
-
 const artists = ref([
-  { role: 'Headline Selector', name: 'DJ Kaito', city: 'Tokyo → Manila', bio: 'A fixture of the Tokyo underground, Kaito is known for live modular sets that dissolve the line between DJ booth and orchestra pit. His 2025 Boiler Room Manila set was called “a sunrise in the middle of the night.”', badges: [
-    { icon: 'bi-disc', text: 'Resident · Womb, Tokyo' },
-    { icon: 'bi-stars', text: 'Boiler Room Manila 2025' },
-  ]},
-  { role: 'Musical Director', name: 'Rafael Ibarra', city: 'Manila Philharmonic', bio: 'Rafael has arranged for the Manila Philharmonic for eleven seasons, with a specialism in amplified strings and hybrid orchestral-electronic scores for film and stage.', badges: [
-    { icon: 'bi-patch-check', text: 'Conductor · 24 Strings' },
-    { icon: 'bi-award', text: 'Aliw Award 2024' },
-  ]},
+  { name: 'DJ Kaito', bio: 'A fixture of the Tokyo underground, Kaito is known for live modular sets that dissolve the line between DJ booth and orchestra pit. His 2025 Boiler Room Manila set was called “a sunrise in the middle of the night.”' },
+  { name: 'Rafael Ibarra', bio: 'Rafael has arranged for the Manila Philharmonic for eleven seasons, with a specialism in amplified strings and hybrid orchestral-electronic scores for film and stage.' },
 ])
 
 // ---- Booking state ----
 const step = ref('select')
 const selectedTierId = ref(null)
 const qty = ref(1)
+const selectedSeats = ref([])
 const holdExpired = ref(false)
 
 // ---- Computed ----
@@ -487,11 +402,22 @@ function changeQty(d) {
 
 function goToPayment() {
   if (!canCheckout.value) return
+  step.value = 'seats'
+}
+
+function onSeatsConfirmed(seats) {
+  selectedSeats.value = seats
   step.value = 'payment'
+}
+
+function closeSeats() {
+  step.value = 'select'
+  selectedSeats.value = []
 }
 
 function resetFlow() {
   step.value = 'select'
+  selectedSeats.value = []
   selectedTierId.value = null
   qty.value = 1
   addons.value.forEach(a => a.selected = false)

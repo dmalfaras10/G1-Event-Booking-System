@@ -39,17 +39,6 @@ body { background: var(--bg-primary); color: var(--text-main); font-family: "Int
 .event-content { min-width: 0; }
 .booking-panel { position: sticky; top: 1rem; align-self: start; }
 
-/* Breadcrumb */
-.breadcrumb {
-  display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;
-  font-size: 0.68rem; font-weight: 800; text-transform: uppercase;
-  letter-spacing: 0.7px; margin-bottom: 0.85rem;
-}
-.breadcrumb a { color: var(--gold-accent); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
-.crumb-sep { color: var(--text-muted); font-weight: 400; }
-.crumb-current { color: var(--gold-accent); }
-
 /* Banner */
 .banner {
   position: relative;
@@ -292,7 +281,7 @@ body { background: var(--bg-primary); color: var(--text-main); font-family: "Int
 }
 
 .price-range { display: flex; align-items: baseline; gap: 0.25rem; margin-bottom: 0.2rem; }
-.price-big { font-family: "Montserrat", sans-serif; font-size: 1.9rem; font-weight: 900; color: var(--text-main); }
+.price-big { font-family: "Montserrat", sans-serif; font-size: 1.7rem; font-weight: 900; color: var(--text-main); }
 .price-sub { font-size: 1rem; font-weight: 700; color: var(--text-main); }
 .price-note { font-size: 0.78rem; color: #b9b9c1; margin-bottom: 1.1rem; }
 

@@ -3,13 +3,6 @@
     <!-- ============ LEFT COLUMN: EVENT CONTENT ============ -->
     <div class="event-content">
 
-      <!-- Breadcrumb -->
-      <nav class="breadcrumb">
-        <a href="#">Performances</a><span class="crumb-sep">/</span>
-        <a href="#">Live Concert</a><span class="crumb-sep">/</span>
-        <span class="crumb-current">Velvet Indie Sessions</span>
-      </nav>
-
       <!-- Hero banner (switches when a thumbnail below is clicked) -->
       <div class="banner">
         <div class="banner-media">
@@ -72,10 +65,8 @@
 
       <!-- Section tabs (switch the content panel below) -->
       <div class="section-tabs">
-        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Set List &amp; Running Order</span>
-        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Band &amp; Support</span>
-        <span :class="['tab', { active: activeTab === 'acoustic' }]" @click="activeTab = 'acoustic'"><i class="bi bi-broadcast"></i> Theatre &amp; Sound</span>
-        <span :class="['tab', { active: activeTab === 'sommelier' }]" @click="activeTab = 'sommelier'"><i class="bi bi-cup-straw"></i> Merch &amp; Bar</span>
+        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Event Details</span>
+        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Performer Lineup</span>
       </div>
 
       <!-- Tab panel: Program Notes & Repertoire -->
@@ -146,57 +137,6 @@
         </div>
       </section>
 
-      <!-- Tab panel: Acoustic Blueprint (placeholder content) -->
-      <section v-else-if="activeTab === 'acoustic'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Theatre &amp; Sound</h2>
-          <span class="artist-profiles">Hall Calibration</span>
-        </div>
-        <div class="movements">
-          <div class="spec-row">
-            <span class="spec-name">Hall</span>
-            <span class="spec-value">Solaire Theatre — 1,400 seats, raked stalls and balcony</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Reverberation Time (RT60)</span>
-            <span class="spec-value">1.6 s at 500 Hz, adjustable banners</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Dispersion System</span>
-            <span class="spec-value">Line array, 12 elements per hang, with balcony delays</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Acoustic Sweet Spot</span>
-            <span class="spec-value">Stalls rows F–M — ±2 dB dispersion tolerance</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Merch</span>
-            <span class="spec-value">Vinyl booth opens 18:00 in the lobby, card only</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Tab panel: Sommelier Pairing (placeholder content) -->
-      <section v-else-if="activeTab === 'sommelier'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Merch &amp; Bar</h2>
-          <span class="artist-profiles">Curated by the Theatre Bar</span>
-        </div>
-        <div class="movements">
-          <div v-for="(p, i) in pairings" :key="i" class="movement-row">
-            <div class="movement-main">
-              <div class="movement-work">{{ p.name }}</div>
-              <div class="movement-detail">{{ p.detail }}</div>
-            </div>
-            <div class="movement-tempo">{{ p.pour }}</div>
-          </div>
-        </div>
-        <p class="pairing-note">
-          <i class="bi bi-cup-straw"></i>
-          Two drink vouchers are included with every stalls and balcony admission. The merch booth accepts cards only.
-        </p>
-      </section>
-
       <!-- Resident Virtuosos & Maestro -->
       <section class="event-section">
         <div class="section-head">
@@ -205,39 +145,9 @@
         </div>
         <div class="artist-grid">
           <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-head">
-              <div class="artist-avatar">
-                <!-- TODO: replace with artist photo: <img src="..." class="artist-photo" alt=""> -->
-              </div>
-              <div class="artist-id">
-                <div class="artist-role">{{ a.role }}</div>
-                <div class="artist-name">{{ a.name }}</div>
-                <div class="artist-city">{{ a.city }}</div>
-              </div>
-            </div>
+            <div class="artist-name">{{ a.name }}</div>
             <p class="artist-bio">{{ a.bio }}</p>
-            <div class="artist-badges">
-              <span v-for="(b, bi) in a.badges" :key="bi" class="artist-badge">
-                <i :class="['bi', b.icon]"></i> {{ b.text }}
-              </span>
-            </div>
           </div>
-        </div>
-      </section>
-
-      <!-- Access Protocol -->
-      <section class="event-section access-protocol">
-        <div class="access-head">
-          <span class="access-kicker">Access Protocol</span>
-          <span class="access-loc"><i class="bi bi-geo-alt"></i> Pasay City</span>
-        </div>
-        <h3 class="access-title">Lobby, Merch Booth &amp; Theatre Entry</h3>
-        <div class="access-map">
-          <!-- TODO: replace with map image: <img src="..." class="map-img" alt=""> -->
-        </div>
-        <div class="access-gate">
-          <span class="gate-left"><i class="bi bi-geo-alt"></i> Solaire Theatre — Main Lobby, Gate 2</span>
-          <span class="gate-right">House Usher Escort</span>
         </div>
       </section>
 
@@ -362,6 +272,20 @@
 
     </div>
 
+    <!-- Seat selection sits between tier choice and checkout -->
+    <SeatSelection
+      v-if="step === 'seats'"
+      :event-name="eventName"
+      :venue="venueName"
+      :when="dateLong + ' · ' + time24"
+      :tier="selectedTier"
+      :tiers="tiers"
+      :qty="qty"
+      :initial-seats="selectedSeats"
+      @close="closeSeats"
+      @confirm="onSeatsConfirmed"
+    />
+
     <!-- Checkout steps live in components/BookingCheckout.vue -->
     <BookingCheckout
       v-if="step === 'payment'"
@@ -371,13 +295,14 @@
       :tier-name="selectedTier?.name"
       :tier-id="selectedTierId || ''"
       :qty="qty"
+      :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
       :add-ons="selectedAddons"
       :service-fee="serviceFee"
       :total="orderTotal"
       :currency="'₱'"
       :code-prefix="'G1-VIS'"
-      @close="step = 'select'"
+      @close="step = 'seats'"
       @reset="resetFlow"
     />
   </div>
@@ -386,6 +311,7 @@
 <script setup>
 import { ref, computed, onUnmounted } from 'vue'
 import BookingCheckout from '../components/BookingCheckout.vue'
+import SeatSelection from '../components/SeatSelection.vue'
 
 const eventId = 'evt-005'
 const eventName = 'Velvet Indie Sessions: Where Time Goes'
@@ -428,27 +354,16 @@ const heroImages = ref([
 ])
 const activeImage = ref(0)
 
-const pairings = ref([
-  { name: 'Local Craft Lager', detail: 'Brewed in Pampanga · served from the lobby bar', pour: 'Doors · 18:00' },
-  { name: 'Cold Brew & Bourbon', detail: 'Barrel-aged cold brew with a bourbon float', pour: 'Interval · 21:00' },
-  { name: 'Sparkling Yuzu', detail: 'Zero-proof, served at the merch booth', pour: 'Encore · 22:00' },
-])
-
 const artists = ref([
-  { role: 'Frontman & Guitar', name: 'Elias Manalo', city: 'Cebu → Manila', bio: 'Elias writes the songs, sings them, and plays the loudest guitar in the room — a Cebu-raised songwriter whose Where Time Goes turned a bedroom demo into a national tour.', badges: [
-    { icon: 'bi-vinyl', text: 'Where Time Goes · LP' },
-    { icon: 'bi-award', text: 'Awit Award 2024' },
-  ]},
-  { role: 'The Band', name: 'The Coastal Drift Collective', city: 'Cebu, Philippines', bio: 'Nine players, three vocalists and a string quartet, assembled for the record and kept together for the tour. Their live shows are built for rooms with seats, not fields.', badges: [
-    { icon: 'bi-music-note', text: '9 Members' },
-    { icon: 'bi-globe', text: 'SEA Tour 2025' },
-  ]},
+  { name: 'Elias Manalo', bio: 'Elias writes the songs, sings them, and plays the loudest guitar in the room — a Cebu-raised songwriter whose Where Time Goes turned a bedroom demo into a national tour.' },
+  { name: 'The Coastal Drift Collective', bio: 'Nine players, three vocalists and a string quartet, assembled for the record and kept together for the tour. Their live shows are built for rooms with seats, not fields.' },
 ])
 
 // ---- Booking state ----
 const step = ref('select')
 const selectedTierId = ref(null)
 const qty = ref(1)
+const selectedSeats = ref([])
 const holdExpired = ref(false)
 
 // ---- Computed ----
@@ -488,11 +403,22 @@ function changeQty(d) {
 
 function goToPayment() {
   if (!canCheckout.value) return
+  step.value = 'seats'
+}
+
+function onSeatsConfirmed(seats) {
+  selectedSeats.value = seats
   step.value = 'payment'
+}
+
+function closeSeats() {
+  step.value = 'select'
+  selectedSeats.value = []
 }
 
 function resetFlow() {
   step.value = 'select'
+  selectedSeats.value = []
   selectedTierId.value = null
   qty.value = 1
   addons.value.forEach(a => a.selected = false)

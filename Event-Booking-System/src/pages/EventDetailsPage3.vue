@@ -3,13 +3,6 @@
     <!-- ============ LEFT COLUMN: EVENT CONTENT ============ -->
     <div class="event-content">
 
-      <!-- Breadcrumb -->
-      <nav class="breadcrumb">
-        <a href="#">Performances</a><span class="crumb-sep">/</span>
-        <a href="#">Classical &amp; Gala</a><span class="crumb-sep">/</span>
-        <span class="crumb-current">Winter Masquerade</span>
-      </nav>
-
       <!-- Hero banner (switches when a thumbnail below is clicked) -->
       <div class="banner">
         <div class="banner-media">
@@ -72,10 +65,8 @@
 
       <!-- Section tabs (switch the content panel below) -->
       <div class="section-tabs">
-        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-journal-text"></i> Program &amp; Dinner</span>
-        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> The Ensemble</span>
-        <span :class="['tab', { active: activeTab === 'acoustic' }]" @click="activeTab = 'acoustic'"><i class="bi bi-rulers"></i> Room &amp; Acoustics</span>
-        <span :class="['tab', { active: activeTab === 'sommelier' }]" @click="activeTab = 'sommelier'"><i class="bi bi-cup-straw"></i> Champagne &amp; Wine</span>
+        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-journal-text"></i> Event Details</span>
+        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Performer Lineup</span>
       </div>
 
       <!-- Tab panel: Program Notes & Repertoire -->
@@ -146,57 +137,6 @@
         </div>
       </section>
 
-      <!-- Tab panel: Acoustic Blueprint (placeholder content) -->
-      <section v-else-if="activeTab === 'acoustic'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Room &amp; Acoustics</h2>
-          <span class="artist-profiles">Ballroom Calibration</span>
-        </div>
-        <div class="movements">
-          <div class="spec-row">
-            <span class="spec-name">Room</span>
-            <span class="spec-value">Shangri-La Grand Ballroom — 480 covers, candlelit, no amplification</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Reverberation Time (RT60)</span>
-            <span class="spec-value">1.9 s with drapes drawn; 1.2 s for dinner service</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Amplification</span>
-            <span class="spec-value">None — acoustic quintet, harpsichord lid removed</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Acoustic Sweet Spot</span>
-            <span class="spec-value">Tables 1–12, centre aisle — ±2 dB dispersion tolerance</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Mask Protocol</span>
-            <span class="spec-value">Masks required until the midnight toast; provided at the cloakroom</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Tab panel: Sommelier Pairing (placeholder content) -->
-      <section v-else-if="activeTab === 'sommelier'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Champagne &amp; Wine</h2>
-          <span class="artist-profiles">Curated by the House Sommelier</span>
-        </div>
-        <div class="movements">
-          <div v-for="(p, i) in pairings" :key="i" class="movement-row">
-            <div class="movement-main">
-              <div class="movement-work">{{ p.name }}</div>
-              <div class="movement-detail">{{ p.detail }}</div>
-            </div>
-            <div class="movement-tempo">{{ p.pour }}</div>
-          </div>
-        </div>
-        <p class="pairing-note">
-          <i class="bi bi-cup-straw"></i>
-          A complimentary glass of vintage Champagne is included with every admission. Additional pours are available at the table.
-        </p>
-      </section>
-
       <!-- Resident Virtuosos & Maestro -->
       <section class="event-section">
         <div class="section-head">
@@ -205,39 +145,9 @@
         </div>
         <div class="artist-grid">
           <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-head">
-              <div class="artist-avatar">
-                <!-- TODO: replace with artist photo: <img src="..." class="artist-photo" alt=""> -->
-              </div>
-              <div class="artist-id">
-                <div class="artist-role">{{ a.role }}</div>
-                <div class="artist-name">{{ a.name }}</div>
-                <div class="artist-city">{{ a.city }}</div>
-              </div>
-            </div>
+            <div class="artist-name">{{ a.name }}</div>
             <p class="artist-bio">{{ a.bio }}</p>
-            <div class="artist-badges">
-              <span v-for="(b, bi) in a.badges" :key="bi" class="artist-badge">
-                <i :class="['bi', b.icon]"></i> {{ b.text }}
-              </span>
-            </div>
           </div>
-        </div>
-      </section>
-
-      <!-- Access Protocol -->
-      <section class="event-section access-protocol">
-        <div class="access-head">
-          <span class="access-kicker">Access Protocol</span>
-          <span class="access-loc"><i class="bi bi-geo-alt"></i> BGC, Taguig</span>
-        </div>
-        <h3 class="access-title">Private Porte-Cochère &amp; Ballroom Entry</h3>
-        <div class="access-map">
-          <!-- TODO: replace with map image: <img src="..." class="map-img" alt=""> -->
-        </div>
-        <div class="access-gate">
-          <span class="gate-left"><i class="bi bi-geo-alt"></i> Shangri-La — Grand Ballroom Door C</span>
-          <span class="gate-right">Masked Usher Escort</span>
         </div>
       </section>
 
@@ -362,6 +272,20 @@
 
     </div>
 
+    <!-- Seat selection sits between tier choice and checkout -->
+    <SeatSelection
+      v-if="step === 'seats'"
+      :event-name="eventName"
+      :venue="venueName"
+      :when="dateLong + ' · ' + time24"
+      :tier="selectedTier"
+      :tiers="tiers"
+      :qty="qty"
+      :initial-seats="selectedSeats"
+      @close="closeSeats"
+      @confirm="onSeatsConfirmed"
+    />
+
     <!-- Checkout steps live in components/BookingCheckout.vue -->
     <BookingCheckout
       v-if="step === 'payment'"
@@ -371,13 +295,14 @@
       :tier-name="selectedTier?.name"
       :tier-id="selectedTierId || ''"
       :qty="qty"
+      :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
       :add-ons="selectedAddons"
       :service-fee="serviceFee"
       :total="orderTotal"
       :currency="'₱'"
       :code-prefix="'G1-WMG'"
-      @close="step = 'select'"
+      @close="step = 'seats'"
       @reset="resetFlow"
     />
   </div>
@@ -386,6 +311,7 @@
 <script setup>
 import { ref, computed, onUnmounted } from 'vue'
 import BookingCheckout from '../components/BookingCheckout.vue'
+import SeatSelection from '../components/SeatSelection.vue'
 
 const eventId = 'evt-003'
 const eventName = 'Winter Masquerade at The Fort'
@@ -428,27 +354,16 @@ const heroImages = ref([
 ])
 const activeImage = ref(0)
 
-const pairings = ref([
-  { name: 'Brut Vintage Champagne', detail: 'Champagne, France · served from 18:30 in the foyer', pour: 'Reception · 18:30' },
-  { name: 'Chablis 1er Cru', detail: 'Burgundy, France · paired with the winter consommé', pour: 'Course II · 20:00' },
-  { name: 'Sauternes', detail: 'Half-bottle service with the Winter Largo encore', pour: 'Encore · 21:20' },
-])
-
 const artists = ref([
-  { role: 'Concertmaster', name: 'Isabel Zaragoza', city: 'Manila Symphony', bio: 'Nine seasons as concertmaster of the Manila Symphony, and the driving force behind the city’s baroque-pitch chamber series. Her gut-string Four Seasons has been called “the warmest winter in Manila.”', badges: [
-    { icon: 'bi-patch-check', text: 'Concertmaster · 9 Seasons' },
-    { icon: 'bi-award', text: 'Gawad CCP 2022' },
-  ]},
-  { role: 'Guest Bandoneón', name: 'Tomás Aguirre', city: 'Buenos Aires', bio: 'A bandoneón player from Buenos Aires who has toured eighteen countries with the Piazzolla repertoire, and who plays a 1920s instrument restored by his family.', badges: [
-    { icon: 'bi-disc', text: 'Piazzolla Estate' },
-    { icon: 'bi-globe', text: '18 Countries Touring' },
-  ]},
+  { name: 'Isabel Zaragoza', bio: 'Nine seasons as concertmaster of the Manila Symphony, and the driving force behind the city’s baroque-pitch chamber series. Her gut-string Four Seasons has been called “the warmest winter in Manila.”' },
+  { name: 'Tomás Aguirre', bio: 'A bandoneón player from Buenos Aires who has toured eighteen countries with the Piazzolla repertoire, and who plays a 1920s instrument restored by his family.' },
 ])
 
 // ---- Booking state ----
 const step = ref('select')
 const selectedTierId = ref(null)
 const qty = ref(1)
+const selectedSeats = ref([])
 const holdExpired = ref(false)
 
 // ---- Computed ----
@@ -488,11 +403,22 @@ function changeQty(d) {
 
 function goToPayment() {
   if (!canCheckout.value) return
+  step.value = 'seats'
+}
+
+function onSeatsConfirmed(seats) {
+  selectedSeats.value = seats
   step.value = 'payment'
+}
+
+function closeSeats() {
+  step.value = 'select'
+  selectedSeats.value = []
 }
 
 function resetFlow() {
   step.value = 'select'
+  selectedSeats.value = []
   selectedTierId.value = null
   qty.value = 1
   addons.value.forEach(a => a.selected = false)
