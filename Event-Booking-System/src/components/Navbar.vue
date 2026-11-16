@@ -138,7 +138,12 @@ const handleSelectEvent = (event) => {
 							<i class="bi bi-house-door me-1"></i>Home
 						</router-link>
 					</li>
-					<li class="navbar-nav-item nav-item">
+					<li v-if="user.isAdmin" class="navbar-nav-item nav-item">
+						<router-link class="navbar-nav-link nav-link text-warning" to="/adminEventList">
+							<i class="bi bi-shield-check me-1"></i>Admin Event List
+						</router-link>
+					</li>
+					<li v-else class="navbar-nav-item nav-item">
 						<router-link class="navbar-nav-link nav-link" to="/events">
 							<i class="bi bi-calendar-event me-1"></i>Events
 						</router-link>
