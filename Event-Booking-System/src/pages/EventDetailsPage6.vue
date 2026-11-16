@@ -3,13 +3,6 @@
     <!-- ============ LEFT COLUMN: EVENT CONTENT ============ -->
     <div class="event-content">
 
-      <!-- Breadcrumb -->
-      <nav class="breadcrumb">
-        <a href="#">Performances</a><span class="crumb-sep">/</span>
-        <a href="#">Nightlife &amp; DJ</a><span class="crumb-sep">/</span>
-        <span class="crumb-current">Gold Champagne NYE Gala</span>
-      </nav>
-
       <!-- Hero banner (switches when a thumbnail below is clicked) -->
       <div class="banner">
         <div class="banner-media">
@@ -72,10 +65,8 @@
 
       <!-- Section tabs (switch the content panel below) -->
       <div class="section-tabs">
-        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Countdown Programme</span>
-        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Headliners</span>
-        <span :class="['tab', { active: activeTab === 'acoustic' }]" @click="activeTab = 'acoustic'"><i class="bi bi-broadcast"></i> Cove &amp; Pyro</span>
-        <span :class="['tab', { active: activeTab === 'sommelier' }]" @click="activeTab = 'sommelier'"><i class="bi bi-cup-straw"></i> Champagne Service</span>
+        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Event Details</span>
+        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Performer Lineup</span>
       </div>
 
       <!-- Tab panel: Program Notes & Repertoire -->
@@ -146,57 +137,6 @@
         </div>
       </section>
 
-      <!-- Tab panel: Acoustic Blueprint (placeholder content) -->
-      <section v-else-if="activeTab === 'acoustic'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Cove &amp; Pyro</h2>
-          <span class="artist-profiles">Venue Calibration</span>
-        </div>
-        <div class="movements">
-          <div class="spec-row">
-            <span class="spec-name">Venue</span>
-            <span class="spec-value">Okada Manila Cove — glass dome and pool deck, Manila Bay front</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Capacity</span>
-            <span class="spec-value">2,400 guests — sold out</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Dispersion System</span>
-            <span class="spec-value">Dome line array, 16 elements per side, with pool-deck delays</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Pyrotechnics</span>
-            <span class="spec-value">Licensed waterfront display, 12-minute sequence from 23:48</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Curfew</span>
-            <span class="spec-value">Amplified sound ends 03:00 PHT; pyro permit expires 00:15</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Tab panel: Sommelier Pairing (placeholder content) -->
-      <section v-else-if="activeTab === 'sommelier'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Champagne Service</h2>
-          <span class="artist-profiles">Curated by the House Sommelier</span>
-        </div>
-        <div class="movements">
-          <div v-for="(p, i) in pairings" :key="i" class="movement-row">
-            <div class="movement-main">
-              <div class="movement-work">{{ p.name }}</div>
-              <div class="movement-detail">{{ p.detail }}</div>
-            </div>
-            <div class="movement-tempo">{{ p.pour }}</div>
-          </div>
-        </div>
-        <p class="pairing-note">
-          <i class="bi bi-cup-straw"></i>
-          Unlimited vintage Champagne is included with every admission. Waitlist guests will be contacted if seats are released.
-        </p>
-      </section>
-
       <!-- Resident Virtuosos & Maestro -->
       <section class="event-section">
         <div class="section-head">
@@ -205,39 +145,9 @@
         </div>
         <div class="artist-grid">
           <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-head">
-              <div class="artist-avatar">
-                <!-- TODO: replace with artist photo: <img src="..." class="artist-photo" alt=""> -->
-              </div>
-              <div class="artist-id">
-                <div class="artist-role">{{ a.role }}</div>
-                <div class="artist-name">{{ a.name }}</div>
-                <div class="artist-city">{{ a.city }}</div>
-              </div>
-            </div>
+            <div class="artist-name">{{ a.name }}</div>
             <p class="artist-bio">{{ a.bio }}</p>
-            <div class="artist-badges">
-              <span v-for="(b, bi) in a.badges" :key="bi" class="artist-badge">
-                <i :class="['bi', b.icon]"></i> {{ b.text }}
-              </span>
-            </div>
           </div>
-        </div>
-      </section>
-
-      <!-- Access Protocol -->
-      <section class="event-section access-protocol">
-        <div class="access-head">
-          <span class="access-kicker">Access Protocol</span>
-          <span class="access-loc"><i class="bi bi-geo-alt"></i> Pasay City</span>
-        </div>
-        <h3 class="access-title">Private Porte-Cochère &amp; Cove Entry</h3>
-        <div class="access-map">
-          <!-- TODO: replace with map image: <img src="..." class="map-img" alt=""> -->
-        </div>
-        <div class="access-gate">
-          <span class="gate-left"><i class="bi bi-geo-alt"></i> Okada Manila — Cove Gate 1, Waterfront</span>
-          <span class="gate-right">VIP Waitlist Concierge</span>
         </div>
       </section>
 
@@ -362,6 +272,20 @@
 
     </div>
 
+    <!-- Seat selection sits between tier choice and checkout -->
+    <SeatSelection
+      v-if="step === 'seats'"
+      :event-name="eventName"
+      :venue="venueName"
+      :when="dateLong + ' · ' + time24"
+      :tier="selectedTier"
+      :tiers="tiers"
+      :qty="qty"
+      :initial-seats="selectedSeats"
+      @close="closeSeats"
+      @confirm="onSeatsConfirmed"
+    />
+
     <!-- Checkout steps live in components/BookingCheckout.vue -->
     <BookingCheckout
       v-if="step === 'payment'"
@@ -371,13 +295,14 @@
       :tier-name="selectedTier?.name"
       :tier-id="selectedTierId || ''"
       :qty="qty"
+      :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
       :add-ons="selectedAddons"
       :service-fee="serviceFee"
       :total="orderTotal"
       :currency="'₱'"
       :code-prefix="'G1-GCN'"
-      @close="step = 'select'"
+      @close="step = 'seats'"
       @reset="resetFlow"
     />
   </div>
@@ -386,6 +311,7 @@
 <script setup>
 import { ref, computed, onUnmounted } from 'vue'
 import BookingCheckout from '../components/BookingCheckout.vue'
+import SeatSelection from '../components/SeatSelection.vue'
 
 const eventId = 'evt-006'
 const eventName = '2027 Gold Champagne NYE Gala'
@@ -428,27 +354,16 @@ const heroImages = ref([
 ])
 const activeImage = ref(0)
 
-const pairings = ref([
-  { name: 'Vintage Brut', detail: 'Unlimited vintage champagne service from doors', pour: 'Reception · 21:00' },
-  { name: 'Gold Leaf Canapés', detail: 'Passed canapés with a champagne pairing', pour: '22:00' },
-  { name: 'Grand Cru Toast', detail: 'A glass of grand cru at midnight on the pool deck', pour: '00:00' },
-])
-
 const artists = ref([
-  { role: 'Headline DJ', name: 'Aurelia Vance', city: 'Ibiza → Manila', bio: 'A headline DJ with a decade-long Ibiza residency and a reputation for sets that run from ambient to peak-time without a visible seam. This is her first Manila New Year’s Eve.', badges: [
-    { icon: 'bi-disc', text: 'Residency · DC-10' },
-    { icon: 'bi-star', text: 'DJ Mag Top 100' },
-  ]},
-  { role: 'Conductor', name: 'Marco Villanueva', city: 'Manila, Philippines', bio: 'Marco conducts the Pyro Symphony, an eighteen-piece ensemble assembled each December to play live under the Manila Bay fireworks — a job that requires split-second cueing and no nerves.', badges: [
-    { icon: 'bi-bank2', text: 'Pyro Symphony · 18' },
-    { icon: 'bi-award', text: 'Aliw Award 2025' },
-  ]},
+  { name: 'Aurelia Vance', bio: 'A headline DJ with a decade-long Ibiza residency and a reputation for sets that run from ambient to peak-time without a visible seam. This is her first Manila New Year’s Eve.' },
+  { name: 'Marco Villanueva', bio: 'Marco conducts the Pyro Symphony, an eighteen-piece ensemble assembled each December to play live under the Manila Bay fireworks — a job that requires split-second cueing and no nerves.' },
 ])
 
 // ---- Booking state ----
 const step = ref('select')
 const selectedTierId = ref(null)
 const qty = ref(1)
+const selectedSeats = ref([])
 const holdExpired = ref(false)
 
 // ---- Computed ----
@@ -488,11 +403,22 @@ function changeQty(d) {
 
 function goToPayment() {
   if (!canCheckout.value) return
+  step.value = 'seats'
+}
+
+function onSeatsConfirmed(seats) {
+  selectedSeats.value = seats
   step.value = 'payment'
+}
+
+function closeSeats() {
+  step.value = 'select'
+  selectedSeats.value = []
 }
 
 function resetFlow() {
   step.value = 'select'
+  selectedSeats.value = []
   selectedTierId.value = null
   qty.value = 1
   addons.value.forEach(a => a.selected = false)

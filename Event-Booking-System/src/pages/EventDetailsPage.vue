@@ -3,13 +3,6 @@
     <!-- ============ LEFT COLUMN: EVENT CONTENT ============ -->
     <div class="event-content">
 
-      <!-- Breadcrumb -->
-      <nav class="breadcrumb">
-        <a href="#">Performances</a><span class="crumb-sep">/</span>
-        <a href="#">Classical &amp; Orchestral</a><span class="crumb-sep">/</span>
-        <span class="crumb-current">Nocturne Philharmonic Gala</span>
-      </nav>
-
       <!-- Hero banner (switches when a thumbnail below is clicked) -->
       <div class="banner">
         <div class="banner-media">
@@ -72,10 +65,8 @@
 
       <!-- Section tabs (switch the content panel below) -->
       <div class="section-tabs">
-        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-journal-text"></i> Program Notes &amp; Repertoire</span>
-        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Orchestra Lineup</span>
-        <span :class="['tab', { active: activeTab === 'acoustic' }]" @click="activeTab = 'acoustic'"><i class="bi bi-rulers"></i> Acoustic Blueprint</span>
-        <span :class="['tab', { active: activeTab === 'sommelier' }]" @click="activeTab = 'sommelier'"><i class="bi bi-cup-straw"></i> Sommelier Pairing</span>
+        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-journal-text"></i> Event Details</span>
+        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Performer Lineup</span>
       </div>
 
       <!-- Tab panel: Program Notes & Repertoire -->
@@ -152,57 +143,6 @@
         </div>
       </section>
 
-      <!-- Tab panel: Acoustic Blueprint (placeholder content) -->
-      <section v-else-if="activeTab === 'acoustic'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Acoustic Blueprint</h2>
-          <span class="artist-profiles">Hall Calibration</span>
-        </div>
-        <div class="movements">
-          <div class="spec-row">
-            <span class="spec-name">Reverberation Time (RT60)</span>
-            <span class="spec-value">1.82 s — full concert configuration</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Dispersion System</span>
-            <span class="spec-value">Meyer Sound Constellation — 96 elements, concealed in the ceiling coffers</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Acoustic Sweet Spot</span>
-            <span class="spec-value">Parquet Rows E–H — ±2 dB dispersion tolerance</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Hall Volume</span>
-            <span class="spec-value">27,400 m³ adjustable chamber — velvet dampening panels engaged at 19:15</span>
-          </div>
-          <div class="spec-row">
-            <span class="spec-name">Box Suite Isolation</span>
-            <span class="spec-value">Private mezzanine envelope — acoustic decoupling at 38 dB attenuation</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Tab panel: Sommelier Pairing (placeholder content) -->
-      <section v-else-if="activeTab === 'sommelier'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Sommelier Pairing</h2>
-          <span class="artist-profiles">Curated by House Sommelier</span>
-        </div>
-        <div class="movements">
-          <div v-for="(p, i) in pairings" :key="i" class="movement-row">
-            <div class="movement-main">
-              <div class="movement-work">{{ p.name }}</div>
-              <div class="movement-detail">{{ p.detail }}</div>
-            </div>
-            <div class="movement-tempo">{{ p.pour }}</div>
-          </div>
-        </div>
-        <p class="pairing-note">
-          <i class="bi bi-cup-straw"></i>
-          The Champagne reception is included with every admission; reserve pours are complimentary for Founder Tier patrons.
-        </p>
-      </section>
-
       <!-- Resident Virtuosos & Maestro -->
       <section class="event-section">
         <div class="section-head">
@@ -211,39 +151,9 @@
         </div>
         <div class="artist-grid">
           <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-head">
-              <div class="artist-avatar">
-                <!-- TODO: replace with artist photo: <img src="..." class="artist-photo" alt=""> -->
-              </div>
-              <div class="artist-id">
-                <div class="artist-role">{{ a.role }}</div>
-                <div class="artist-name">{{ a.name }}</div>
-                <div class="artist-city">{{ a.city }}</div>
-              </div>
-            </div>
+            <div class="artist-name">{{ a.name }}</div>
             <p class="artist-bio">{{ a.bio }}</p>
-            <div class="artist-badges">
-              <span v-for="(b, bi) in a.badges" :key="bi" class="artist-badge">
-                <i :class="['bi', b.icon]"></i> {{ b.text }}
-              </span>
-            </div>
           </div>
-        </div>
-      </section>
-
-      <!-- Access Protocol -->
-      <section class="event-section access-protocol">
-        <div class="access-head">
-          <span class="access-kicker">Access Protocol</span>
-          <span class="access-loc"><i class="bi bi-geo-alt"></i> West 65th St &amp; Columbus Ave</span>
-        </div>
-        <h3 class="access-title">Private Porte-Cochère &amp; Lounge Entry</h3>
-        <div class="access-map">
-          <!-- TODO: replace with map image: <img src="..." class="map-img" alt=""> -->
-        </div>
-        <div class="access-gate">
-          <span class="gate-left"><i class="bi bi-geo-alt"></i> David Geffen Hall Patrons VIP Gate 3</span>
-          <span class="gate-right">White-Glove Usher Escort</span>
         </div>
       </section>
 
@@ -368,6 +278,20 @@
 
     </div>
 
+    <!-- Seat selection sits between tier choice and checkout -->
+    <SeatSelection
+      v-if="step === 'seats'"
+      :event-name="eventName"
+      :venue="'David Geffen Hall'"
+      :when="'Sat, Oct 28, 2026 · 19:30'"
+      :tier="selectedTier"
+      :tiers="tiers"
+      :qty="qty"
+      :initial-seats="selectedSeats"
+      @close="closeSeats"
+      @confirm="onSeatsConfirmed"
+    />
+
     <!-- Checkout steps live in components/BookingCheckout.vue -->
     <BookingCheckout
       v-if="step === 'payment'"
@@ -377,13 +301,14 @@
       :tier-name="selectedTier?.name"
       :tier-id="selectedTierId || ''"
       :qty="qty"
+      :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
       :add-ons="selectedAddons"
       :service-fee="serviceFee"
       :total="orderTotal"
       :currency="'$'"
       :code-prefix="'G1-NC'"
-      @close="step = 'select'"
+      @close="step = 'seats'"
       @reset="resetFlow"
     />
   </div>
@@ -392,6 +317,7 @@
 <script setup>
 import { ref, computed, onUnmounted } from 'vue'
 import BookingCheckout from '../components/BookingCheckout.vue'
+import SeatSelection from '../components/SeatSelection.vue'
 
 const eventId = 'evt_nocturne_2026'
 const eventName = 'Nocturne Philharmonic: Chopin & Debussy'
@@ -429,27 +355,16 @@ const heroImages = ref([
 ])
 const activeImage = ref(0)
 
-const pairings = ref([
-  { name: 'Dom Pérignon Vintage 2013', detail: 'Épernay, France · Disgorged 2021 — served fluted at the Porte-Cochère lounge', pour: 'Doors Pour · 18:30' },
-  { name: 'Chablis Grand Cru “Les Clos” 2019', detail: 'William Fèvre, Burgundy — kinetic minerality to mirror the Nocturnes', pour: 'First Interlude · 20:45' },
-  { name: 'Château d’Yquem 2011', detail: 'Sauternes, half-bottle service — apricot & saffron finish for the encore', pour: 'Encore Pour · 21:40' },
-])
-
 const artists = ref([
-  { role: 'Featured Soloist', name: 'Alistair Vance', city: 'Hamburg Steinway Laureate', bio: 'Three‑time International Chopin Piano Prize medalist, celebrated for a rare pianism that the Financial Times called “an otherworldly suspension of acoustic time.”', badges: [
-    { icon: 'bi-bank2', text: 'Carnegie Hall Resident' },
-    { icon: 'bi-award', text: '14× Deutscher Schallplattenpreis' },
-  ]},
-  { role: 'Musical Director', name: 'Julian von Berg', city: 'Conductor, Laureate', bio: 'Directing the Nocturne Philharmonic into its fifteenth season, Julian has previously conducted the Royal Concertgebouw and Vienna Philharmonic in historical French romantic repertoires.', badges: [
-    { icon: 'bi-patch-check', text: 'Order of Arts et des Lettres' },
-    { icon: 'bi-disc', text: '32 World Premieres' },
-  ]},
+  { name: 'Alistair Vance', bio: 'Three‑time International Chopin Piano Prize medalist, celebrated for a rare pianism that the Financial Times called “an otherworldly suspension of acoustic time.”' },
+  { name: 'Julian von Berg', bio: 'Directing the Nocturne Philharmonic into its fifteenth season, Julian has previously conducted the Royal Concertgebouw and Vienna Philharmonic in historical French romantic repertoires.' },
 ])
 
 // ---- Booking state ----
 const step = ref('select')
 const selectedTierId = ref(null)
 const qty = ref(1)
+const selectedSeats = ref([])
 const holdExpired = ref(false)
 
 // ---- Computed ----
@@ -488,11 +403,22 @@ function changeQty(d) {
 
 function goToPayment() {
   if (!canCheckout.value) return
+  step.value = 'seats'
+}
+
+function onSeatsConfirmed(seats) {
+  selectedSeats.value = seats
   step.value = 'payment'
+}
+
+function closeSeats() {
+  step.value = 'select'
+  selectedSeats.value = []
 }
 
 function resetFlow() {
   step.value = 'select'
+  selectedSeats.value = []
   selectedTierId.value = null
   qty.value = 1
   addons.value.forEach(a => a.selected = false)
