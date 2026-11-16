@@ -152,22 +152,8 @@
         </div>
         <div class="artist-grid">
           <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-head">
-              <div class="artist-avatar">
-                <!-- TODO: replace with artist photo: <img src="..." class="artist-photo" alt=""> -->
-              </div>
-              <div class="artist-id">
-                <div class="artist-role">{{ a.role }}</div>
-                <div class="artist-name">{{ a.name }}</div>
-                <div class="artist-city">{{ a.city }}</div>
-              </div>
-            </div>
+            <div class="artist-name">{{ a.name }}</div>
             <p class="artist-bio">{{ a.bio }}</p>
-            <div class="artist-badges">
-              <span v-for="(b, bi) in a.badges" :key="bi" class="artist-badge">
-                <i :class="['bi', b.icon]"></i> {{ b.text }}
-              </span>
-            </div>
           </div>
         </div>
       </section>
@@ -360,14 +346,8 @@ const heroImages = ref([
 const activeImage = ref(0)
 
 const artists = ref([
-  { role: 'Frontman & Guitar', name: 'Elias Manalo', city: 'Cebu → Manila', bio: 'Elias writes the songs, sings them, and plays the loudest guitar in the room — a Cebu-raised songwriter whose Where Time Goes turned a bedroom demo into a national tour.', badges: [
-    { icon: 'bi-vinyl', text: 'Where Time Goes · LP' },
-    { icon: 'bi-award', text: 'Awit Award 2024' },
-  ]},
-  { role: 'The Band', name: 'The Coastal Drift Collective', city: 'Cebu, Philippines', bio: 'Nine players, three vocalists and a string quartet, assembled for the record and kept together for the tour. Their live shows are built for rooms with seats, not fields.', badges: [
-    { icon: 'bi-music-note', text: '9 Members' },
-    { icon: 'bi-globe', text: 'SEA Tour 2025' },
-  ]},
+  { name: 'Elias Manalo', bio: 'Elias writes the songs, sings them, and plays the loudest guitar in the room — a Cebu-raised songwriter whose Where Time Goes turned a bedroom demo into a national tour.' },
+  { name: 'The Coastal Drift Collective', bio: 'Nine players, three vocalists and a string quartet, assembled for the record and kept together for the tour. Their live shows are built for rooms with seats, not fields.' },
 ])
 
 // ---- Booking state ----

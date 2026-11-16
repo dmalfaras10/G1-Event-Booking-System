@@ -152,22 +152,8 @@
         </div>
         <div class="artist-grid">
           <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-head">
-              <div class="artist-avatar">
-                <!-- TODO: replace with artist photo: <img src="..." class="artist-photo" alt=""> -->
-              </div>
-              <div class="artist-id">
-                <div class="artist-role">{{ a.role }}</div>
-                <div class="artist-name">{{ a.name }}</div>
-                <div class="artist-city">{{ a.city }}</div>
-              </div>
-            </div>
+            <div class="artist-name">{{ a.name }}</div>
             <p class="artist-bio">{{ a.bio }}</p>
-            <div class="artist-badges">
-              <span v-for="(b, bi) in a.badges" :key="bi" class="artist-badge">
-                <i :class="['bi', b.icon]"></i> {{ b.text }}
-              </span>
-            </div>
           </div>
         </div>
       </section>
@@ -360,14 +346,8 @@ const heroImages = ref([
 const activeImage = ref(0)
 
 const artists = ref([
-  { role: 'Headline DJ', name: 'Aurelia Vance', city: 'Ibiza → Manila', bio: 'A headline DJ with a decade-long Ibiza residency and a reputation for sets that run from ambient to peak-time without a visible seam. This is her first Manila New Year’s Eve.', badges: [
-    { icon: 'bi-disc', text: 'Residency · DC-10' },
-    { icon: 'bi-star', text: 'DJ Mag Top 100' },
-  ]},
-  { role: 'Conductor', name: 'Marco Villanueva', city: 'Manila, Philippines', bio: 'Marco conducts the Pyro Symphony, an eighteen-piece ensemble assembled each December to play live under the Manila Bay fireworks — a job that requires split-second cueing and no nerves.', badges: [
-    { icon: 'bi-bank2', text: 'Pyro Symphony · 18' },
-    { icon: 'bi-award', text: 'Aliw Award 2025' },
-  ]},
+  { name: 'Aurelia Vance', bio: 'A headline DJ with a decade-long Ibiza residency and a reputation for sets that run from ambient to peak-time without a visible seam. This is her first Manila New Year’s Eve.' },
+  { name: 'Marco Villanueva', bio: 'Marco conducts the Pyro Symphony, an eighteen-piece ensemble assembled each December to play live under the Manila Bay fireworks — a job that requires split-second cueing and no nerves.' },
 ])
 
 // ---- Booking state ----

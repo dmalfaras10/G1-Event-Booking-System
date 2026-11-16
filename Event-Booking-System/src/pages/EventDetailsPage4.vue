@@ -152,22 +152,8 @@
         </div>
         <div class="artist-grid">
           <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-head">
-              <div class="artist-avatar">
-                <!-- TODO: replace with artist photo: <img src="..." class="artist-photo" alt=""> -->
-              </div>
-              <div class="artist-id">
-                <div class="artist-role">{{ a.role }}</div>
-                <div class="artist-name">{{ a.name }}</div>
-                <div class="artist-city">{{ a.city }}</div>
-              </div>
-            </div>
+            <div class="artist-name">{{ a.name }}</div>
             <p class="artist-bio">{{ a.bio }}</p>
-            <div class="artist-badges">
-              <span v-for="(b, bi) in a.badges" :key="bi" class="artist-badge">
-                <i :class="['bi', b.icon]"></i> {{ b.text }}
-              </span>
-            </div>
           </div>
         </div>
       </section>
@@ -360,14 +346,8 @@ const heroImages = ref([
 const activeImage = ref(0)
 
 const artists = ref([
-  { role: 'Bandleader', name: 'Cornelius “Chip” Barnes', city: 'New York → Manila', bio: 'A tenor player who came up in the Harlem loft scene and recorded for Blue Note in the late seventies. He now leads the Speakeasy Quartet on an annual Manila residency.', badges: [
-    { icon: 'bi-vinyl', text: 'Blue Note · 1978' },
-    { icon: 'bi-award', text: 'Jazz Awards 2019' },
-  ]},
-  { role: 'Pianist', name: 'Dolores Reyes', city: 'Manila Conservatory', bio: 'A Manila Conservatory faculty pianist who has spent a decade in the city’s listening rooms, known for an upright-only style that never once touches a keyboard with amplification.', badges: [
-    { icon: 'bi-music-note-list', text: 'Upright Only' },
-    { icon: 'bi-patch-check', text: 'Aliw Award 2023' },
-  ]},
+  { name: 'Cornelius “Chip” Barnes', bio: 'A tenor player who came up in the Harlem loft scene and recorded for Blue Note in the late seventies. He now leads the Speakeasy Quartet on an annual Manila residency.' },
+  { name: 'Dolores Reyes', bio: 'A Manila Conservatory faculty pianist who has spent a decade in the city’s listening rooms, known for an upright-only style that never once touches a keyboard with amplification.' },
 ])
 
 // ---- Booking state ----

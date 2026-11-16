@@ -152,22 +152,8 @@
         </div>
         <div class="artist-grid">
           <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-head">
-              <div class="artist-avatar">
-                <!-- TODO: replace with artist photo: <img src="..." class="artist-photo" alt=""> -->
-              </div>
-              <div class="artist-id">
-                <div class="artist-role">{{ a.role }}</div>
-                <div class="artist-name">{{ a.name }}</div>
-                <div class="artist-city">{{ a.city }}</div>
-              </div>
-            </div>
+            <div class="artist-name">{{ a.name }}</div>
             <p class="artist-bio">{{ a.bio }}</p>
-            <div class="artist-badges">
-              <span v-for="(b, bi) in a.badges" :key="bi" class="artist-badge">
-                <i :class="['bi', b.icon]"></i> {{ b.text }}
-              </span>
-            </div>
           </div>
         </div>
       </section>
@@ -359,14 +345,8 @@ const heroImages = ref([
 const activeImage = ref(0)
 
 const artists = ref([
-  { role: 'Headline Selector', name: 'DJ Kaito', city: 'Tokyo → Manila', bio: 'A fixture of the Tokyo underground, Kaito is known for live modular sets that dissolve the line between DJ booth and orchestra pit. His 2025 Boiler Room Manila set was called “a sunrise in the middle of the night.”', badges: [
-    { icon: 'bi-disc', text: 'Resident · Womb, Tokyo' },
-    { icon: 'bi-stars', text: 'Boiler Room Manila 2025' },
-  ]},
-  { role: 'Musical Director', name: 'Rafael Ibarra', city: 'Manila Philharmonic', bio: 'Rafael has arranged for the Manila Philharmonic for eleven seasons, with a specialism in amplified strings and hybrid orchestral-electronic scores for film and stage.', badges: [
-    { icon: 'bi-patch-check', text: 'Conductor · 24 Strings' },
-    { icon: 'bi-award', text: 'Aliw Award 2024' },
-  ]},
+  { name: 'DJ Kaito', bio: 'A fixture of the Tokyo underground, Kaito is known for live modular sets that dissolve the line between DJ booth and orchestra pit. His 2025 Boiler Room Manila set was called “a sunrise in the middle of the night.”' },
+  { name: 'Rafael Ibarra', bio: 'Rafael has arranged for the Manila Philharmonic for eleven seasons, with a specialism in amplified strings and hybrid orchestral-electronic scores for film and stage.' },
 ])
 
 // ---- Booking state ----

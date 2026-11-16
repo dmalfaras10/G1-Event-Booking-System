@@ -152,22 +152,8 @@
         </div>
         <div class="artist-grid">
           <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-head">
-              <div class="artist-avatar">
-                <!-- TODO: replace with artist photo: <img src="..." class="artist-photo" alt=""> -->
-              </div>
-              <div class="artist-id">
-                <div class="artist-role">{{ a.role }}</div>
-                <div class="artist-name">{{ a.name }}</div>
-                <div class="artist-city">{{ a.city }}</div>
-              </div>
-            </div>
+            <div class="artist-name">{{ a.name }}</div>
             <p class="artist-bio">{{ a.bio }}</p>
-            <div class="artist-badges">
-              <span v-for="(b, bi) in a.badges" :key="bi" class="artist-badge">
-                <i :class="['bi', b.icon]"></i> {{ b.text }}
-              </span>
-            </div>
           </div>
         </div>
       </section>
@@ -360,14 +346,8 @@ const heroImages = ref([
 const activeImage = ref(0)
 
 const artists = ref([
-  { role: 'Concertmaster', name: 'Isabel Zaragoza', city: 'Manila Symphony', bio: 'Nine seasons as concertmaster of the Manila Symphony, and the driving force behind the city’s baroque-pitch chamber series. Her gut-string Four Seasons has been called “the warmest winter in Manila.”', badges: [
-    { icon: 'bi-patch-check', text: 'Concertmaster · 9 Seasons' },
-    { icon: 'bi-award', text: 'Gawad CCP 2022' },
-  ]},
-  { role: 'Guest Bandoneón', name: 'Tomás Aguirre', city: 'Buenos Aires', bio: 'A bandoneón player from Buenos Aires who has toured eighteen countries with the Piazzolla repertoire, and who plays a 1920s instrument restored by his family.', badges: [
-    { icon: 'bi-disc', text: 'Piazzolla Estate' },
-    { icon: 'bi-globe', text: '18 Countries Touring' },
-  ]},
+  { name: 'Isabel Zaragoza', bio: 'Nine seasons as concertmaster of the Manila Symphony, and the driving force behind the city’s baroque-pitch chamber series. Her gut-string Four Seasons has been called “the warmest winter in Manila.”' },
+  { name: 'Tomás Aguirre', bio: 'A bandoneón player from Buenos Aires who has toured eighteen countries with the Piazzolla repertoire, and who plays a 1920s instrument restored by his family.' },
 ])
 
 // ---- Booking state ----

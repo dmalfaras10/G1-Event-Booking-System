@@ -152,22 +152,8 @@
         </div>
         <div class="artist-grid">
           <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-head">
-              <div class="artist-avatar">
-                <!-- TODO: replace with artist photo: <img src="..." class="artist-photo" alt=""> -->
-              </div>
-              <div class="artist-id">
-                <div class="artist-role">{{ a.role }}</div>
-                <div class="artist-name">{{ a.name }}</div>
-                <div class="artist-city">{{ a.city }}</div>
-              </div>
-            </div>
+            <div class="artist-name">{{ a.name }}</div>
             <p class="artist-bio">{{ a.bio }}</p>
-            <div class="artist-badges">
-              <span v-for="(b, bi) in a.badges" :key="bi" class="artist-badge">
-                <i :class="['bi', b.icon]"></i> {{ b.text }}
-              </span>
-            </div>
           </div>
         </div>
       </section>
@@ -360,14 +346,8 @@ const heroImages = ref([
 const activeImage = ref(0)
 
 const artists = ref([
-  { role: 'Featured Artist', name: 'Nils Frahm', city: 'Berlin, Germany', bio: 'A pianist and producer whose felt-damped piano recordings for Erased Tapes have made him one of the most streamed classical artists in the world, and one of the least predictable live.', badges: [
-    { icon: 'bi-disc', text: 'Erased Tapes' },
-    { icon: 'bi-award', text: 'Echo Klassik 2015' },
-  ]},
-  { role: 'Guest Artist', name: 'Frode Haltli', city: 'Oslo, Norway', bio: 'A Hardanger fiddle player and classical violist who moves between folk suites and contemporary commissions, and who has never amplified the instrument on stage.', badges: [
-    { icon: 'bi-music-note', text: 'Hardanger Fiddle' },
-    { icon: 'bi-patch-check', text: 'Grammy Nominee 2010' },
-  ]},
+  { name: 'Nils Frahm', bio: 'A pianist and producer whose felt-damped piano recordings for Erased Tapes have made him one of the most streamed classical artists in the world, and one of the least predictable live.' },
+  { name: 'Frode Haltli', bio: 'A Hardanger fiddle player and classical violist who moves between folk suites and contemporary commissions, and who has never amplified the instrument on stage.' },
 ])
 
 // ---- Booking state ----
