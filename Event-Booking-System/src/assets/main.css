@@ -27,3 +27,467 @@ body {
         radial-gradient(circle at 20% 50%, rgba(243, 198, 79, 0.08), transparent 50%),
         var(--bg-primary);
 }
+
+.admin-event-dashboard {
+  color: var(--text-main);
+  min-height: 100vh;
+}
+
+.admin-event-dashboard-header {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.admin-event-dashboard-title {
+  color: var(--text-main);
+}
+
+.admin-event-dashboard-subtitle {
+  color: var(--text-muted);
+}
+
+.admin-event-create-btn {
+  background-color: var(--gold-accent);
+  color: var(--bg-primary);
+}
+
+.admin-event-create-btn:hover {
+  background-color: var(--gold-accent-hover);
+  color: var(--bg-primary);
+}
+
+.admin-event-search-group {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-search-icon-wrap {
+  color: var(--text-muted);
+}
+
+.admin-event-search-input {
+  color: var(--text-main);
+}
+
+.admin-event-search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.admin-event-category-select {
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-category-option {
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+}
+
+.admin-event-table-container-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-custom-table {
+  color: var(--text-main);
+  background-color: transparent;
+}
+
+.admin-event-custom-table > :not(v) > * > * {
+  background-color: transparent;
+  color: var(--text-main);
+  box-shadow: none;
+}
+
+.admin-event-table-header-tr {
+  background-color: var(--bg-surface-hover);
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.admin-event-table-body-tr {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.admin-event-table-hover tbody tr:hover {
+  background-color: var(--bg-surface-hover);
+}
+
+.admin-event-thumbnail {
+  width: 55px;
+  height: 55px;
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-title-text {
+  color: var(--text-main);
+}
+
+.admin-event-desc-text {
+  color: var(--text-muted);
+}
+
+.admin-event-category-badge-style {
+  background-color: var(--bg-surface-hover);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-venue-address-text {
+  color: var(--text-muted);
+}
+
+.admin-event-capacity-footer-box {
+  border-top: 1px dashed var(--border-subtle);
+  color: var(--text-muted);
+}
+
+.admin-event-capacity-allocated-text {
+  color: var(--gold-muted);
+}
+
+.admin-event-ticket-tier-inner-card {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-custom-magenta-badge {
+  background-color: var(--magenta-badge);
+  color: #fff;
+}
+
+.admin-event-ticket-card-bottom-border {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.admin-event-stat-available {
+  color: #4ade80;
+}
+
+.admin-event-stat-sold {
+  color: #f87171;
+}
+
+.admin-event-action-seatmap-btn {
+  background-color: var(--bg-surface-hover);
+  color: var(--gold-accent);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-action-seatmap-btn:hover {
+  background-color: var(--gold-accent);
+  color: var(--bg-primary);
+}
+
+.admin-event-action-edit-btn {
+  background-color: var(--bg-surface-hover);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-action-edit-btn:hover {
+  background-color: var(--border-subtle);
+  color: var(--text-main);
+}
+
+.admin-event-action-delete-btn {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.admin-event-action-delete-btn:hover {
+  background-color: #f87171;
+  color: #fff;
+}
+
+.admin-event-empty-state-box {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-reset-filter-btn {
+  background-color: var(--bg-surface-hover);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-reset-filter-btn:hover {
+  background-color: var(--border-subtle);
+  color: var(--text-main);
+}
+
+.admin-event-pagination-btn {
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  border-color: var(--border-subtle);
+}
+
+.admin-event-pagination-btn:hover {
+  background-color: var(--bg-surface-hover);
+  color: var(--gold-accent);
+  border-color: var(--border-subtle);
+}
+
+.page-item.active .admin-event-pagination-btn {
+  background-color: var(--gold-accent);
+  color: var(--bg-primary);
+  border-color: var(--gold-accent);
+}
+
+.page-item.disabled .admin-event-pagination-btn {
+  background-color: var(--bg-primary);
+  color: var(--text-muted);
+  border-color: var(--border-subtle);
+}
+
+.admin-event-custom-modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: 1050;
+}
+
+.admin-event-custom-modal-dialog {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  max-width: 750px;
+  max-height: 90vh;
+}
+
+.admin-event-custom-modal-header {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.admin-event-modal-text-input {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-modal-text-input:focus {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  border-color: var(--gold-accent);
+  box-shadow: 0 0 0 0.25rem rgba(243, 198, 79, 0.25);
+}
+
+.admin-event-modal-text-input::placeholder {
+  color: var(--text-muted);
+}
+
+.admin-event-upload-action-btn {
+  background-color: var(--bg-surface-hover);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-upload-action-btn:hover {
+  background-color: var(--border-subtle);
+  color: var(--text-main);
+}
+
+.admin-event-modal-img-preview {
+  height: 140px;
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-modal-dropdown-option {
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+}
+
+.admin-event-modal-inner-section {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-add-tier-btn-style {
+  background-color: rgba(243, 198, 79, 0.1);
+  color: var(--gold-accent);
+  border: 1px solid rgba(243, 198, 79, 0.3);
+}
+
+.admin-event-add-tier-btn-style:hover {
+  background-color: var(--gold-accent);
+  color: var(--bg-primary);
+}
+
+.admin-event-modal-tier-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-price-prefix-addon {
+  background-color: var(--bg-surface-hover);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-tier-remove-btn {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.admin-event-tier-remove-btn:hover {
+  background-color: #f87171;
+  color: #fff;
+}
+
+.admin-event-modal-generator-bar {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-qty-input-field {
+  width: 70px;
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-generate-seats-action-btn {
+  background-color: var(--bg-surface-hover);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-generate-seats-action-btn:hover {
+  background-color: var(--border-subtle);
+  color: var(--text-main);
+}
+
+.admin-event-seats-preview-scroll {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.admin-event-custom-modal-footer {
+  border-top: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface);
+}
+
+.admin-event-modal-cancel-btn {
+  background-color: var(--bg-surface-hover);
+  color: var(--text-main);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-modal-cancel-btn:hover {
+  background-color: var(--border-subtle);
+  color: var(--text-main);
+}
+
+.admin-event-publish-action-btn {
+  background-color: var(--gold-accent);
+  color: var(--bg-primary);
+}
+
+.admin-event-publish-action-btn:hover {
+  background-color: var(--gold-accent-hover);
+  color: var(--bg-primary);
+}
+
+.admin-event-stage-banner-box {
+  background-color: var(--bg-surface-hover);
+  color: var(--gold-accent);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-stage-legend-bar {
+  border-bottom: 1px solid var(--border-subtle);
+  background-color: var(--bg-surface);
+}
+
+.admin-event-stage-tier-card {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-subtle);
+}
+
+.admin-event-seat-box-dimension {
+  width: 38px;
+  height: 38px;
+}
+
+.admin-event-delete-modal-box {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  max-width: 420px;
+}
+
+.admin-event-delete-confirm-btn {
+  background-color: #ef4444;
+  color: #fff;
+  border: none;
+}
+
+.admin-event-delete-confirm-btn:hover {
+  background-color: #dc2626;
+  color: #fff;
+}
+
+.admin-event-dot-size {
+  width: 10px;
+  height: 10px;
+}
+
+.admin-event-legend-dot-available {
+  background-color: #22c55e;
+}
+
+.admin-event-legend-dot-hold {
+  background-color: #eab308;
+}
+
+.admin-event-legend-dot-sold {
+  background-color: #ef4444;
+}
+
+.admin-event-legend-dot-blocked {
+  background-color: #6b7280;
+}
+
+.admin-event-status-available {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.admin-event-status-hold {
+  background-color: rgba(234, 179, 8, 0.2);
+  color: #facc15;
+  border: 1px solid rgba(234, 179, 8, 0.4);
+}
+
+.admin-event-status-sold {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.admin-event-status-blocked {
+  background-color: rgba(107, 114, 128, 0.2);
+  color: #9ca3af;
+  border: 1px solid rgba(107, 114, 128, 0.4);
+}
+
+.admin-event-badge-upcoming {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: #60a5fa;
+}
+
+.admin-event-badge-live {
+  background-color: rgba(34, 197, 94, 0.2);
+  color: #4ade80;
+}
+
+.admin-event-badge-completed {
+  background-color: rgba(107, 114, 128, 0.2);
+  color: #d1d5db;
+}
+
+.admin-event-badge-cancelled {
+  background-color: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+}
