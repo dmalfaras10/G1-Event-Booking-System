@@ -210,7 +210,7 @@ onBeforeUnmount(() => {
 // --- DROPDOWN FILTER OPTIONS ---
 const locations = computed(() => ['All', ...new Set(events.value.map(e => e.location))])
 const venues = computed(() => ['All', ...new Set(events.value.map(e => e.venueName))])
-const genres = computed(() => ['All', ...new Set(events.value.map(e => e.genre))])
+
 
 // --- FILTERED & SORTED EVENTS ---
 const filteredEvents = computed(() => {
@@ -222,8 +222,7 @@ const filteredEvents = computed(() => {
         evt.eventName.toLowerCase().includes(q) ||
         evt.artistName.toLowerCase().includes(q) ||
         evt.venueName.toLowerCase().includes(q) ||
-        evt.location.toLowerCase().includes(q) ||
-        evt.genre.toLowerCase().includes(q)
+        evt.location.toLowerCase().includes(q)
 
       const matchesCategory =
         selectedCategory.value === 'All' || evt.eventCategory === selectedCategory.value
@@ -231,8 +230,6 @@ const filteredEvents = computed(() => {
         selectedLocation.value === 'All' || evt.location === selectedLocation.value
       const matchesVenue =
         selectedVenue.value === 'All' || evt.venueName === selectedVenue.value
-      const matchesGenre =
-        selectedGenre.value === 'All' || evt.genre === selectedGenre.value
       const matchesPrice = evt.startingPrice <= maxPrice.value
 
       const eventDateIso = evt.eventStartDateTime.split('T')[0]
@@ -246,7 +243,6 @@ const filteredEvents = computed(() => {
         matchesCategory &&
         matchesLocation &&
         matchesVenue &&
-        matchesGenre &&
         matchesPrice &&
         matchesDateRange
       )
@@ -354,9 +350,6 @@ const goToEventDetails = (eventId) => {
       <section class="mb-4">
         <div class="row align-items-end g-3">
           <div class="col-lg-6">
-            <span class="text-uppercase small fw-bold browse-lineup-title">
-              <i class="bi bi-stars me-1"></i>Curated Sanctuary Calendar
-            </span>
             <h1 class="display-6 fw-bold mb-1 text-white">Explore Event Listings</h1>
             <p class="text-secondary-light small mb-0">
               Discover live concerts, orchestral galas, and intimate lounge sessions across Metro Manila.
@@ -372,7 +365,7 @@ const goToEventDetails = (eventId) => {
                 v-model="searchQuery"
                 type="text"
                 class="form-control bg-transparent border-0 text-white shadow-none"
-                placeholder="Search by event, artist, venue, city, or genre..."
+                placeholder="Search by event, artist, venue, or city..."
               />
               <button
                 v-if="searchQuery"
@@ -543,7 +536,7 @@ const goToEventDetails = (eventId) => {
           </div>
         </div>
 
-        <!-- Dropdown Filters: Location, Venue, Genre, Price, Sort -->
+        <!-- Dropdown Filters: Location, Venue, Price, Sort -->
         <div class="row g-3 pt-3 align-items-end">
           <div class="col-6 col-md-4 col-lg-2">
             <label class="form-label small text-secondary-light mb-1">
@@ -567,16 +560,6 @@ const goToEventDetails = (eventId) => {
             </select>
           </div>
 
-          <div class="col-6 col-md-4 col-lg-2">
-            <label class="form-label small text-secondary-light mb-1">
-              <i class="bi bi-music-note-beamed text-warning me-1"></i>Genre
-            </label>
-            <select v-model="selectedGenre" class="form-select form-select-sm dark-select">
-              <option v-for="g in genres" :key="g" :value="g">
-                {{ g === 'All' ? 'All Genres' : g }}
-              </option>
-            </select>
-          </div>
 
           <div class="col-6 col-md-6 col-lg-3">
             <div class="d-flex justify-content-between small mb-1">
@@ -653,9 +636,6 @@ const goToEventDetails = (eventId) => {
                 </span>
 
                 <div class="card-promo-overlay px-3 py-1 d-flex justify-content-between align-items-center">
-                  <span class="extra-small fw-semibold text-warning">
-                    <i class="bi bi-lightning-charge-fill me-1"></i>{{ event.promoBanner }}
-                  </span>
                   <span class="extra-small text-white">
                     <i class="bi bi-clock me-1"></i>{{ event.timeFormatted }}
                   </span>
@@ -665,7 +645,6 @@ const goToEventDetails = (eventId) => {
               <div class="card-body d-flex flex-column p-4">
                 <div class="d-flex justify-content-between align-items-center mb-1">
                   <span class="event-category">{{ event.eventCategory }}</span>
-                  <span class="extra-small text-secondary-light">{{ event.genre }}</span>
                 </div>
 
                 <h5
@@ -687,11 +666,6 @@ const goToEventDetails = (eventId) => {
                   <i class="bi bi-geo-alt me-1"></i>{{ event.venueName }} &bull;
                   <span class="text-white">{{ event.location }}</span>
                 </p>
-
-                <div class="announcement-chip rounded-2 px-2 py-1 mb-3 extra-small">
-                  <i class="bi bi-info-circle text-warning me-1"></i>
-                  {{ event.announcement }}
-                </div>
 
                 <div class="mb-3">
                   <div class="d-flex justify-content-between extra-small mb-1">
@@ -767,7 +741,7 @@ const goToEventDetails = (eventId) => {
                   <span class="badge bg-dark border border-secondary text-warning">
                     {{ event.timeFormatted }}
                   </span>
-                  <span class="event-category">{{ event.eventCategory }} &bull; {{ event.genre }}</span>
+                  <span class="event-category">{{ event.eventCategory }}</span>
                   <span
                     class="availability-badge position-static py-0 px-2"
                     :class="getAvailabilityBadgeClass(event.availabilityStatus)"
@@ -791,7 +765,6 @@ const goToEventDetails = (eventId) => {
 
             <div class="d-flex flex-wrap align-items-center justify-content-between justify-content-lg-end gap-4 pt-2 pt-lg-0 border-top border-lg-0 border-secondary border-opacity-25">
               <div class="text-lg-end">
-                <span class="d-block extra-small text-secondary-light">{{ event.promoBanner }}</span>
                 <span class="small fw-semibold text-white">
                   {{ event.remainingTickets > 0 ? `${event.remainingTickets} Seats Left` : 'Waitlist Only' }}
                 </span>

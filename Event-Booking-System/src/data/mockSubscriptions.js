@@ -1,0 +1,167 @@
+export const planStatuses = ['Active', 'Inactive', 'Archived'];
+
+export const userSubscriptionStatuses = ['Active', 'Expired', 'Cancelled', 'Pending'];
+
+// SUBSCRIPTION_PLAN collection
+export const mockSubscriptionPlans = [
+  {
+    _id: 'plan-001',
+    user_id: 'admin-001',
+    adminName: 'Dan Michael Alfaras',
+    subscriptionType: 'Bronze',
+    subscriptionPrice: 999.00,
+    subscriptionPerks: '5% Ticket Discount, 24-Hour Presale Access, Member Newsletter',
+    subscriptionStatus: 'Active',
+    createdAt: '2026-10-01T09:00:00',
+    updatedAt: '2026-10-15T14:30:00'
+  },
+  {
+    _id: 'plan-002',
+    user_id: 'admin-001',
+    adminName: 'Matthew Antonio Bulaong',
+    subscriptionType: 'Silver',
+    subscriptionPrice: 2499.00,
+    subscriptionPerks: '12% Ticket Discount, 48-Hour Presale Access, Priority Seat Hold, Exclusive Merch Drops',
+    subscriptionStatus: 'Active',
+    createdAt: '2026-10-01T09:15:00',
+    updatedAt: '2026-10-16T11:20:00'
+  },
+  {
+    _id: 'plan-003',
+    user_id: 'admin-002',
+    adminName: 'Jovie Cleofas',
+    subscriptionType: 'Gold',
+    subscriptionPrice: 4999.00,
+    subscriptionPerks: '20% Ticket Discount, 72-Hour VIP Presale, Complimentary Lounge Drink Voucher, Dedicated Concierge Support',
+    subscriptionStatus: 'Active',
+    createdAt: '2026-10-01T09:30:00',
+    updatedAt: '2026-10-18T16:45:00'
+  },
+  {
+    _id: 'plan-004',
+    user_id: 'admin-002',
+    adminName: 'Aaron Angelo Crisologo',
+    subscriptionType: 'Founder Holiday Pass',
+    subscriptionPrice: 7500.00,
+    subscriptionPerks: '25% Gala Discount, Backstage Meet & Greet Raffle, Free VIP Seat Upgrade, Waived Booking Fees',
+    subscriptionStatus: 'Inactive',
+    createdAt: '2026-09-10T08:00:00',
+    updatedAt: '2026-10-19T10:00:00'
+  }
+];
+
+// USER_SUBSCRIPTIONS collection (joined with customer & plan info for admin table view)
+export const mockUserSubscriptions = [
+  {
+    _id: 'usub-1001',
+    user_id: 'usr-201',
+    fullName: 'Sofia Marie Reyes',
+    email: 'sofia.reyes@email.com',
+    subscriptionPlan_id: 'plan-003',
+    subscriptionType: 'Gold',
+    subscriptionPrice: 4999.00,
+    subscriptionStatus: 'Active',
+    paymentMethod: 'GCash',
+    transactionRef: 'TXN-G1-90812',
+    startDate: '2026-10-05T10:00:00',
+    endDate: '2027-10-05T10:00:00',
+    createdAt: '2026-10-05T10:00:00',
+    updatedAt: '2026-10-05T10:00:00'
+  },
+  {
+    _id: 'usub-1002',
+    user_id: 'usr-202',
+    fullName: 'Marco Antonio Santos',
+    email: 'marco.santos@email.com',
+    subscriptionPlan_id: 'plan-002',
+    subscriptionType: 'Silver',
+    subscriptionPrice: 2499.00,
+    subscriptionStatus: 'Active',
+    paymentMethod: 'PayPal',
+    transactionRef: 'TXN-G1-90845',
+    startDate: '2026-10-12T15:30:00',
+    endDate: '2027-10-12T15:30:00',
+    createdAt: '2026-10-12T15:30:00',
+    updatedAt: '2026-10-12T15:30:00'
+  },
+  {
+    _id: 'usub-1003',
+    user_id: 'usr-203',
+    fullName: 'Camille Anne Villanueva',
+    email: 'camille.v@email.com',
+    subscriptionPlan_id: 'plan-001',
+    subscriptionType: 'Bronze',
+    subscriptionPrice: 999.00,
+    subscriptionStatus: 'Expired',
+    paymentMethod: 'Maya',
+    transactionRef: 'TXN-G1-77310',
+    startDate: '2025-10-01T08:00:00',
+    endDate: '2026-10-01T08:00:00',
+    createdAt: '2025-10-01T08:00:00',
+    updatedAt: '2026-10-02T09:00:00'
+  },
+  {
+    _id: 'usub-1004',
+    user_id: 'usr-204',
+    fullName: 'Liam Gabriel Mendoza',
+    email: 'liam.mendoza@email.com',
+    subscriptionPlan_id: 'plan-003',
+    subscriptionType: 'Gold',
+    subscriptionPrice: 4999.00,
+    subscriptionStatus: 'Active',
+    paymentMethod: 'Stripe',
+    transactionRef: 'TXN-G1-91204',
+    startDate: '2026-11-01T12:00:00',
+    endDate: '2027-11-01T12:00:00',
+    createdAt: '2026-11-01T12:00:00',
+    updatedAt: '2026-11-01T12:00:00'
+  },
+  {
+    _id: 'usub-1005',
+    user_id: 'usr-205',
+    fullName: 'Hannah Grace Bautista',
+    email: 'hannah.bautista@email.com',
+    subscriptionPlan_id: 'plan-002',
+    subscriptionType: 'Silver',
+    subscriptionPrice: 2499.00,
+    subscriptionStatus: 'Cancelled',
+    paymentMethod: 'GCash',
+    transactionRef: 'TXN-G1-88419',
+    startDate: '2026-08-15T18:20:00',
+    endDate: '2027-08-15T18:20:00',
+    createdAt: '2026-08-15T18:20:00',
+    updatedAt: '2026-09-20T11:10:00'
+  },
+  {
+    _id: 'usub-1006',
+    user_id: 'usr-206',
+    fullName: 'Ethan Joshua Lim',
+    email: 'ethan.lim@email.com',
+    subscriptionPlan_id: 'plan-001',
+    subscriptionType: 'Bronze',
+    subscriptionPrice: 999.00,
+    subscriptionStatus: 'Pending',
+    paymentMethod: 'Maya',
+    transactionRef: 'TXN-G1-95401',
+    startDate: '2026-11-15T14:00:00',
+    endDate: '2027-11-15T14:00:00',
+    createdAt: '2026-11-15T14:00:00',
+    updatedAt: '2026-11-15T14:00:00'
+  },
+  {
+    _id: 'usub-1007',
+    user_id: 'usr-207',
+    fullName: 'Patricia Denise Aquino',
+    email: 'patricia.aquino@email.com',
+    subscriptionPlan_id: 'plan-003',
+    subscriptionType: 'Gold',
+    subscriptionPrice: 4999.00,
+    subscriptionStatus: 'Active',
+    paymentMethod: 'Stripe',
+    transactionRef: 'TXN-G1-96112',
+    startDate: '2026-11-16T19:45:00',
+    endDate: '2027-11-16T19:45:00',
+    createdAt: '2026-11-16T19:45:00',
+    updatedAt: '2026-11-16T19:45:00'
+  }
+];
