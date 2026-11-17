@@ -121,17 +121,31 @@ const handleSubmit = () => {
 const scrollToSection = (sectionId) => {
   const el = document.getElementById(sectionId)
   if (el) {
-    el.scrollIntoView({ behavior: 'smooth' })
+    scrollToWithOffset(el, 80);
   }
 }
+
+function scrollToWithOffset(element, offset = 80) {
+  const elementPosition = element.getBoundingClientRect().top;
+  const offsetPosition = elementPosition + window.scrollY - offset;
+
+  window.scrollTo({
+    top: offsetPosition,
+    behavior: 'smooth'
+  });
+}
+
 
 //handle dynamic scrolling to about / contact
 const handleRouteScroll = async () => {
   await nextTick()
 
   if (route.path === '/contact') {
-    const contactSection = document.getElementById('contact-section')
-    contactSection?.scrollIntoView({ behavior: 'smooth' })
+    const contactSection = document.getElementById('contact-section');
+
+    scrollToWithOffset(contactSection, 80);
+
+
   } else {
     window.scrollTo({
       top: 0,
@@ -189,7 +203,7 @@ watch(
             <div class="d-flex flex-wrap gap-3 mb-4">
               <button
                 type="button"
-                class="btn btn-login px-4 py-2.5 d-inline-flex align-items-center gap-2"
+                class="btn btn-login px-4 py-2 d-inline-flex align-items-center gap-2"
                 @click="scrollToSection('contact-section')"
               >
                 <span>Contact Support</span>
@@ -197,7 +211,7 @@ watch(
               </button>
               <button
                 type="button"
-                class="btn btn-register px-4 py-2.5 d-inline-flex align-items-center gap-2"
+                class="btn btn-register px-4 py-2 d-inline-flex align-items-center gap-2"
                 @click="scrollToSection('policies-section')"
               >
                 <i class="bi bi-shield-check text-warning"></i>
@@ -466,7 +480,7 @@ watch(
 
                   <!-- Submit Button -->
                   <div class="col-12 pt-2 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-login px-4 py-2.5 d-inline-flex align-items-center gap-2">
+                    <button type="submit" class="btn btn-login px-4 py-2 d-inline-flex align-items-center gap-2">
                       <span>Submit Inquiry</span>
                       <i class="bi bi-send-fill"></i>
                     </button>

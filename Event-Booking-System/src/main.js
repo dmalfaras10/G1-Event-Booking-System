@@ -21,6 +21,7 @@ import LogoutPage from './pages/LogoutPage.vue'
 import ForgotPassword from './pages/ForgotPassword.vue'
 import ErrorPage from './pages/ErrorPage.vue'
 import AboutContactPage from './pages/AboutContactPage.vue';
+import UserProfile from './pages/UserProfile.vue'
 // Admin Side
 import AdminEventListing from './pages/AdminEventListing.vue';
 import AdminUserBookings from './pages/AdminUserBookings.vue';
@@ -41,6 +42,7 @@ const routes = [
   { path: '/', name: 'home', component: HomePage },
   { path: '/register', name: 'Register', component: RegisterPage },
   { path: '/login', name: 'Login', component: LoginPage },
+  { path: '/profile', name: 'Profile', component: UserProfile, meta: { fullWidth: true }},
   { path: '/forgot-password', name: 'Forgot-Password', component: ForgotPassword },
   { path: '/logout', name: 'logout', component: LogoutPage},
   { path: '/event/event-details1', name: 'event-details', component: EventDetailsPage },
