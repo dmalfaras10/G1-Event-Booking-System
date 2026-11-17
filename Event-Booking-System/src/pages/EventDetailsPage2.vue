@@ -288,22 +288,57 @@ const buildSeats = (row, count, soldIndices = [], holdIndices = []) => {
 // Ticket tiers based on mockEvents.js structure
 const tiers = ref([
   {
-    id: 'tier_orchestra',
-    ticketType: 'Orchestra Center',
-    name: 'Orchestra Center',
-    ticketDescription: 'Direct acoustic sweet spot with unobstructed stage view.',
-    desc: 'Direct acoustic sweet spot with unobstructed stage view.',
-    ticketPerks: ['Acoustic Check Access', 'Program Booklet'],
-    perksInput: 'Acoustic Check Access, Program Booklet',
+    id: 'tier_bronze',
+    ticketType: 'Bronze — Orchestra Cabaret',
+    name: 'Bronze — Orchestra Cabaret',
+    ticketDescription: 'Unreserved cabaret seating on the flat, closest to the piano.',
+    desc: 'Unreserved cabaret seating on the flat, closest to the piano.',
+    ticketPerks: ['Acoustic Check Access', 'Printed Set List'],
+    perksInput: 'Acoustic Check Access, Printed Set List',
     price: 3600.00,
     seatSection: 'Orchestra',
     seatRow: 'C',
-    capacity: 40,
-    quantity: 40,
-    seats: buildSeats('C', 40, [1, 2, 10, 11], [5, 6]),
+    quantity: 50,
+    seats: buildSeats('C', 50, [1, 2, 10, 11], [5, 6]),
     badge: null
+  },
+  {
+    id: 'tier_silver',
+    ticketType: 'Silver — Mezzanine Reserved',
+    name: 'Silver — Mezzanine Reserved',
+    ticketDescription: 'Reserved mezzanine seat with a clear sight line to the keyboard.',
+    desc: 'Reserved mezzanine seat with a clear sight line to the keyboard.',
+    ticketPerks: ['Reserved Seat', 'Interval Drink Voucher'],
+    perksInput: 'Reserved Seat, Interval Drink Voucher',
+    price: 6000.00,
+    seatSection: 'Mezzanine',
+    seatRow: 'M',
+    quantity: 30,
+    seats: buildSeats('M', 30, [4, 5], [1]),
+    badge: 'Best Value'
+  },
+  {
+    id: 'tier_gold',
+    ticketType: 'Gold — Front Box & Green Room',
+    name: 'Gold — Front Box & Green Room',
+    ticketDescription: 'Front box for two, with post-show green-room access and a signed programme.',
+    desc: 'Front box for two, with post-show green-room access and a signed programme.',
+    ticketPerks: ['Front Box Seating', 'Green Room Access', 'Signed Programme'],
+    perksInput: 'Front Box Seating, Green Room Access, Signed Programme',
+    price: 9500.00,
+    seatSection: 'Front Box',
+    seatRow: 'F',
+    quantity: 12,
+    seats: buildSeats('F', 12, [1, 2], [3]),
+    badge: 'Includes Green Room Access'
   }
 ])
+
+// Capacity is the number of seats still bookable, so the panel's maxQty and the
+// SeatSelection map can never disagree with the seat data.
+tiers.value.forEach(t => {
+  t.capacity = t.seats.filter(s => s.status === 'available').length
+})
 
 // Beverage service add-ons
 const addons = ref([
