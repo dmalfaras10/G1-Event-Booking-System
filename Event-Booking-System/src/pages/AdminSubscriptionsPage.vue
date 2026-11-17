@@ -25,12 +25,9 @@ const itemsPerPage = 5;
 const isPlanModalOpen = ref(false);
 const isEditingPlan = ref(false);
 const planToDelete = ref(null);
-
-const isSubscriberModalOpen = ref(false);
-const isEditingSubscriber = ref(false);
 const subscriberToDelete = ref(null);
 
-// --- DEFAULT FORMS MATCHING ERD FIELDS ---
+// --- DEFAULT FORM FOR SUBSCRIPTION_PLAN ---
 const getDefaultPlanForm = () => ({
   _id: null,
   user_id: 'admin-001',
@@ -43,21 +40,7 @@ const getDefaultPlanForm = () => ({
   updatedAt: ''
 });
 
-const getDefaultSubscriberForm = () => ({
-  _id: null,
-  user_id: '',
-  fullName: '',
-  email: '',
-  subscriptionPlan_id: plans.value[0]?._id || 'plan-001',
-  subscriptionStatus: 'Active',
-  paymentMethod: 'GCash',
-  transactionRef: '',
-  startDate: '2026-11-17T09:00',
-  endDate: '2027-11-17T09:00'
-});
-
 const planForm = ref(getDefaultPlanForm());
-const subscriberForm = ref(getDefaultSubscriberForm());
 
 // --- SCROLL & TAB WATCHERS ---
 const scrollToTop = () => {
@@ -207,59 +190,7 @@ const confirmDeletePlan = () => {
   }
 };
 
-// --- USER_SUBSCRIPTIONS CRUD ACTIONS ---
-const openSubscriberModal = (sub = null) => {
-  if (sub) {
-    isEditingSubscriber.value = true;
-    subscriberForm.value = {
-      ...JSON.parse(JSON.stringify(sub)),
-      startDate: sub.startDate ? sub.startDate.slice(0, 16) : '',
-      endDate: sub.endDate ? sub.endDate.slice(0, 16) : ''
-    };
-  } else {
-    isEditingSubscriber.value = false;
-    subscriberForm.value = getDefaultSubscriberForm();
-  }
-  isSubscriberModalOpen.value = true;
-};
-
-const closeSubscriberModal = () => {
-  isSubscriberModalOpen.value = false;
-  subscriberForm.value = getDefaultSubscriberForm();
-};
-
-const saveSubscriber = () => {
-  if (!subscriberForm.value.fullName.trim() || !subscriberForm.value.email.trim()) return;
-
-  const selectedPlan = plans.value.find(
-    (p) => p._id === subscriberForm.value.subscriptionPlan_id
-  );
-  const nowIso = new Date().toISOString();
-
-  const payload = {
-    ...subscriberForm.value,
-    subscriptionType: selectedPlan ? selectedPlan.subscriptionType : 'Custom',
-    subscriptionPrice: selectedPlan ? Number(selectedPlan.subscriptionPrice) : 0,
-    updatedAt: nowIso
-  };
-
-  if (isEditingSubscriber.value) {
-    const idx = userSubscriptions.value.findIndex((s) => s._id === payload._id);
-    if (idx !== -1) userSubscriptions.value[idx] = payload;
-  } else {
-    userSubscriptions.value.unshift({
-      ...payload,
-      _id: `usub-${Date.now().toString().slice(-4)}`,
-      user_id: payload.user_id || `usr-${Math.floor(300 + Math.random() * 600)}`,
-      transactionRef:
-        payload.transactionRef || `TXN-G1-${Math.floor(10000 + Math.random() * 90000)}`,
-      createdAt: nowIso
-    });
-    currentPage.value = 1;
-  }
-  closeSubscriberModal();
-};
-
+// --- USER_SUBSCRIPTIONS ACTIONS (TOGGLE STATUS & REMOVE ONLY) ---
 const cycleUserSubStatus = (sub) => {
   const nextIndex =
     (userSubscriptionStatuses.indexOf(sub.subscriptionStatus) + 1) %
@@ -335,26 +266,17 @@ const getStatusBadgeClass = (status) => {
             Membership Plans &amp; User Subscriptions
           </h1>
           <p class="small mb-0 admin-event-dashboard-subtitle">
-            Manage Bronze, Silver, and Gold tiers (SUBSCRIPTION_PLAN) and monitor member enrollments (USER_SUBSCRIPTIONS)
+            Manage subscription tiers and monitor member enrollments
           </p>
         </div>
 
-        <div class="d-flex flex-wrap gap-2">
-          <button
-            v-if="activeTab === 'plans'"
-            class="btn fw-semibold px-4 py-2 d-inline-flex align-items-center gap-2 shadow-sm border-0 admin-event-create-btn"
-            @click="openPlanModal()"
-          >
-            <span class="fs-5 lh-1">+</span> Create Membership Plan
-          </button>
-          <button
-            v-else
-            class="btn fw-semibold px-4 py-2 d-inline-flex align-items-center gap-2 shadow-sm border-0 admin-event-create-btn"
-            @click="openSubscriberModal()"
-          >
-            <span class="fs-5 lh-1">+</span> Enroll Subscriber
-          </button>
-        </div>
+        <button
+          v-if="activeTab === 'plans'"
+          class="btn fw-semibold px-4 py-2 d-inline-flex align-items-center gap-2 shadow-sm border-0 admin-event-create-btn"
+          @click="openPlanModal()"
+        >
+          <span class="fs-5 lh-1">+</span> Create Membership Plan
+        </button>
       </header>
 
       <!-- Entity Switcher Tabs (SUBSCRIPTION_PLAN vs USER_SUBSCRIPTIONS) -->
@@ -396,7 +318,7 @@ const getStatusBadgeClass = (status) => {
           </div>
         </div>
 
-        <!-- Optional Plan Filter when viewing User Subscriptions -->
+        <!-- Plan Filter when viewing User Subscriptions -->
         <div v-if="activeTab === 'subscribers'" class="col-12 col-sm-6 col-md-3">
           <select
             v-model="selectedPlanFilter"
@@ -552,7 +474,7 @@ const getStatusBadgeClass = (status) => {
       </div>
 
       <!-- =============================================================== -->
-      <!-- TAB 2: USER_SUBSCRIPTIONS TABLE                                 -->
+      <!-- TAB 2: USER_SUBSCRIPTIONS TABLE (TOGGLE STATUS & REMOVE ONLY)   -->
       <!-- =============================================================== -->
       <div v-else>
         <div v-if="filteredUserSubscriptions.length > 0">
@@ -625,15 +547,9 @@ const getStatusBadgeClass = (status) => {
                       </div>
                     </td>
 
-                    <!-- Actions -->
+                    <!-- Actions: Toggle Status & Remove Only -->
                     <td class="py-3 px-3 pe-4 text-center">
-                      <div class="d-flex flex-column gap-2 align-items-center mx-auto" style="width: 110px;">
-                        <button
-                          class="btn btn-sm w-100 py-1 fs-8 admin-event-action-edit-btn"
-                          @click="openSubscriberModal(sub)"
-                        >
-                          Edit Record
-                        </button>
+                      <div class="d-flex flex-column gap-2 align-items-center mx-auto" style="width: 100px;">
                         <button
                           class="btn btn-sm w-100 py-1 fs-8 admin-event-action-edit-btn"
                           @click="cycleUserSubStatus(sub)"
@@ -793,124 +709,7 @@ const getStatusBadgeClass = (status) => {
     </div>
 
     <!-- =============================================================== -->
-    <!-- MODAL 2: CREATE / EDIT USER_SUBSCRIPTIONS                       -->
-    <!-- =============================================================== -->
-    <div v-if="isSubscriberModalOpen" class="admin-modal-backdrop" @click.self="closeSubscriberModal">
-      <div class="card rounded-4 p-4 shadow-lg admin-modal-card">
-        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-25">
-          <h5 class="fw-bold mb-0 admin-event-title-text">
-            {{ isEditingSubscriber ? 'Edit User Subscription' : 'Enroll User in Membership Plan' }}
-          </h5>
-          <button type="button" class="btn-close btn-close-white" @click="closeSubscriberModal"></button>
-        </div>
-
-        <form @submit.prevent="saveSubscriber">
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label small admin-event-dashboard-subtitle">Customer Full Name *</label>
-              <input
-                v-model="subscriberForm.fullName"
-                type="text"
-                class="form-control admin-event-category-select"
-                placeholder="e.g., Juan Dela Cruz"
-                required
-              />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label small admin-event-dashboard-subtitle">Customer Email *</label>
-              <input
-                v-model="subscriberForm.email"
-                type="email"
-                class="form-control admin-event-category-select"
-                placeholder="customer@email.com"
-                required
-              />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label small admin-event-dashboard-subtitle">
-                Membership Plan (subscriptionPlan_id)
-              </label>
-              <select
-                v-model="subscriberForm.subscriptionPlan_id"
-                class="form-select admin-event-category-select"
-              >
-                <option v-for="pl in plans" :key="pl._id" :value="pl._id">
-                  {{ pl.subscriptionType }} (₱{{ formatCurrency(pl.subscriptionPrice) }})
-                </option>
-              </select>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label small admin-event-dashboard-subtitle">
-                Enrollment Status (subscriptionStatus)
-              </label>
-              <select
-                v-model="subscriberForm.subscriptionStatus"
-                class="form-select admin-event-category-select"
-              >
-                <option v-for="st in userSubscriptionStatuses" :key="st" :value="st">
-                  {{ st }}
-                </option>
-              </select>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label small admin-event-dashboard-subtitle">Start Date (startDate)</label>
-              <input
-                v-model="subscriberForm.startDate"
-                type="datetime-local"
-                class="form-control admin-event-category-select"
-                required
-              />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label small admin-event-dashboard-subtitle">Expiration Date (endDate)</label>
-              <input
-                v-model="subscriberForm.endDate"
-                type="datetime-local"
-                class="form-control admin-event-category-select"
-                required
-              />
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label small admin-event-dashboard-subtitle">Payment Method</label>
-              <select v-model="subscriberForm.paymentMethod" class="form-select admin-event-category-select">
-                <option value="GCash">GCash</option>
-                <option value="Maya">Maya</option>
-                <option value="PayPal">PayPal</option>
-                <option value="Stripe">Stripe</option>
-              </select>
-            </div>
-
-            <div class="col-md-6">
-              <label class="form-label small admin-event-dashboard-subtitle">Transaction Reference</label>
-              <input
-                v-model="subscriberForm.transactionRef"
-                type="text"
-                class="form-control admin-event-category-select"
-                placeholder="Auto-generated if left blank"
-              />
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top border-secondary border-opacity-25">
-            <button type="button" class="btn btn-sm px-3 admin-event-action-edit-btn" @click="closeSubscriberModal">
-              Cancel
-            </button>
-            <button type="submit" class="btn btn-sm px-4 fw-semibold admin-event-create-btn">
-              {{ isEditingSubscriber ? 'Save Changes' : 'Save Enrollment' }}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-
-    <!-- =============================================================== -->
-    <!-- MODAL 3: DELETE CONFIRMATION (PLANS OR SUBSCRIBERS)             -->
+    <!-- MODAL 2: DELETE CONFIRMATION (PLANS OR SUBSCRIBERS)             -->
     <!-- =============================================================== -->
     <div
       v-if="planToDelete || subscriberToDelete"
