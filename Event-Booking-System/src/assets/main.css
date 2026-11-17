@@ -8,6 +8,7 @@
     --magenta-badge: #9e1c4e;
     --text-main: #f4f4f5;
     --text-muted: #9ca3af;
+    --text-vault-muted: #FFEFCC;
     --border-subtle: rgba(255, 255, 255, 0.08);
 }
 
@@ -18,7 +19,9 @@ body {
     display: flex;
     flex-direction: column;
     font-family: "Inter", sans-serif;
+
     font-size: 1rem;
+
 }
 
 .main-wrapper {
@@ -28,6 +31,93 @@ body {
         var(--bg-primary);
 }
 
+
+
+
+/* Custom Component Overrides */
+.bg-surface { background-color: var(--bg-surface) !important; }
+.bg-surface-hover:hover { background-color: var(--bg-surface-hover) !important; }
+.text-gold { color: var(--gold-accent) !important; }
+.text-gold-muted { color: var(--gold-muted) !important; }
+.text-vault-muted { color: #FFEFCC !important; }
+.border-subtle { border-color: var(--border-subtle) !important; }
+
+/* Custom Sidebar Navigation Buttons */
+.profile-nav-btn {
+    background-color: transparent;
+    color: var(--text-vault-muted);
+    border: 1px solid transparent;
+    text-align: left;
+    transition: all 0.2s ease-in-out;
+}
+
+.profile-nav-btn:hover {
+    color: var(--text-vault-muted);
+    background-color: var(--bg-surface);
+    border-color: var(--border-subtle);
+}
+
+.profile-nav-btn.active {
+    background-color: rgba(243, 198, 79, 0.1);
+    color: var(--gold-accent);
+    border-color: rgba(243, 198, 79, 0.3);
+}
+
+/* Form inputs matching the dark aesthetic */
+.form-control, .form-select {
+    background-color: var(--bg-primary) !important;
+    border-color: var(--border-subtle) !important;
+    color: var(--text-main) !important;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--gold-accent) !important;
+    box-shadow: 0 0 0 0.25rem rgba(243, 198, 79, 0.15) !important;
+}
+
+/* Gold Solid Action Button */
+.btn-gold {
+    background-color: var(--gold-accent);
+    color: #0b0b0c;
+    font-weight: 600;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.btn-gold:hover {
+    background-color: var(--gold-accent-hover);
+    color: #0b0b0c;
+}
+
+/* Filter Pill Tabs */
+.filter-pill {
+    background-color: var(--bg-surface);
+    color: var(--text-muted);
+    border: 1px solid var(--border-subtle);
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+}
+
+.filter-pill:hover {
+    color: var(--text-main);
+    background-color: var(--bg-surface-hover);
+}
+
+.filter-pill.active {
+    background-color: var(--gold-accent);
+    color: #0b0b0c;
+    font-weight: 600;
+    border-color: var(--gold-accent);
+}
+
+/* Magenta Accent Badge */
+.badge-magenta {
+    background-color: rgba(158, 28, 78, 0.25);
+    color: #f472b6;
+    border: 1px solid rgba(158, 28, 78, 0.5);
+}
+
+=======
 .admin-event-dashboard {
   color: var(--text-main);
   min-height: 100vh;
@@ -491,3 +581,4 @@ body {
   background-color: rgba(239, 68, 68, 0.2);
   color: #f87171;
 }
+
