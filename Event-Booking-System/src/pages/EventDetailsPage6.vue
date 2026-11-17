@@ -101,7 +101,7 @@
 
         <!-- Price range -->
         <div class="price-range">
-          <span class="price-big">₱12,000 — ₱45,000</span>
+          <span class="price-big">{{ priceRangeLabel }}</span>
           <span class="price-sub">/ attendee</span>
         </div>
         <p class="price-note">Sold out — join the VIP waitlist to be contacted if seats are released.</p>
@@ -249,29 +249,69 @@ import { ref, computed, onUnmounted } from 'vue'
 import BookingCheckout from '../components/BookingCheckout.vue'
 import SeatSelection from '../components/SeatSelection.vue'
 
-const eventId = 'evt-006'
+// Event data based on mockEvents.js structure (Event ID: 6)
+const eventId = 6
 const eventName = '2027 Gold Champagne NYE Gala'
-const venueName = 'Okada Manila Cove'
+const artist = ref([
+  'International Guest DJs & Pyro Symphony',
+  'A curated lineup of Ibiza and Seoul festival headliners performing alongside a synchronized midnight fireworks score.'
+])
+const artistDescription = 'A curated lineup of Ibiza and Seoul festival headliners performing alongside a synchronized midnight fireworks score.'
+const category = 'Nightlife & DJ'
+const description = 'Ring in 2027 poolside by Manila Bay inside the glass dome with international headliners and unlimited vintage bubbly.'
 const dateLong = 'Thu, Dec 31, 2026'
 const dateShort = 'Thu, Dec 31'
 const time24 = '21:00'
+const status = 'Upcoming'
 
+// Venue information
+const venueName = 'Okada Manila Cove'
+const address = 'Pasay City'
+const venueCapacity = 200
+
+// Build seats function (matching mockEvents.js)
+const buildSeats = (row, count, soldIndices = [], holdIndices = []) => {
+  return Array.from({ length: count }, (_, i) => {
+    const num = i + 1
+    let seatStatus = 'available'
+    if (soldIndices.includes(num)) seatStatus = 'sold'
+    else if (holdIndices.includes(num)) seatStatus = 'hold'
+    return {
+      seatRow: row,
+      seatNumber: num,
+      code: `${row}-${num}`,
+      status: seatStatus
+    }
+  })
+}
+
+// Ticket tiers based on mockEvents.js structure (ALL SOLD OUT for this event)
 const tiers = ref([
-  { id: 'tier_bronze', name: 'Bronze — Cove Floor', price: 12000, capacity: 0,
-    desc: 'Standing access to the cove floor and pool deck.', badge: 'Sold Out' },
-  { id: 'tier_silver', name: 'Silver — Dome Lounge', price: 25000, capacity: 0,
-    desc: 'Reserved lounge inside the glass dome with full table service.', badge: 'Sold Out' },
-  { id: 'tier_gold', name: 'Gold — Private Villa', price: 45000, capacity: 0,
-    desc: 'Private poolside villa with butler, chef and a magnum service.', badge: 'Sold Out' },
+  {
+    id: 'tier_gold_vip',
+    ticketType: 'Gold VIP Dome Pass',
+    name: 'Gold VIP Dome Pass',
+    ticketDescription: 'Unlimited vintage bubbly and front-row pyrotechnics view.',
+    desc: 'Unlimited vintage bubbly and front-row pyrotechnics view.',
+    ticketPerks: ['Unlimited Vintage Bubbly', 'Midnight Pyro View', 'Valet Parking'],
+    perksInput: 'Unlimited Vintage Bubbly, Midnight Pyro View, Valet Parking',
+    price: 12000.00,
+    seatSection: 'Dome VIP',
+    seatRow: 'Z',
+    capacity: 0, // All sold out
+    quantity: 50,
+    seats: buildSeats('Z', 50, Array.from({length: 50}, (_, i) => i + 1), []), // All 50 seats sold
+    badge: 'Sold Out'
+  }
 ])
 
+// Waitlist and concierge add-ons
 const addons = ref([
   { name: 'Waitlist Priority Upgrade', price: 2500, desc: 'Priority position on the VIP waitlist for released seats.', selected: false },
   { name: 'Private Car & Chauffeur', price: 3500, desc: 'Round-trip chauffeur from Makati or BGC.', selected: false },
 ])
 
 // ---- Hero gallery ----
-// TODO: put your image paths here — src '' keeps the gradient placeholder until filled in.
 const heroImages = ref([
   { src: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80', alt: 'Fireworks over Manila Bay' },
   { src: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80', alt: 'Glass dome at midnight' },
@@ -279,8 +319,6 @@ const heroImages = ref([
   { src: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80', alt: 'Champagne toast on the deck' },
 ])
 const activeImage = ref(0)
-
-const artist = ref(['Aurelia Vance', 'A headline DJ with a decade-long Ibiza residency and a reputation for sets that run from ambient to peak-time without a visible seam. This is her first Manila New Year’s Eve.'])
 
 // ---- Booking state ----
 const step = ref('select')
@@ -293,6 +331,15 @@ const holdExpired = ref(false)
 const selectedTier = computed(() => tiers.value.find(t => t.id === selectedTierId.value))
 const allSoldOut = computed(() => tiers.value.every(t => t.capacity === 0))
 const canCheckout = computed(() => !!selectedTier.value && qty.value > 0 && selectedTier.value.capacity > 0 && !holdExpired.value)
+
+// Price headline derived from the tiers, so it can't drift from the data.
+const priceRangeLabel = computed(() => {
+  const prices = tiers.value.map(t => t.price)
+  if (!prices.length) return '—'
+  const min = Math.min(...prices)
+  const max = Math.max(...prices)
+  return min === max ? peso(min) : `${peso(min)} — ${peso(max)}`
+})
 
 // ---- Attendees ----
 // Per-order cap from the UI note. The effective max is the smaller of the tier's
