@@ -21,6 +21,9 @@ import LogoutPage from './pages/LogoutPage.vue'
 import ForgotPassword from './pages/ForgotPassword.vue'
 import ErrorPage from './pages/ErrorPage.vue'
 import AboutContactPage from './pages/AboutContactPage.vue';
+// Admin Side
+import AdminEventListing from './pages/AdminEventListing.vue';
+import AdminUserBookings from './pages/AdminUserBookings.vue';
 
 // Each event page is referenced by the id set in its own script (evt-001 … evt-006)
 const eventDetailsPages = {
@@ -47,6 +50,8 @@ const routes = [
   }},
   { path: '/about', name: 'About', component: AboutContactPage},
   { path: '/contact', name: 'Contact', component: AboutContactPage},
+  { path: '/AdminEventList', name: 'AdminEventListing', component: AdminEventListing},
+  { path: '/AdminUserBookings', name: 'AdminUserBookings', component: AdminUserBookings},
   { path: '/:pathMatch(.*)*', name: 'not-found', component: ErrorPage }
 
 ]

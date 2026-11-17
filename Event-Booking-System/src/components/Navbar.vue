@@ -48,7 +48,7 @@ const handleSelectEvent = (event) => {
 					<span class="navbar-brand-text">G<span class="navbar-brand-hyphen">-</span>ONE</span>
 				</router-link>
 				<!-- Search Bar -->
-				<div class="navbar-search-form d-none d-md-block">
+				<div class="navbar-search-form d-none d-md-block" v-if="!user.isAdmin">
 					<div class="navbar-search-wrapper" :class="{ 'active': isSearchOpen && searchQuery.trim() }">
 						<i class="bi bi-search navbar-search-icon"></i>
 						<input
@@ -99,7 +99,7 @@ const handleSelectEvent = (event) => {
 			<!-- Navigation Links & Actions -->
 			<div class="collapse navbar-collapse" id="mainNav">
 				<!-- Mobile Search Bar -->
-				<div class="navbar-search-form d-md-none my-3 position-relative">
+				<div class="navbar-search-form d-md-none my-3 position-relative" v-if="!user.isAdmin">
 					<div class="navbar-search-wrapper">
 						<i class="bi bi-search navbar-search-icon"></i>
 						<input
@@ -134,27 +134,44 @@ const handleSelectEvent = (event) => {
 				<!-- Main Navigation  -->
 				<ul class="navbar-nav mx-auto mb-3 mb-lg-0 gap-1">
 					<li class="navbar-nav-item nav-item">
-						<router-link class="navbar-nav-link nav-link" to="/">
+						<router-link class="navbar-nav-link nav-link" to="/" v-if="!user.isAdmin">
 							<i class="bi bi-house-door me-1"></i>Home
 						</router-link>
 					</li>
-					<li class="navbar-nav-item nav-item">
-						<router-link class="navbar-nav-link nav-link" to="/events">
+					<template v-if="user.isAdmin">
+						<li class="navbar-nav-item nav-item">
+							<router-link class="navbar-nav-link nav-link text-warning" to="/adminEventList">
+								<i class="bi bi-shield-check me-1"></i>Admin Events
+							</router-link>
+						</li>
+						<li class="navbar-nav-item nav-item">
+							<router-link class="navbar-nav-link nav-link text-warning" to="/adminUserBookings">
+								<i class="bi bi-receipt me-1"></i>User Bookings
+							</router-link>
+						</li>
+						<li class="navbar-nav-item nav-item">
+							<router-link class="navbar-nav-link nav-link text-warning" to="/adminSubscriptions">
+								<i class="bi bi-gem me-1"></i>Subscriptions
+							</router-link>
+						</li>
+					</template>
+					<li v-else class="navbar-nav-item nav-item">
+						<router-link class="navbar-nav-link nav-link" to="/events" v-if="!user.isAdmin">
 							<i class="bi bi-calendar-event me-1"></i>Events
 						</router-link>
 					</li>
 					<li class="navbar-nav-item nav-item">
-						<a class="navbar-nav-link nav-link" href="#">
+						<a class="navbar-nav-link nav-link" href="#" v-if="!user.isAdmin">
 							<i class="bi bi-gem navbar-text-gold me-1"></i>VIP
 						</a>
 					</li>
 					<li class="navbar-nav-item nav-item">
-						<router-link class="navbar-nav-link nav-link" to="/about">
+						<router-link class="navbar-nav-link nav-link" to="/about" v-if="!user.isAdmin">
 							<i class="bi bi-info-circle me-1"></i>About
 						</router-link>
 					</li>
 					<li class="navbar-nav-item nav-item">
-						<router-link class="navbar-nav-link nav-link" to="/contact">
+						<router-link class="navbar-nav-link nav-link" to="/contact" v-if="!user.isAdmin">
 							<i class="bi bi-envelope me-1"></i>Contact
 						</router-link>
 					</li>
@@ -189,7 +206,7 @@ const handleSelectEvent = (event) => {
 								</router-link>
 							</li>
 							<li>
-								<router-link class="dropdown-item d-flex align-items-center gap-2" to="/tickets">
+								<router-link class="dropdown-item d-flex align-items-center gap-2" to="/tickets" v-if="!user.isAdmin">
 									<i class="bi bi-ticket-perforated"></i>My Ticket
 								</router-link>
 							</li>
