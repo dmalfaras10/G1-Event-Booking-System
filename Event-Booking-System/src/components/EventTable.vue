@@ -80,9 +80,16 @@ const getEventSeatStats = (event) => {
                 <!-- Artist & Category -->
                 <td class="py-3 px-3">
                   <div class="fw-medium mb-1 admin-event-title-text">{{ event.artist }}</div>
-                  <span class="badge fw-normal small px-2 py-1 admin-event-category-badge-style">
+                  <span class="badge fw-normal small px-2 py-1 mb-1 admin-event-category-badge-style">
                     {{ event.category }}
                   </span>
+                  <p
+                    v-if="event.artistDescription"
+                    class="small mb-0 text-truncate-2 lh-sm admin-event-desc-text"
+                    :title="event.artistDescription"
+                  >
+                    {{ truncateText(event.artistDescription, 45) }}
+                  </p>
                 </td>
 
                 <!-- Date -->

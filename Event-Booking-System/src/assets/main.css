@@ -249,8 +249,8 @@ body {
 .admin-event-custom-modal-dialog {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  max-width: 750px;
-  max-height: 90vh;
+  max-width: 980px;
+  max-height: 95vh;
 }
 
 .admin-event-custom-modal-header {

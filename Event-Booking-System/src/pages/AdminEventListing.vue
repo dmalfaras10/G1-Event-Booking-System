@@ -13,6 +13,7 @@ const getDefaultForm = () => ({
   image: '',
   name: '',
   artist: '',
+  artistDescription: '',
   category: '',
   description: '',
   date: '',
@@ -73,6 +74,7 @@ const filteredEvents = computed(() => {
     const matchesSearch =
       event.name.toLowerCase().includes(query) ||
       event.artist.toLowerCase().includes(query) ||
+      (event.artistDescription && event.artistDescription.toLowerCase().includes(query)) ||
       event.venueName.toLowerCase().includes(query) ||
       event.address.toLowerCase().includes(query);
     const matchesCategory = selectedCategory.value ? event.category === selectedCategory.value : true;
@@ -132,6 +134,9 @@ const addTicketTier = () => {
   const rowName = String.fromCharCode(65 + form.value.tickets.length);
   form.value.tickets.push({
     ticketType: '',
+    ticketDescription: '',
+    ticketPerks: [],
+    perksInput: '',
     seatSection: 'Section ' + rowName,
     seatRow: rowName,
     price: 0,
@@ -163,6 +168,28 @@ const generateSeatsForTier = (ticket) => {
 const cycleSeatStatus = (seat) => {
   const order = ['available', 'hold', 'sold', 'blocked'];
   seat.status = order[(order.indexOf(seat.status) + 1) % order.length];
+};
+
+const handleImageUpload = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      form.value.image = event.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
+const updatePerks = (ticket) => {
+  if (ticket.perksInput) {
+    ticket.ticketPerks = ticket.perksInput
+      .split(',')
+      .map((p) => p.trim())
+      .filter((p) => p.length > 0);
+  } else {
+    ticket.ticketPerks = [];
+  }
 };
 
 const getTotalSeatsCount = (tickets) => tickets ? tickets.reduce((sum, t) => sum + (t.seats ? t.seats.length : 0), 0) : 0;
@@ -210,6 +237,7 @@ const getTotalSeatsCount = (tickets) => tickets ? tickets.reduce((sum, t) => sum
         :events="paginatedEvents"
         :current-page="currentPage"
         :total-pages="totalPages"
+        :filtered-events-length="filteredEvents.length"
         @page-change="(p) => currentPage = p"
         @open-seat-map="(ev) => activeSeatMapEvent = ev"
         @edit-event="(ev) => openModal(ev)"
@@ -233,8 +261,10 @@ const getTotalSeatsCount = (tickets) => tickets ? tickets.reduce((sum, t) => sum
       :is-over-capacity="isOverCapacity"
       @close="closeModal"
       @save="saveEvent"
+      @image-upload="handleImageUpload"
       @add-tier="addTicketTier"
       @remove-tier="removeTicketTier"
+      @update-perks="updatePerks"
       @generate-seats="generateSeatsForTier"
       @cycle-seat="cycleSeatStatus"
     />
@@ -252,4 +282,3 @@ const getTotalSeatsCount = (tickets) => tickets ? tickets.reduce((sum, t) => sum
     />
   </div>
 </template>
-

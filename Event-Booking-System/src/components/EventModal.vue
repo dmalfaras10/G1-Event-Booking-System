@@ -115,10 +115,27 @@ const adminEventGetSeatStatusClass = (status) => {
           </div>
         </div>
 
-        <!-- Description -->
-        <div>
-          <label class="form-label small fw-medium admin-event-dashboard-subtitle">Event Description *</label>
-          <textarea v-model="form.description" rows="2" required placeholder="Show details, doors open time..." class="form-control shadow-none admin-event-modal-text-input"></textarea>
+        <!-- Event & Artist Descriptions -->
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label class="form-label small fw-medium admin-event-dashboard-subtitle">Event Description *</label>
+            <textarea
+              v-model="form.description"
+              rows="4"
+              required
+              placeholder="Show details, doors open time..."
+              class="form-control shadow-none admin-event-modal-text-input"
+            ></textarea>
+          </div>
+          <div class="col-12 col-md-6">
+            <label class="form-label small fw-medium admin-event-dashboard-subtitle">Artist Description</label>
+            <textarea
+              v-model="form.artistDescription"
+              rows="4"
+              placeholder="Artist bio, genre, notable achievements..."
+              class="form-control shadow-none admin-event-modal-text-input"
+            ></textarea>
+          </div>
         </div>
 
         <!-- Ticket Tiers & Seat Generator Section -->
