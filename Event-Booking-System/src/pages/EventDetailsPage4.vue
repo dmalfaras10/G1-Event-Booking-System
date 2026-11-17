@@ -52,11 +52,6 @@
           <div class="meta-value"><i class="bi bi-geo-alt"></i> {{ venueName }}</div>
           <div class="meta-sub">{{ venueAddress }}</div>
         </div>
-        <div class="meta-card">
-          <div class="meta-label">Dress Code</div>
-          <div class="meta-value"><i class="bi bi-person-badge"></i> Speakeasy Smart</div>
-          <div class="meta-sub">No phones on the floor</div>
-        </div>
       </div>
 
       <!-- Program notes & repertoire -->
@@ -141,20 +136,13 @@
           <i class="bi bi-exclamation-triangle-fill"></i> All seating tiers are currently sold out.
         </div>
 
-        <!-- Add-ons -->
+        <!-- Perks included with the selected seating tier -->
         <div class="addons-section">
-          <h4 class="addons-title">Bespoke Concierge Add-ons</h4>
-          <div v-for="(a, i) in addons" :key="i" class="addon-row">
-            <label class="addon-label">
-              <input type="checkbox" v-model="a.selected" class="addon-checkbox">
-              <span class="addon-check"></span>
-              <div class="addon-main">
-                <div class="addon-name">{{ a.name }}</div>
-                <div class="addon-price">+{{ peso(a.price) }} / seat</div>
-              </div>
-              <span class="addon-desc">{{ a.desc }}</span>
-            </label>
-          </div>
+          <h4 class="addons-title">Included With Your Seating</h4>
+          <ul v-if="selectedTier" class="perks-list">
+            <li v-for="perk in selectedTier.perks" :key="perk" class="perk-item">{{ perk }}</li>
+          </ul>
+          <p v-else class="perks-empty">Select a seating tier to see what is included.</p>
         </div>
 
         <!-- Order summary: dynamic line items derived from user selection -->
@@ -163,15 +151,11 @@
             <span class="order-line-name">Pass Allocation ({{ selectedTier.name }} × {{ qty }})</span>
             <span class="order-line-price">{{ peso(tiersSubtotal) }}</span>
           </div>
-          <div v-for="a in selectedAddons" :key="a.name" class="order-line">
-            <span class="order-line-name">{{ a.name }} (× {{ qty }})</span>
-            <span class="order-line-price">{{ peso(a.price * qty) }}</span>
-          </div>
           <div v-if="serviceFee > 0" class="order-line">
             <span class="order-line-name">Concierge &amp; Facilities Surcharge (10%)</span>
             <span class="order-line-price">{{ peso(serviceFee) }}</span>
           </div>
-          <div v-if="!selectedTier && selectedAddons.length === 0" class="order-empty">
+          <div v-if="!selectedTier" class="order-empty">
             Select a seating tier to see your order summary.
           </div>
           <div class="order-divider"></div>
@@ -229,7 +213,6 @@
       :qty="qty"
       :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
-      :add-ons="selectedAddons"
       :service-fee="serviceFee"
       :total="orderTotal"
       :currency="'₱'"
@@ -345,6 +328,7 @@ const tiers = computed(() =>
     price: ticket.price,
     capacity: availableSeats(ticket),
     desc: ticket.ticketDescription,
+    perks: ticket.ticketPerks || [],
     badge: ticket.badge || null
   }))
 )
@@ -355,11 +339,6 @@ const totalSeatsLeft = computed(() => tiers.value.reduce((sum, t) => sum + t.cap
 const eventTitle = computed(
   () => `${mockEvent.name}: An ${venueCapacity}-Seat Bebop Session at ${venueName}`
 )
-
-const addons = ref([
-  { name: 'Late Jam Session Sign-Up', price: 800, desc: 'A guaranteed slot in the 23:30 jam with the quartet.', selected: false },
-  { name: 'Rare Single Malt Flight', price: 1600, desc: 'Three additional 25 ml pours from the back-bar reserve.', selected: false },
-])
 
 // ---- Hero gallery (first slide is the event's listing image) ----
 const heroImages = ref([
@@ -389,10 +368,8 @@ const MAX_SEATS_PER_ORDER = 6
 const maxQty = computed(() => Math.min(selectedTier.value?.capacity ?? MAX_SEATS_PER_ORDER, MAX_SEATS_PER_ORDER))
 
 const tiersSubtotal = computed(() => (selectedTier.value ? selectedTier.value.price * qty.value : 0))
-const selectedAddons = computed(() => addons.value.filter(a => a.selected))
-const addonsSubtotal = computed(() => selectedAddons.value.reduce((s, a) => s + a.price * qty.value, 0))
-const serviceFee = computed(() => Math.round((tiersSubtotal.value + addonsSubtotal.value) * 0.10))
-const orderTotal = computed(() => tiersSubtotal.value + addonsSubtotal.value + serviceFee.value)
+const serviceFee = computed(() => Math.round(tiersSubtotal.value * 0.10))
+const orderTotal = computed(() => tiersSubtotal.value + serviceFee.value)
 
 // ---- Formatters ----
 const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')
@@ -430,7 +407,6 @@ function resetFlow() {
   selectedSeats.value = []
   selectedTierId.value = null
   qty.value = 1
-  addons.value.forEach(a => a.selected = false)
   holdExpired.value = false
 }
 </script>
