@@ -86,40 +86,44 @@
             <p class="modal-sub">Your booking is confirmed and your digital e-tickets are ready.</p>
           </div>
 
-          <div class="summary-grid">
-            <div class="summary-item">
-              <span class="summary-label">Event</span>
-              <span class="summary-value">{{ eventName }}</span>
+          <div class="block-head">
+            <span class="block-title"><i class="bi bi-receipt"></i> Booking Summary</span>
+          </div>
+
+          <div class="order-strip">
+            <div class="order-strip-row">
+              <span class="order-strip-label">Event</span>
+              <span class="order-strip-value">{{ eventName }}</span>
             </div>
-            <div class="summary-item">
-              <span class="summary-label">Venue</span>
-              <span class="summary-value">{{ venue }}</span>
+            <div class="order-strip-row">
+              <span class="order-strip-label">Venue</span>
+              <span class="order-strip-value">{{ venue }}</span>
             </div>
-            <div class="summary-item">
-              <span class="summary-label">Date &amp; Time</span>
-              <span class="summary-value">{{ when }}</span>
+            <div class="order-strip-row">
+              <span class="order-strip-label">Date &amp; Time</span>
+              <span class="order-strip-value">{{ when }}</span>
             </div>
-            <div class="summary-item">
-              <span class="summary-label">Seating Tier</span>
-              <span class="summary-value">{{ tierName }}</span>
+            <div class="order-strip-row">
+              <span class="order-strip-label">Seating Tier</span>
+              <span class="order-strip-value">{{ tierName }}</span>
             </div>
-            <div class="summary-item">
-              <span class="summary-label">Attendees</span>
-              <span class="summary-value">{{ qty }}</span>
+            <div class="order-strip-row">
+              <span class="order-strip-label">Attendees</span>
+              <span class="order-strip-value">{{ qty }}</span>
             </div>
-            <div v-if="seats.length" class="summary-item">
-              <span class="summary-label">Seats</span>
-              <span class="summary-value">{{ seats.join(', ') }}</span>
+            <div v-if="seats.length" class="order-strip-row">
+              <span class="order-strip-label">Seats</span>
+              <span class="order-strip-value">{{ seats.join(', ') }}</span>
             </div>
-            <div class="summary-item">
-              <span class="summary-label">Total Paid</span>
-              <span class="summary-value gold">{{ money(total) }}</span>
+            <div class="order-strip-row order-strip-total">
+              <span>Total Paid</span>
+              <span class="order-strip-value gold">{{ money(total) }}</span>
             </div>
           </div>
 
-          <div class="tickets-head">
-            <span class="tickets-title"><i class="bi bi-ticket-perforated"></i> Digital E-Tickets</span>
-            <span class="tickets-count">{{ qty }} issued</span>
+          <div class="block-head">
+            <span class="block-title"><i class="bi bi-ticket-perforated"></i> Digital E-Tickets</span>
+            <span class="block-count">{{ qty }} issued</span>
           </div>
 
           <div class="tickets">
@@ -314,7 +318,7 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   font-size: 0.84rem;
   color: var(--text-muted);
   margin: 0 0 1.25rem;
-  max-width: 46ch;
+  max-width: 50ch;
 }
 .gold { color: var(--gold-accent); }
 
@@ -336,7 +340,7 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   margin-bottom: 0.4rem;
 }
 .order-strip-label { color: var(--text-muted); }
-.order-strip-value { font-weight: 700; }
+.order-strip-value { font-weight: 700; text-align: right; }
 /* Add-on lines sit under the tier line */
 .order-strip-row-sub { padding-left: 0.9rem; font-size: 0.8rem; }
 .order-strip-row-sub .order-strip-label { color: #8a8a93; }
@@ -483,44 +487,15 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   margin-bottom: 0.75rem;
 }
 
-.summary-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.6rem;
-  margin-bottom: 1.4rem;
-}
-.summary-item {
-  background: var(--bg-primary);
-  border: 1px solid var(--border-subtle);
-  border-radius: 0.6rem;
-  padding: 0.6rem 0.75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  min-width: 0;
-}
-.summary-label {
-  font-size: 0.6rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
-  color: var(--text-muted);
-}
-.summary-value {
-  font-size: 0.84rem;
-  font-weight: 600;
-  color: var(--text-main);
-  overflow-wrap: anywhere;
-}
-
 /* ---------- E-tickets ---------- */
-.tickets-head {
+/* ---------- Section headers ---------- */
+.block-head {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
   margin-bottom: 0.7rem;
 }
-.tickets-title {
+.block-title {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -530,8 +505,8 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   letter-spacing: 0.6px;
   color: var(--text-main);
 }
-.tickets-title i { color: var(--gold-accent); }
-.tickets-count { font-size: 0.7rem; color: var(--text-muted); }
+.block-title i { color: var(--gold-accent); }
+.block-count { font-size: 0.7rem; color: var(--text-muted); }
 
 .tickets { max-height: 38vh; overflow-y: auto; padding-right: 0.25rem; }
 
@@ -614,7 +589,6 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   .checkout-overlay { padding: 2vh 0.6rem; }
   .modal-body { padding: 1.5rem 1.15rem 1.3rem; }
   .modal-title { font-size: 1.35rem; padding-right: 2rem; }
-  .summary-grid { grid-template-columns: 1fr 1fr; }
   .field-row { grid-template-columns: 1fr; gap: 0; }
   .modal-actions { flex-direction: column-reverse; }
   .modal-actions .btn-pay-inline,
