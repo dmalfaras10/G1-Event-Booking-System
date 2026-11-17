@@ -1,25 +1,20 @@
 <script setup>
-
-	import UserProfile from './pages/UserProfile.vue';
-
+	import { useRoute } from 'vue-router'
 	import Navbar from	'./components/Navbar.vue'
-	import HomePage from './pages/HomePage.vue'
 	import Footer from './components/Footer.vue'
 
+	const route = useRoute()
 </script>
 
 
 <template>
 
-	<UserProfile class="main-wrapper" />
-
-<Navbar />
-	<div class="main-wrapper">
-		<div class="container">
-			<RouterView />
+	<Navbar />
+		<div class="main-wrapper">
+			<div :class="{ container: !route.meta.fullWidth }">
+			  <RouterView />
+			</div>
 		</div>
-	</div>
-<Footer />
-
+	<Footer />
 
 </template>
