@@ -145,20 +145,13 @@
           <i class="bi bi-exclamation-triangle-fill"></i> All seating tiers are currently sold out.
         </div>
 
-        <!-- Add-ons -->
+        <!-- Perks included with the selected seating tier -->
         <div class="addons-section">
-          <h4 class="addons-title">Bespoke Concierge Add-ons</h4>
-          <div v-for="(a, i) in addons" :key="i" class="addon-row">
-            <label class="addon-label">
-              <input type="checkbox" v-model="a.selected" class="addon-checkbox">
-              <span class="addon-check"></span>
-              <div class="addon-main">
-                <div class="addon-name">{{ a.name }}</div>
-                <div class="addon-price">+{{ peso(a.price) }} / seat</div>
-              </div>
-              <span class="addon-desc">{{ a.desc }}</span>
-            </label>
-          </div>
+          <h4 class="addons-title">Included With Your Seating</h4>
+          <ul v-if="selectedTier" class="perks-list">
+            <li v-for="perk in selectedTier.perks" :key="perk" class="perk-item">{{ perk }}</li>
+          </ul>
+          <p v-else class="perks-empty">Select a seating tier to see what is included.</p>
         </div>
 
         <!-- Order summary: dynamic line items derived from user selection -->
@@ -167,15 +160,11 @@
             <span class="order-line-name">Pass Allocation ({{ selectedTier.name }} × {{ qty }})</span>
             <span class="order-line-price">{{ peso(tiersSubtotal) }}</span>
           </div>
-          <div v-for="a in selectedAddons" :key="a.name" class="order-line">
-            <span class="order-line-name">{{ a.name }} (× {{ qty }})</span>
-            <span class="order-line-price">{{ peso(a.price * qty) }}</span>
-          </div>
           <div v-if="serviceFee > 0" class="order-line">
             <span class="order-line-name">Concierge &amp; Facilities Surcharge (10%)</span>
             <span class="order-line-price">{{ peso(serviceFee) }}</span>
           </div>
-          <div v-if="!selectedTier && selectedAddons.length === 0" class="order-empty">
+          <div v-if="!selectedTier" class="order-empty">
             Select a seating tier to see your order summary.
           </div>
           <div class="order-divider"></div>
@@ -233,7 +222,6 @@
       :qty="qty"
       :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
-      :add-ons="selectedAddons"
       :service-fee="serviceFee"
       :total="orderTotal"
       :currency="'₱'"
@@ -294,6 +282,7 @@ const tiers = ref([
     ticketDescription: 'Unreserved cabaret seating on the flat, closest to the piano.',
     desc: 'Unreserved cabaret seating on the flat, closest to the piano.',
     ticketPerks: ['Acoustic Check Access', 'Printed Set List'],
+    perks: ['Acoustic Check Access', 'Printed Set List'],
     perksInput: 'Acoustic Check Access, Printed Set List',
     price: 3600.00,
     seatSection: 'Orchestra',
@@ -309,6 +298,7 @@ const tiers = ref([
     ticketDescription: 'Reserved mezzanine seat with a clear sight line to the keyboard.',
     desc: 'Reserved mezzanine seat with a clear sight line to the keyboard.',
     ticketPerks: ['Reserved Seat', 'Interval Drink Voucher'],
+    perks: ['Reserved Seat', 'Interval Drink Voucher'],
     perksInput: 'Reserved Seat, Interval Drink Voucher',
     price: 6000.00,
     seatSection: 'Mezzanine',
@@ -324,6 +314,7 @@ const tiers = ref([
     ticketDescription: 'Front box for two, with post-show green-room access and a signed programme.',
     desc: 'Front box for two, with post-show green-room access and a signed programme.',
     ticketPerks: ['Front Box Seating', 'Green Room Access', 'Signed Programme'],
+    perks: ['Front Box Seating', 'Green Room Access', 'Signed Programme'],
     perksInput: 'Front Box Seating, Green Room Access, Signed Programme',
     price: 9500.00,
     seatSection: 'Front Box',
@@ -339,13 +330,6 @@ const tiers = ref([
 tiers.value.forEach(t => {
   t.capacity = t.seats.filter(s => s.status === 'available').length
 })
-
-// Beverage service add-ons
-const addons = ref([
-  { name: 'Interval Champagne Service', price: 850, desc: 'Chilled champagne delivered to your seat during interval.', selected: false },
-  { name: 'Signed Program & CD Bundle', price: 1200, desc: 'Limited edition signed program with artist CD compilation.', selected: false },
-  { name: 'Pre-Concert Dinner', price: 2500, desc: 'Three-course dinner at partner restaurant before the performance.', selected: false }
-])
 
 // ---- Hero gallery ----
 // TODO: put your image paths here — src '' keeps the gradient placeholder until filled in.
@@ -383,10 +367,8 @@ const MAX_SEATS_PER_ORDER = 6
 const maxQty = computed(() => Math.min(selectedTier.value?.capacity ?? MAX_SEATS_PER_ORDER, MAX_SEATS_PER_ORDER))
 
 const tiersSubtotal = computed(() => (selectedTier.value ? selectedTier.value.price * qty.value : 0))
-const selectedAddons = computed(() => addons.value.filter(a => a.selected))
-const addonsSubtotal = computed(() => selectedAddons.value.reduce((s, a) => s + a.price * qty.value, 0))
-const serviceFee = computed(() => Math.round((tiersSubtotal.value + addonsSubtotal.value) * 0.10))
-const orderTotal = computed(() => tiersSubtotal.value + addonsSubtotal.value + serviceFee.value)
+const serviceFee = computed(() => Math.round(tiersSubtotal.value * 0.10))
+const orderTotal = computed(() => tiersSubtotal.value + serviceFee.value)
 
 // ---- Formatters ----
 const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')
@@ -424,7 +406,6 @@ function resetFlow() {
   selectedSeats.value = []
   selectedTierId.value = null
   qty.value = 1
-  addons.value.forEach(a => a.selected = false)
   holdExpired.value = false
 }
 </script>
