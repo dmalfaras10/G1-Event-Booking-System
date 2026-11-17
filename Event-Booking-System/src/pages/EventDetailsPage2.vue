@@ -101,7 +101,7 @@
 
         <!-- Price range -->
         <div class="price-range">
-          <span class="price-big">₱3,600 — ₱9,500</span>
+          <span class="price-big">{{ priceRangeLabel }}</span>
           <span class="price-sub">/ attendee</span>
         </div>
         <p class="price-note">All admissions include one interval drink voucher and a printed set list.</p>
@@ -249,25 +249,67 @@ import { ref, computed, onUnmounted } from 'vue'
 import BookingCheckout from '../components/BookingCheckout.vue'
 import SeatSelection from '../components/SeatSelection.vue'
 
-const eventId = 'evt-002'
+// Event data based on mockEvents.js structure (Event ID: 2)
+const eventId = 2
 const eventName = 'Solitary Harmonics: Acoustic Piano Night'
-const venueName = 'Samsung Performing Arts Theater'
+const artist = ref([
+  'Nils Frahm & Guests',
+  'Acclaimed Berlin composer and multi-instrumentalist renowned for bridging classical piano intimacy with tactile analog synthesis.'
+])
+const artistDescription = 'Acclaimed Berlin composer and multi-instrumentalist renowned for bridging classical piano intimacy with tactile analog synthesis.'
+const category = 'Classical & Gala'
+const description = 'An intimate three-hour improvisational performance on grand upright piano and vintage analog modular synthesizers.'
 const dateLong = 'Sat, Nov 28, 2026'
 const dateShort = 'Sat, Nov 28'
 const time24 = '19:30'
+const status = 'Upcoming'
 
+// Venue information
+const venueName = 'Samsung Performing Arts Theater'
+const address = 'Makati City'
+const venueCapacity = 150
+
+// Build seats function (matching mockEvents.js)
+const buildSeats = (row, count, soldIndices = [], holdIndices = []) => {
+  return Array.from({ length: count }, (_, i) => {
+    const num = i + 1
+    let seatStatus = 'available'
+    if (soldIndices.includes(num)) seatStatus = 'sold'
+    else if (holdIndices.includes(num)) seatStatus = 'hold'
+    return {
+      seatRow: row,
+      seatNumber: num,
+      code: `${row}-${num}`,
+      status: seatStatus
+    }
+  })
+}
+
+// Ticket tiers based on mockEvents.js structure
 const tiers = ref([
-  { id: 'tier_bronze', name: 'Bronze — Orchestra Cabaret', price: 3600, capacity: 30,
-    desc: 'Unreserved cabaret seating on the flat, closest to the piano.', badge: null },
-  { id: 'tier_silver', name: 'Silver — Mezzanine Reserved', price: 6000, capacity: 20,
-    desc: 'Reserved mezzanine seat with a clear sight line to the keyboard.', badge: 'Best Value' },
-  { id: 'tier_gold', name: 'Gold — Front Box & Green Room', price: 9500, capacity: 8,
-    desc: 'Front box for two, with post-show green-room access and a signed programme.', badge: 'Includes Green Room Access' },
+  {
+    id: 'tier_orchestra',
+    ticketType: 'Orchestra Center',
+    name: 'Orchestra Center',
+    ticketDescription: 'Direct acoustic sweet spot with unobstructed stage view.',
+    desc: 'Direct acoustic sweet spot with unobstructed stage view.',
+    ticketPerks: ['Acoustic Check Access', 'Program Booklet'],
+    perksInput: 'Acoustic Check Access, Program Booklet',
+    price: 3600.00,
+    seatSection: 'Orchestra',
+    seatRow: 'C',
+    capacity: 40,
+    quantity: 40,
+    seats: buildSeats('C', 40, [1, 2, 10, 11], [5, 6]),
+    badge: null
+  }
 ])
 
+// Beverage service add-ons
 const addons = ref([
-  { name: 'Post-Show Green Room Reception', price: 1200, desc: 'Meet the artists after the curtain.', selected: false },
-  { name: 'Coat Check & Cloakroom Priority', price: 250, desc: 'Priority cloakroom for the interval.', selected: false },
+  { name: 'Interval Champagne Service', price: 850, desc: 'Chilled champagne delivered to your seat during interval.', selected: false },
+  { name: 'Signed Program & CD Bundle', price: 1200, desc: 'Limited edition signed program with artist CD compilation.', selected: false },
+  { name: 'Pre-Concert Dinner', price: 2500, desc: 'Three-course dinner at partner restaurant before the performance.', selected: false }
 ])
 
 // ---- Hero gallery ----
@@ -279,8 +321,6 @@ const heroImages = ref([
   { src: 'https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?auto=format&fit=crop&w=900&q=80', alt: 'Cabaret seating in the round' },
 ])
 const activeImage = ref(0)
-
-const artist = ref(['Nils Frahm', 'A pianist and producer whose felt-damped piano recordings for Erased Tapes have made him one of the most streamed classical artists in the world, and one of the least predictable live.'])
 
 // ---- Booking state ----
 const step = ref('select')
@@ -294,9 +334,16 @@ const selectedTier = computed(() => tiers.value.find(t => t.id === selectedTierI
 const allSoldOut = computed(() => tiers.value.every(t => t.capacity === 0))
 const canCheckout = computed(() => !!selectedTier.value && qty.value > 0 && selectedTier.value.capacity > 0 && !holdExpired.value)
 
+// Price headline derived from the tiers, so it can't drift from the data.
+const priceRangeLabel = computed(() => {
+  const prices = tiers.value.map(t => t.price)
+  if (!prices.length) return '—'
+  const min = Math.min(...prices)
+  const max = Math.max(...prices)
+  return min === max ? peso(min) : `${peso(min)} — ${peso(max)}`
+})
+
 // ---- Attendees ----
-// Per-order cap from the UI note. The effective max is the smaller of the tier's
-// remaining capacity and this per-order cap, so the note and the +/- buttons agree.
 const MAX_SEATS_PER_ORDER = 6
 const maxQty = computed(() => Math.min(selectedTier.value?.capacity ?? MAX_SEATS_PER_ORDER, MAX_SEATS_PER_ORDER))
 

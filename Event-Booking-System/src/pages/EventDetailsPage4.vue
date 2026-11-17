@@ -6,7 +6,6 @@
       <!-- Hero banner (switches when a thumbnail below is clicked) -->
       <div class="banner">
         <div class="banner-media">
-          <!-- TODO: fill in the src values in heroImages (script) — banner auto-switches on thumb click -->
           <img v-if="heroImages[activeImage]?.src" :key="activeImage" :src="heroImages[activeImage].src" class="banner-img" alt="">
         </div>
         <div class="badge-row">
@@ -15,12 +14,12 @@
         </div>
         <div class="banner-strip">
           <div class="strip-left">
-            <i class="bi bi-cup-hot"></i> The Spirits Library — Listening Room
+            <i class="bi bi-cup-hot"></i> {{ venueName }} — Listening Room
             <span class="strip-sep">|</span>
-            <span class="strip-detail">80 seats · No amplification</span>
+            <span class="strip-detail">{{ venueCapacity }} seats · No amplification</span>
           </div>
           <div class="strip-right">
-            <i class="bi bi-ticket-perforated"></i> 14 Seats Left
+            <i class="bi bi-ticket-perforated"></i> {{ totalSeatsLeft }} Seats Left
           </div>
         </div>
       </div>
@@ -30,31 +29,28 @@
         <div v-for="(img, i) in heroImages" :key="i"
              :class="['thumb', { active: activeImage === i }]"
              @click="activeImage = i">
-          <!-- TODO: thumbnails render automatically once src is set in heroImages -->
         </div>
       </div>
 
       <span class="event-kicker"><i class="bi bi-moon-stars-fill"></i> Makati Speakeasy Series // Volume III</span>
-      <h1 class="event-title">
-        Midnight Saxophone Salon: An 80-Seat Bebop Session at The Spirits Library
-      </h1>
+      <h1 class="event-title">{{ eventTitle }}</h1>
 
       <!-- Meta row: 4 quick facts in a single panel -->
       <div class="meta-grid">
         <div class="meta-card">
           <div class="meta-label">Date &amp; Evening</div>
-          <div class="meta-value"><i class="bi bi-calendar-event"></i> Sat, Dec 12, 2026</div>
+          <div class="meta-value"><i class="bi bi-calendar-event"></i> {{ dateLong }}</div>
           <div class="meta-sub">Members’ door from 21:00</div>
         </div>
         <div class="meta-card">
           <div class="meta-label">First Set</div>
-          <div class="meta-value"><i class="bi bi-clock"></i> 21:30 Sharp</div>
+          <div class="meta-value"><i class="bi bi-clock"></i> {{ time24 }} Sharp</div>
           <div class="meta-sub">Two sets · one jam session</div>
         </div>
         <div class="meta-card">
           <div class="meta-label">Venue</div>
-          <div class="meta-value"><i class="bi bi-geo-alt"></i> The Spirits Library</div>
-          <div class="meta-sub">Makati City</div>
+          <div class="meta-value"><i class="bi bi-geo-alt"></i> {{ venueName }}</div>
+          <div class="meta-sub">{{ venueAddress }}</div>
         </div>
         <div class="meta-card">
           <div class="meta-label">Dress Code</div>
@@ -69,7 +65,7 @@
           <h2 class="section-title">Event Details</h2>
         </div>
         <p class="lead">
-          An intimate eighty-seat speakeasy jazz session behind an unmarked door on Chino Roces, where brass standards are played acoustically at conversational volume and the bar never closes.
+          {{ mockEvent.description }}
         </p>
         <p class="lead">
           The Harlem Speakeasy Quartet plays two sets with a guest on muted trumpet, then hands the room over for a late jam session — sign up at the bar, and the quartet will call you up.
@@ -82,8 +78,8 @@
           <h2 class="section-title">Featured Artist</h2>
         </div>
         <div class="artist-profile">
-          <div class="artist-name">{{ artist[0] }}</div>
-          <p class="lead">{{ artist[1] }}</p>
+          <div class="artist-name">{{ mockEvent.artist }}</div>
+          <p class="lead">{{ mockEvent.artistDescription }}</p>
         </div>
       </div>
 
@@ -101,7 +97,7 @@
 
         <!-- Price range -->
         <div class="price-range">
-          <span class="price-big">₱2,800 — ₱6,500</span>
+          <span class="price-big">{{ peso(minPrice) }} — {{ peso(maxPrice) }}</span>
           <span class="price-sub">/ attendee</span>
         </div>
         <p class="price-note">Every admission includes one rare single malt pour and a listening-room programme.</p>
@@ -249,38 +245,130 @@ import { ref, computed, onUnmounted } from 'vue'
 import BookingCheckout from '../components/BookingCheckout.vue'
 import SeatSelection from '../components/SeatSelection.vue'
 
-const eventId = 'evt-004'
-const eventName = 'Midnight Saxophone Salon'
-const venueName = 'The Spirits Library'
-const dateLong = 'Sat, Dec 12, 2026'
-const dateShort = 'Sat, Dec 12'
-const time24 = '21:30'
+// ---------------------------------------------------------------------------
+// Mock event — same shape as src/data/mockEvents.js (the schema AdminEventListing
+// reads), so the listing, the admin table and this page stay in sync.
+// id 4 → route /events/evt-004.
+// ---------------------------------------------------------------------------
+const buildSeats = (row, count, soldIndices = [], holdIndices = []) =>
+  Array.from({ length: count }, (_, i) => {
+    const num = i + 1
+    let status = 'available'
+    if (soldIndices.includes(num)) status = 'sold'
+    else if (holdIndices.includes(num)) status = 'hold'
+    return { seatRow: row, seatNumber: num, code: `${row}-${num}`, status }
+  })
 
-const tiers = ref([
-  { id: 'tier_bronze', name: 'Bronze — Bar Stool', price: 2800, capacity: 14,
-    desc: 'A stool at the back bar with full sight lines to the quartet.', badge: null },
-  { id: 'tier_silver', name: 'Silver — Banquette Seat', price: 4500, capacity: 12,
-    desc: 'A seat at an east-wall banquette with full table service.', badge: 'Includes Single Malt Pour' },
-  { id: 'tier_gold', name: 'Gold — Private Booth', price: 6500, capacity: 4,
-    desc: 'Private booth for four with a dedicated pour from the back-bar reserve.', badge: 'Most Requested' },
-])
+const mockEvent = {
+  id: 4,
+  image: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80',
+  name: 'Midnight Saxophone Salon',
+  artist: 'The Harlem Speakeasy Quartet',
+  artistDescription:
+    'New York-trained bebop outfit that came up through the Harlem loft scene, pairing smoky 1940s tenor standards with late-night brass improvisation. Their annual Manila residency is limited to three rooms and never amplified.',
+  category: 'Jazz & Lounge',
+  description:
+    'An intimate 80-seat speakeasy jazz session behind an unmarked door on Chino Roces, where brass standards are played acoustically at conversational volume, every admission includes one rare single malt pour, and the back bar never closes.',
+  date: '2026-12-12T21:30:00',
+  status: 'Upcoming',
+  venueName: 'The Spirits Library',
+  address: 'Makati City',
+  venueCapacity: 80,
+  tickets: [
+    {
+      ticketType: 'Bronze — Bar Stool',
+      ticketDescription:
+        'A backless stool at the long back bar with a clear sight line to the quartet and first call on the bartenders.',
+      ticketPerks: ['Back-Bar Seat', 'Late Jam Session Sign-Up'],
+      perksInput: 'Back-Bar Seat, Late Jam Session Sign-Up',
+      price: 2800.00,
+      seatSection: 'Back Bar',
+      seatRow: 'B',
+      quantity: 24,
+      seats: buildSeats('B', 24, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10]),
+      badge: null
+    },
+    {
+      ticketType: 'Silver — Banquette Seat',
+      ticketDescription:
+        'A cushioned seat at an east-wall banquette with full table service and one rare single malt pour from the back-bar reserve.',
+      ticketPerks: ['1 Rare Single Malt Pairing', 'Dedicated Table Service'],
+      perksInput: '1 Rare Single Malt Pairing, Dedicated Table Service',
+      price: 4500.00,
+      seatSection: 'East-Wall Banquette',
+      seatRow: 'S',
+      quantity: 20,
+      seats: buildSeats('S', 20, [1, 2, 3, 4, 5, 6], [7, 8]),
+      badge: 'Includes 1 Rare Single Malt Pairing'
+    },
+    {
+      ticketType: 'Gold — Private Booth',
+      ticketDescription:
+        'A velvet booth for four in the back reserve, with a dedicated pour from the owner’s shelf, coat check and a signed listening-room programme.',
+      ticketPerks: ['Private Booth for Four', 'Owner’s Reserve Pour', 'Coat Check'],
+      perksInput: 'Private Booth for Four, Owner’s Reserve Pour, Coat Check',
+      price: 6500.00,
+      seatSection: 'Back-Reserve Booth',
+      seatRow: 'G',
+      quantity: 8,
+      seats: buildSeats('G', 8, [1, 2, 3, 4], []),
+      badge: 'Most Requested'
+    }
+  ]
+}
+
+// ---- Event identity (mirrors the props the seat/checkout modals expect) ----
+const eventId = `evt-${String(mockEvent.id).padStart(3, '0')}`
+const eventName = mockEvent.name
+const venueName = mockEvent.venueName
+const venueAddress = mockEvent.address
+const venueCapacity = mockEvent.venueCapacity
+
+const eventDate = new Date(mockEvent.date)
+const dateLong = new Intl.DateTimeFormat('en-US', {
+  weekday: 'short', month: 'short', day: 'numeric', year: 'numeric',
+}).format(eventDate)
+const dateShort = new Intl.DateTimeFormat('en-US', {
+  weekday: 'short', month: 'short', day: 'numeric',
+}).format(eventDate)
+const time24 = `${String(eventDate.getHours()).padStart(2, '0')}:${String(eventDate.getMinutes()).padStart(2, '0')}`
+
+// ---- Tiers: the booking panel only needs name / price / remaining capacity /
+//      copy / badge, so each ticket is narrowed down to that shape. ----
+const TIER_IDS = ['tier_bronze', 'tier_silver', 'tier_gold']
+const availableSeats = (ticket) => ticket.seats.filter((s) => s.status === 'available').length
+
+const tiers = computed(() =>
+  mockEvent.tickets.map((ticket, i) => ({
+    id: TIER_IDS[i] || `tier_${i + 1}`,
+    name: ticket.ticketType,
+    price: ticket.price,
+    capacity: availableSeats(ticket),
+    desc: ticket.ticketDescription,
+    badge: ticket.badge || null
+  }))
+)
+
+const minPrice = computed(() => Math.min(...mockEvent.tickets.map((t) => t.price)))
+const maxPrice = computed(() => Math.max(...mockEvent.tickets.map((t) => t.price)))
+const totalSeatsLeft = computed(() => tiers.value.reduce((sum, t) => sum + t.capacity, 0))
+const eventTitle = computed(
+  () => `${mockEvent.name}: An ${venueCapacity}-Seat Bebop Session at ${venueName}`
+)
 
 const addons = ref([
   { name: 'Late Jam Session Sign-Up', price: 800, desc: 'A guaranteed slot in the 23:30 jam with the quartet.', selected: false },
   { name: 'Rare Single Malt Flight', price: 1600, desc: 'Three additional 25 ml pours from the back-bar reserve.', selected: false },
 ])
 
-// ---- Hero gallery ----
-// TODO: put your image paths here — src '' keeps the gradient placeholder until filled in.
+// ---- Hero gallery (first slide is the event's listing image) ----
 const heroImages = ref([
-  { src: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80', alt: 'Dimly lit speakeasy bar' },
-  { src: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80', alt: 'Saxophone under a single lamp' },
-  { src: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80', alt: 'Back-bar single malt reserve' },
-  { src: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80', alt: 'Banquette seating along the wall' },
+  { src: mockEvent.image, alt: 'Dimly lit speakeasy bar' },
+  { src: 'https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=80', alt: 'Saxophone under a single lamp' },
+  { src: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=900&q=80', alt: 'Back-bar single malt reserve' },
+  { src: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=900&q=80', alt: 'Banquette seating along the east wall' },
 ])
 const activeImage = ref(0)
-
-const artist = ref(['Cornelius “Chip” Barnes', 'A tenor player who came up in the Harlem loft scene and recorded for Blue Note in the late seventies. He now leads the Speakeasy Quartet on an annual Manila residency.'])
 
 // ---- Booking state ----
 const step = ref('select')
