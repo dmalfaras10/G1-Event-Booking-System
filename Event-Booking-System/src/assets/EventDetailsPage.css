@@ -96,10 +96,10 @@ body { background: var(--bg-primary); color: var(--text-main); font-family: "Int
   margin: 0 0 1.1rem 0; letter-spacing: -0.5px;
 }
 
-/* Meta grid: single panel split into 4 fact columns */
+/* Meta grid: single panel split into 3 fact columns (dress code removed) */
 .meta-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   border-radius: 0.75rem;

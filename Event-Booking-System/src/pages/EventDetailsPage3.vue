@@ -11,7 +11,6 @@
         </div>
         <div class="badge-row">
           <span class="badge badge-magenta">Complimentary Champagne</span>
-          <span class="badge badge-dark">Strict Black Tie &amp; Mask Dress Code</span>
         </div>
         <div class="banner-strip">
           <div class="strip-left">
@@ -55,11 +54,6 @@
           <div class="meta-label">Venue</div>
           <div class="meta-value"><i class="bi bi-bank2"></i> {{ venueName }}</div>
           <div class="meta-sub">{{ address }}</div>
-        </div>
-        <div class="meta-card">
-          <div class="meta-label">Dress Attire</div>
-          <div class="meta-value"><i class="bi bi-suit-diamond"></i> Black Tie &amp; Mask</div>
-          <div class="meta-sub">Masks provided at the cloakroom</div>
         </div>
       </div>
 

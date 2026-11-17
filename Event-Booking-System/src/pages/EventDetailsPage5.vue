@@ -54,11 +54,6 @@
           <div class="meta-value"><i class="bi bi-geo-alt"></i> {{ venueName }}</div>
           <div class="meta-sub">{{ address }}</div>
         </div>
-        <div class="meta-card">
-          <div class="meta-label">Dress Code</div>
-          <div class="meta-value"><i class="bi bi-person-badge"></i> Come As You Are</div>
-          <div class="meta-sub">Standing floor + seated balcony</div>
-        </div>
       </div>
 
       <!-- Program notes & repertoire -->

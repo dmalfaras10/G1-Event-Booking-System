@@ -52,11 +52,6 @@
           <div class="meta-value"><i class="bi bi-geo-alt"></i> {{ event.venueName }}</div>
           <div class="meta-sub">{{ event.address }}</div>
         </div>
-        <div class="meta-card">
-          <div class="meta-label">Dress Code</div>
-          <div class="meta-value"><i class="bi bi-sunglasses"></i> Noir Cocktail</div>
-          <div class="meta-sub">Pool deck closes at 22:00</div>
-        </div>
       </div>
 
       <!-- Program notes & repertoire -->

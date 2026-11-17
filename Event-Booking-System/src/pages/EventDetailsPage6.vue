@@ -56,11 +56,6 @@
           <div class="meta-value"><i class="bi bi-geo-alt"></i> Okada Manila Cove</div>
           <div class="meta-sub">Pasay City</div>
         </div>
-        <div class="meta-card">
-          <div class="meta-label">Dress Attire</div>
-          <div class="meta-value"><i class="bi bi-suit-diamond"></i> Gold &amp; Black Tie</div>
-          <div class="meta-sub">No open-toe footwear</div>
-        </div>
       </div>
 
       <!-- Program notes & repertoire -->
