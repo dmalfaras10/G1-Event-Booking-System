@@ -116,23 +116,6 @@ body { background: var(--bg-primary); color: var(--text-main); font-family: "Int
 .meta-value i { color: var(--gold-accent); margin-right: 0.15rem; }
 .meta-sub { font-size: 0.75rem; color: #8a8a93; }
 
-/* Section tabs: gold underline style */
-.section-tabs {
-  display: flex; gap: 1.4rem; flex-wrap: wrap;
-  border-bottom: 1px solid var(--border-subtle);
-  margin-bottom: 1.4rem;
-}
-.tab {
-  display: flex; align-items: center; gap: 0.4rem;
-  font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.5px; color: var(--text-muted);
-  padding: 0.25rem 0 0.65rem; border: none; border-bottom: 2px solid transparent;
-  background: transparent; cursor: pointer;
-}
-.tab i { font-size: 0.9rem; }
-.tab:hover { color: var(--text-main); }
-.tab.active { color: var(--gold-accent); border-bottom-color: var(--gold-accent); }
-
 /* Sections */
 .event-section { margin-bottom: 2.25rem; }
 .section-head {
@@ -212,6 +195,11 @@ body { background: var(--bg-primary); color: var(--text-main); font-family: "Int
 .artist-photo { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); }
 .artist-id { flex: 1; min-width: 0; }
 .artist-role { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gold-accent); margin-bottom: 0.1rem; }
+/* Featured artist: single name + bio, marked with a gold rule */
+.artist-profile {
+  padding-left: 1rem;
+  border-left: 2px solid var(--gold-accent);
+}
 .artist-name { font-family: var(--font-serif); font-weight: 700; font-size: 1.2rem; margin-bottom: 0.15rem; color: var(--text-main); }
 .artist-city { font-size: 0.72rem; font-weight: 700; color: var(--gold-accent); }
 .artist-bio { font-size: 0.82rem; line-height: 1.55; color: #c1c1c7; margin: 0 0 0.9rem 0; }
@@ -413,7 +401,6 @@ body { background: var(--bg-primary); color: var(--text-main); font-family: "Int
   .meta-card:nth-child(n+3) { border-top: 1px solid var(--border-subtle); }
   .artist-grid { grid-template-columns: 1fr; }
   .lineup-grid { grid-template-columns: 1fr; }
-  .section-tabs { gap: 1rem; }
 }
 @media (max-width: 640px) {
   .event-title { font-size: 1.9rem; }

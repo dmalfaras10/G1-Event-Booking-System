@@ -63,14 +63,11 @@
         </div>
       </div>
 
-      <!-- Section tabs (switch the content panel below) -->
-      <div class="section-tabs">
-        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-journal-text"></i> Event Details</span>
-        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Performer Lineup</span>
-      </div>
-
-      <!-- Tab panel: Program Notes & Repertoire -->
-      <section v-if="activeTab === 'program'" class="event-section">
+      <!-- Program notes & repertoire -->
+      <div class="event-section">
+        <div class="section-head">
+          <h2 class="section-title">Event Details</h2>
+        </div>
         <p class="lead">
           Immerse your senses in a transcendent nocturnal exploration celebrating the impressionist
           architecture of Claude Debussy and the poetic virtuosity of Frédéric Chopin. Specially
@@ -83,79 +80,18 @@
           merino wool, this singular instrument renders Chopin’s Ballade No. 4 in F Minor with
           unprecedented velvet-harmonic nuance.
         </p>
-      </section>
+      </div>
 
-      <!-- Curated Movement Schedule (part of Program Notes & Repertoire) -->
-      <section v-if="activeTab === 'program'" class="event-section">
+      <!-- Featured artist -->
+      <div class="event-section">
         <div class="section-head">
-          <h2 class="section-title">Curated Movement Schedule</h2>
-          <span class="intermission">Intermission at 20:45 (25 min)</span>
+          <h2 class="section-title">Featured Artist</h2>
         </div>
-        <div class="movements">
-          <div v-for="(m, i) in movements" :key="i" class="movement-row">
-            <div class="movement-num">{{ roman(i) }}</div>
-            <div class="movement-main">
-              <div class="movement-work">{{ m.work }}</div>
-              <div class="movement-detail">{{ m.detail }}</div>
-            </div>
-            <div class="movement-tempo">{{ m.tempo }}</div>
-          </div>
+        <div class="artist-profile">
+          <div class="artist-name">{{ artist[0] }}</div>
+          <p class="lead">{{ artist[1] }}</p>
         </div>
-      </section>
-
-      <!-- Tab panel: Orchestra Lineup (placeholder content) -->
-      <section v-else-if="activeTab === 'lineup'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Orchestra Lineup</h2>
-          <span class="artist-profiles">71 Musicians Onstage</span>
-        </div>
-        <div class="lineup-grid">
-          <div class="lineup-card">
-            <div class="lineup-name">Strings</div>
-            <div class="lineup-detail">32 players — 12 First Violins · 10 Second Violins · 6 Violas · 4 Cellos, led by the Concertmaster's desk.</div>
-            <div class="lineup-count">32 Players</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Woodwinds</div>
-            <div class="lineup-detail">Dual flutes, oboes, clarinets &amp; bassoons — with solo cor anglais for the Nocturnes.</div>
-            <div class="lineup-count">8 Players</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Brass</div>
-            <div class="lineup-detail">Dual French horns, dual trumpets &amp; tenor trombone — muted for the impressionist passages.</div>
-            <div class="lineup-count">5 Players</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Harp, Piano &amp; Percussion</div>
-            <div class="lineup-detail">1892 Hamburg Steinway Centennial D-274, dual harps, timpani &amp; celesta.</div>
-            <div class="lineup-count">5 Players</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Guest Female Choir</div>
-            <div class="lineup-detail">16-voice chamber choir — Sirènes movement, positioned in the First Tier balcony.</div>
-            <div class="lineup-count">16 Voices</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Featured Soloists</div>
-            <div class="lineup-detail">Alistair Vance, piano — Viviano Atalian, guest concertmaster — Julian von Berg, podium.</div>
-            <div class="lineup-count">3 Guest Artists</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Resident Virtuosos & Maestro -->
-      <section class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Resident Virtuosos &amp; Maestro</h2>
-          <span class="artist-profiles">Artist Profiles</span>
-        </div>
-        <div class="artist-grid">
-          <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-name">{{ a.name }}</div>
-            <p class="artist-bio">{{ a.bio }}</p>
-          </div>
-        </div>
-      </section>
+      </div>
 
     </div>
 
@@ -336,15 +272,6 @@ const addons = ref([
   { name: 'Valet Parking Guarantee (Porte‑Cochère)', price: 45, desc: 'Guaranteed valet at the private entrance.', selected: false },
 ])
 
-const movements = ref([
-  { work: 'Debussy: Prélude à l’après‑midi d’un faune', detail: 'Solo Flute, Dual Harps & Naded Strings · 11 Minutes', tempo: 'Allegretto ma non troppo' },
-  { work: 'Chopin: Piano Concerto No. 2 in F Minor, Op. 21', detail: 'Featuring Viviano Atalian / 34 Minutes', tempo: 'Maestoso · Larghetto' },
-  { work: 'Debussy: Nocturnes (Nuages, Fêtes, Sirènes)', detail: 'Full Orchestra with 16‑Voice Female Choir / 26 Minutes', tempo: 'Très lent · Animé' },
-])
-
-// ---- Tab panels ----
-const activeTab = ref('program')
-
 // ---- Hero gallery ----
 // TODO: put your image paths here — src '' keeps the gradient placeholder until filled in.
 const heroImages = ref([
@@ -355,10 +282,7 @@ const heroImages = ref([
 ])
 const activeImage = ref(0)
 
-const artists = ref([
-  { name: 'Alistair Vance', bio: 'Three‑time International Chopin Piano Prize medalist, celebrated for a rare pianism that the Financial Times called “an otherworldly suspension of acoustic time.”' },
-  { name: 'Julian von Berg', bio: 'Directing the Nocturne Philharmonic into its fifteenth season, Julian has previously conducted the Royal Concertgebouw and Vienna Philharmonic in historical French romantic repertoires.' },
-])
+const artist = ref(['Alistair Vance', 'Three‑time International Chopin Piano Prize medalist, celebrated for a rare pianism that the Financial Times called “an otherworldly suspension of acoustic time.”'])
 
 // ---- Booking state ----
 const step = ref('select')
@@ -383,10 +307,6 @@ const selectedAddons = computed(() => addons.value.filter(a => a.selected))
 const addonsSubtotal = computed(() => selectedAddons.value.reduce((s, a) => s + a.price * qty.value, 0))
 const serviceFee = computed(() => Math.round((tiersSubtotal.value + addonsSubtotal.value) * 0.10))
 const orderTotal = computed(() => tiersSubtotal.value + addonsSubtotal.value + serviceFee.value)
-
-// ---- Formatters ----
-const ROMANS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
-const roman = (i) => ROMANS[i] ?? (i + 1)
 
 // ---- Actions ----
 function selectTier(t) {

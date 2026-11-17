@@ -63,93 +63,29 @@
         </div>
       </div>
 
-      <!-- Section tabs (switch the content panel below) -->
-      <div class="section-tabs">
-        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Event Details</span>
-        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Performer Lineup</span>
-      </div>
-
-      <!-- Tab panel: Program Notes & Repertoire -->
-      <section v-if="activeTab === 'program'" class="event-section">
+      <!-- Program notes & repertoire -->
+      <div class="event-section">
+        <div class="section-head">
+          <h2 class="section-title">Event Details</h2>
+        </div>
         <p class="lead">
           An intimate eighty-seat speakeasy jazz session behind an unmarked door on Chino Roces, where brass standards are played acoustically at conversational volume and the bar never closes.
         </p>
         <p class="lead">
           The Harlem Speakeasy Quartet plays two sets with a guest on muted trumpet, then hands the room over for a late jam session — sign up at the bar, and the quartet will call you up.
         </p>
-      </section>
+      </div>
 
-      <!-- Curated Movement Schedule (part of Program Notes & Repertoire) -->
-      <section v-if="activeTab === 'program'" class="event-section">
+      <!-- Featured artist -->
+      <div class="event-section">
         <div class="section-head">
-          <h2 class="section-title">Set List &amp; Session Times</h2>
-          <span class="intermission">Two sets · one jam session</span>
+          <h2 class="section-title">Featured Artist</h2>
         </div>
-        <div class="movements">
-          <div v-for="(m, i) in movements" :key="i" class="movement-row">
-            <div class="movement-num">{{ roman(i) }}</div>
-            <div class="movement-main">
-              <div class="movement-work">{{ m.work }}</div>
-              <div class="movement-detail">{{ m.detail }}</div>
-            </div>
-            <div class="movement-tempo">{{ m.tempo }}</div>
-          </div>
+        <div class="artist-profile">
+          <div class="artist-name">{{ artist[0] }}</div>
+          <p class="lead">{{ artist[1] }}</p>
         </div>
-      </section>
-
-      <!-- Tab panel: Orchestra Lineup (placeholder content) -->
-      <section v-else-if="activeTab === 'lineup'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">The Quartet</h2>
-          <span class="artist-profiles">4 Players · 1 Guest</span>
-        </div>
-        <div class="lineup-grid">
-          <div class="lineup-card">
-            <div class="lineup-name">Tenor &amp; Bari Sax</div>
-            <div class="lineup-detail">Tenor and baritone saxophones carrying the hard-bop lead lines.</div>
-            <div class="lineup-count">1 Player</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Alto Sax &amp; Flute</div>
-            <div class="lineup-detail">Alto sax doubling on flute for the ballad set.</div>
-            <div class="lineup-count">1 Player</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Upright Bass</div>
-            <div class="lineup-detail">Acoustic bass, no pickup, played pizzicato throughout.</div>
-            <div class="lineup-count">1 Player</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Drums</div>
-            <div class="lineup-detail">Brushes only for the first set; sticks after the single malt pour.</div>
-            <div class="lineup-count">1 Player</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Piano</div>
-            <div class="lineup-detail">Upright piano, lid closed, played only for the late jam session.</div>
-            <div class="lineup-count">1 Player</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Guest</div>
-            <div class="lineup-detail">Muted trumpet sitting in for Set II and the jam.</div>
-            <div class="lineup-count">1 Guest</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Resident Virtuosos & Maestro -->
-      <section class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Featured Artists</h2>
-          <span class="artist-profiles">Artist Profiles</span>
-        </div>
-        <div class="artist-grid">
-          <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-name">{{ a.name }}</div>
-            <p class="artist-bio">{{ a.bio }}</p>
-          </div>
-        </div>
-      </section>
+      </div>
 
     </div>
 
@@ -334,16 +270,6 @@ const addons = ref([
   { name: 'Rare Single Malt Flight', price: 1600, desc: 'Three additional 25 ml pours from the back-bar reserve.', selected: false },
 ])
 
-const movements = ref([
-  { work: 'Set I — Brass Standards', detail: 'Bop standards, tenor and alto sax, upright bass · 40 Minutes', tempo: '21:30' },
-  { work: 'Single Malt Pour No. 1', detail: 'Rare 18-year single malt, poured at the table', tempo: '22:15' },
-  { work: 'Set II — Ballads & Blues', detail: 'Slow-tempo quartet with muted trumpet · 35 Minutes', tempo: '22:30' },
-  { work: 'Late Jam Session', detail: 'Open to the room — sign up at the bar · 30 Minutes', tempo: '23:30' },
-])
-
-// ---- Tab panels ----
-const activeTab = ref('program')
-
 // ---- Hero gallery ----
 // TODO: put your image paths here — src '' keeps the gradient placeholder until filled in.
 const heroImages = ref([
@@ -354,10 +280,7 @@ const heroImages = ref([
 ])
 const activeImage = ref(0)
 
-const artists = ref([
-  { name: 'Cornelius “Chip” Barnes', bio: 'A tenor player who came up in the Harlem loft scene and recorded for Blue Note in the late seventies. He now leads the Speakeasy Quartet on an annual Manila residency.' },
-  { name: 'Dolores Reyes', bio: 'A Manila Conservatory faculty pianist who has spent a decade in the city’s listening rooms, known for an upright-only style that never once touches a keyboard with amplification.' },
-])
+const artist = ref(['Cornelius “Chip” Barnes', 'A tenor player who came up in the Harlem loft scene and recorded for Blue Note in the late seventies. He now leads the Speakeasy Quartet on an annual Manila residency.'])
 
 // ---- Booking state ----
 const step = ref('select')
@@ -385,8 +308,6 @@ const orderTotal = computed(() => tiersSubtotal.value + addonsSubtotal.value + s
 
 // ---- Formatters ----
 const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')
-const ROMANS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
-const roman = (i) => ROMANS[i] ?? (i + 1)
 
 // ---- Actions ----
 function selectTier(t) {

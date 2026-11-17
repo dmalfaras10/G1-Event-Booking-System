@@ -63,93 +63,29 @@
         </div>
       </div>
 
-      <!-- Section tabs (switch the content panel below) -->
-      <div class="section-tabs">
-        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Event Details</span>
-        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Performer Lineup</span>
-      </div>
-
-      <!-- Tab panel: Program Notes & Repertoire -->
-      <section v-if="activeTab === 'program'" class="event-section">
+      <!-- Program notes & repertoire -->
+      <div class="event-section">
+        <div class="section-head">
+          <h2 class="section-title">Event Details</h2>
+        </div>
         <p class="lead">
           An immersive nocturnal audiovisual takeover on the Palace pool deck, where a 24-piece string ensemble and deep melodic synth sets trade the same stage from dusk until the last light leaves the water.
         </p>
         <p class="lead">
           Headlining the night is DJ Kaito, whose live modular patches are answered in real time by the Nocturne Philharmonic — a single continuous set with no interval, built to move from ambient strings to peak-time house without a break.
         </p>
-      </section>
+      </div>
 
-      <!-- Curated Movement Schedule (part of Program Notes & Repertoire) -->
-      <section v-if="activeTab === 'program'" class="event-section">
+      <!-- Featured artist -->
+      <div class="event-section">
         <div class="section-head">
-          <h2 class="section-title">Set Times &amp; Running Order</h2>
-          <span class="intermission">Last set ends 23:30</span>
+          <h2 class="section-title">Featured Artist</h2>
         </div>
-        <div class="movements">
-          <div v-for="(m, i) in movements" :key="i" class="movement-row">
-            <div class="movement-num">{{ roman(i) }}</div>
-            <div class="movement-main">
-              <div class="movement-work">{{ m.work }}</div>
-              <div class="movement-detail">{{ m.detail }}</div>
-            </div>
-            <div class="movement-tempo">{{ m.tempo }}</div>
-          </div>
+        <div class="artist-profile">
+          <div class="artist-name">{{ artist[0] }}</div>
+          <p class="lead">{{ artist[1] }}</p>
         </div>
-      </section>
-
-      <!-- Tab panel: Orchestra Lineup (placeholder content) -->
-      <section v-else-if="activeTab === 'lineup'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Artist Lineup</h2>
-          <span class="artist-profiles">24 Musicians &amp; 2 Selectors</span>
-        </div>
-        <div class="lineup-grid">
-          <div class="lineup-card">
-            <div class="lineup-name">Strings</div>
-            <div class="lineup-detail">24 players — 14 first violins, 6 second violins and 4 cellos, amplified through the pool-deck line array.</div>
-            <div class="lineup-count">24 Players</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Synth &amp; Electronics</div>
-            <div class="lineup-detail">Two modular rigs, a Moog Sub 37 and a custom 12-voice poly chain, patched live on stage.</div>
-            <div class="lineup-count">2 Rigs</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Percussion</div>
-            <div class="lineup-detail">Live congas, cajón and a four-piece kit, time-locked to the click track.</div>
-            <div class="lineup-count">4 Players</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Horns &amp; Flutes</div>
-            <div class="lineup-detail">Dual flugelhorns and alto flute for the No. 2 Neon Adagio.</div>
-            <div class="lineup-count">3 Players</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Guest Vocalists</div>
-            <div class="lineup-detail">Two vocalists on the closing house cut, “Afterglow (Manila Edit)”.</div>
-            <div class="lineup-count">2 Voices</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Selectors</div>
-            <div class="lineup-detail">DJ Kaito (Tokyo) with Manila selector Mara Velez on the warm-up and after-party.</div>
-            <div class="lineup-count">2 Selectors</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Resident Virtuosos & Maestro -->
-      <section class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Featured Artists &amp; Maestro</h2>
-          <span class="artist-profiles">Artist Profiles</span>
-        </div>
-        <div class="artist-grid">
-          <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-name">{{ a.name }}</div>
-            <p class="artist-bio">{{ a.bio }}</p>
-          </div>
-        </div>
-      </section>
+      </div>
 
     </div>
 
@@ -334,15 +270,6 @@ const addons = ref([
   { name: 'Valet Parking (11th Avenue Porte-Cochère)', price: 500, desc: 'Guaranteed valet at the private BGC entrance.', selected: false },
 ])
 
-const movements = ref([
-  { work: 'DJ Kaito — Warm-Up Set', detail: 'Deep melodic house, live modular · 45 Minutes', tempo: 'Doors · 19:15' },
-  { work: 'Nocturne Philharmonic — Neon Suite', detail: '24 Strings, 2 Synth Modules & Live Percussion · 55 Minutes', tempo: '20:00 · Act I' },
-  { work: 'DJ Kaito × Orchestra — B2B Finale', detail: 'Improvised orchestral-house hybrid, no set list · 40 Minutes', tempo: '22:00 · Act II' },
-])
-
-// ---- Tab panels ----
-const activeTab = ref('program')
-
 // ---- Hero gallery ----
 // TODO: put your image paths here — src '' keeps the gradient placeholder until filled in.
 const heroImages = ref([
@@ -353,10 +280,7 @@ const heroImages = ref([
 ])
 const activeImage = ref(0)
 
-const artists = ref([
-  { name: 'DJ Kaito', bio: 'A fixture of the Tokyo underground, Kaito is known for live modular sets that dissolve the line between DJ booth and orchestra pit. His 2025 Boiler Room Manila set was called “a sunrise in the middle of the night.”' },
-  { name: 'Rafael Ibarra', bio: 'Rafael has arranged for the Manila Philharmonic for eleven seasons, with a specialism in amplified strings and hybrid orchestral-electronic scores for film and stage.' },
-])
+const artist = ref(['DJ Kaito', 'A fixture of the Tokyo underground, Kaito is known for live modular sets that dissolve the line between DJ booth and orchestra pit. His 2025 Boiler Room Manila set was called “a sunrise in the middle of the night.”'])
 
 // ---- Booking state ----
 const step = ref('select')
@@ -384,8 +308,6 @@ const orderTotal = computed(() => tiersSubtotal.value + addonsSubtotal.value + s
 
 // ---- Formatters ----
 const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')
-const ROMANS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
-const roman = (i) => ROMANS[i] ?? (i + 1)
 
 // ---- Actions ----
 function selectTier(t) {
