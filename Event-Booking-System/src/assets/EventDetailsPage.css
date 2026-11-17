@@ -269,7 +269,13 @@ body { background: var(--bg-primary); color: var(--text-main); font-family: "Int
 }
 
 .price-range { display: flex; align-items: baseline; gap: 0.25rem; margin-bottom: 0.2rem; }
-.price-big { font-family: "Montserrat", sans-serif; font-size: 1.7rem; font-weight: 900; color: var(--text-main); }
+.price-big {
+  font-family: "Montserrat", sans-serif; font-size: 1.7rem; font-weight: 900; color: var(--gold-accent);
+  text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.18em;
+  text-decoration-color: rgba(243, 198, 79, 0.45);
+}
 .price-sub { font-size: 1rem; font-weight: 700; color: var(--text-main); }
 .price-note { font-size: 0.78rem; color: #b9b9c1; margin-bottom: 1.1rem; }
 
