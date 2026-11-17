@@ -63,93 +63,29 @@
         </div>
       </div>
 
-      <!-- Section tabs (switch the content panel below) -->
-      <div class="section-tabs">
-        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Event Details</span>
-        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Performer Lineup</span>
-      </div>
-
-      <!-- Tab panel: Program Notes & Repertoire -->
-      <section v-if="activeTab === 'program'" class="event-section">
+      <!-- Program notes & repertoire -->
+      <div class="event-section">
+        <div class="section-head">
+          <h2 class="section-title">Event Details</h2>
+        </div>
         <p class="lead">
           Warm analog guitars and nostalgic indie rock anthems, performed live in an acoustically engineered theatre by a nine-piece collective that has spent three years turning Where Time Goes into a full-band record.
         </p>
         <p class="lead">
           The Coastal Drift Collective bring a string quartet for the second set, a pedal steel player from Cebu, and a support slot from Paper Lanterns — all of it mixed for a seated room rather than a festival field.
         </p>
-      </section>
+      </div>
 
-      <!-- Curated Movement Schedule (part of Program Notes & Repertoire) -->
-      <section v-if="activeTab === 'program'" class="event-section">
+      <!-- Featured artist -->
+      <div class="event-section">
         <div class="section-head">
-          <h2 class="section-title">Set List &amp; Running Order</h2>
-          <span class="intermission">Support act · two sets</span>
+          <h2 class="section-title">Featured Artist</h2>
         </div>
-        <div class="movements">
-          <div v-for="(m, i) in movements" :key="i" class="movement-row">
-            <div class="movement-num">{{ roman(i) }}</div>
-            <div class="movement-main">
-              <div class="movement-work">{{ m.work }}</div>
-              <div class="movement-detail">{{ m.detail }}</div>
-            </div>
-            <div class="movement-tempo">{{ m.tempo }}</div>
-          </div>
+        <div class="artist-profile">
+          <div class="artist-name">{{ artist[0] }}</div>
+          <p class="lead">{{ artist[1] }}</p>
         </div>
-      </section>
-
-      <!-- Tab panel: Orchestra Lineup (placeholder content) -->
-      <section v-else-if="activeTab === 'lineup'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Band &amp; Support</h2>
-          <span class="artist-profiles">9 Musicians Onstage</span>
-        </div>
-        <div class="lineup-grid">
-          <div class="lineup-card">
-            <div class="lineup-name">Guitars</div>
-            <div class="lineup-detail">Two electric guitars and one pedal steel, vintage amps only.</div>
-            <div class="lineup-count">3 Players</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Bass</div>
-            <div class="lineup-detail">Fretless bass and a baritone guitar covering the low end.</div>
-            <div class="lineup-count">1 Player</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Drums</div>
-            <div class="lineup-detail">Kit plus a floor tom and tambourine for the indie anthems.</div>
-            <div class="lineup-count">1 Player</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Keys</div>
-            <div class="lineup-detail">Rhodes, Wurlitzer and a Mellotron for the string lines.</div>
-            <div class="lineup-count">1 Player</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">String Quartet</div>
-            <div class="lineup-detail">Four-piece string section joining for Set II and the encore.</div>
-            <div class="lineup-count">4 Players</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Support</div>
-            <div class="lineup-detail">Paper Lanterns — four-piece acoustic support act from Cebu.</div>
-            <div class="lineup-count">4 Players</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Resident Virtuosos & Maestro -->
-      <section class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Featured Artists</h2>
-          <span class="artist-profiles">Artist Profiles</span>
-        </div>
-        <div class="artist-grid">
-          <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-name">{{ a.name }}</div>
-            <p class="artist-bio">{{ a.bio }}</p>
-          </div>
-        </div>
-      </section>
+      </div>
 
     </div>
 
@@ -334,16 +270,6 @@ const addons = ref([
   { name: 'Signed Vinyl (Where Time Goes)', price: 1400, desc: 'Hand-numbered LP signed by the band, collected at the merch booth.', selected: false },
 ])
 
-const movements = ref([
-  { work: 'Support — Paper Lanterns', detail: 'Four-piece indie folk, acoustic · 30 Minutes', tempo: '19:15' },
-  { work: 'Set I — Velvet Years', detail: 'Where Time Goes, Slow Motion, Hometown Static · 45 Minutes', tempo: '20:00' },
-  { work: 'Set II — Neon Coast', detail: 'Full band with pedal steel and string quartet · 50 Minutes', tempo: '21:00' },
-  { work: 'Encore — Where Time Goes (Reprise)', detail: 'Acoustic, house lights up · 10 Minutes', tempo: '22:00' },
-])
-
-// ---- Tab panels ----
-const activeTab = ref('program')
-
 // ---- Hero gallery ----
 // TODO: put your image paths here — src '' keeps the gradient placeholder until filled in.
 const heroImages = ref([
@@ -354,10 +280,7 @@ const heroImages = ref([
 ])
 const activeImage = ref(0)
 
-const artists = ref([
-  { name: 'Elias Manalo', bio: 'Elias writes the songs, sings them, and plays the loudest guitar in the room — a Cebu-raised songwriter whose Where Time Goes turned a bedroom demo into a national tour.' },
-  { name: 'The Coastal Drift Collective', bio: 'Nine players, three vocalists and a string quartet, assembled for the record and kept together for the tour. Their live shows are built for rooms with seats, not fields.' },
-])
+const artist = ref(['Elias Manalo', 'Elias writes the songs, sings them, and plays the loudest guitar in the room — a Cebu-raised songwriter whose Where Time Goes turned a bedroom demo into a national tour.'])
 
 // ---- Booking state ----
 const step = ref('select')
@@ -385,8 +308,6 @@ const orderTotal = computed(() => tiersSubtotal.value + addonsSubtotal.value + s
 
 // ---- Formatters ----
 const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')
-const ROMANS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
-const roman = (i) => ROMANS[i] ?? (i + 1)
 
 // ---- Actions ----
 function selectTier(t) {

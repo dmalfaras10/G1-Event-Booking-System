@@ -63,93 +63,29 @@
         </div>
       </div>
 
-      <!-- Section tabs (switch the content panel below) -->
-      <div class="section-tabs">
-        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-journal-text"></i> Event Details</span>
-        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Performer Lineup</span>
-      </div>
-
-      <!-- Tab panel: Program Notes & Repertoire -->
-      <section v-if="activeTab === 'program'" class="event-section">
+      <!-- Program notes & repertoire -->
+      <div class="event-section">
+        <div class="section-head">
+          <h2 class="section-title">Event Details</h2>
+        </div>
         <p class="lead">
           An evening of velvet elegance at The Fort: Vivaldi’s Four Seasons recomposed for chamber quintet under candlelight, with a curated four-course dinner served between movements.
         </p>
         <p class="lead">
           The Manila Chamber Quintet performs on gut strings and period bows at baroque pitch, with a 1920s bandoneón joining for the Piazzolla. Masks are worn until the midnight toast and provided at the cloakroom.
         </p>
-      </section>
+      </div>
 
-      <!-- Curated Movement Schedule (part of Program Notes & Repertoire) -->
-      <section v-if="activeTab === 'program'" class="event-section">
+      <!-- Featured artist -->
+      <div class="event-section">
         <div class="section-head">
-          <h2 class="section-title">Program &amp; Dinner Service</h2>
-          <span class="intermission">Four courses · one interval at 21:00</span>
+          <h2 class="section-title">Featured Artist</h2>
         </div>
-        <div class="movements">
-          <div v-for="(m, i) in movements" :key="i" class="movement-row">
-            <div class="movement-num">{{ roman(i) }}</div>
-            <div class="movement-main">
-              <div class="movement-work">{{ m.work }}</div>
-              <div class="movement-detail">{{ m.detail }}</div>
-            </div>
-            <div class="movement-tempo">{{ m.tempo }}</div>
-          </div>
+        <div class="artist-profile">
+          <div class="artist-name">{{ artist[0] }}</div>
+          <p class="lead">{{ artist[1] }}</p>
         </div>
-      </section>
-
-      <!-- Tab panel: Orchestra Lineup (placeholder content) -->
-      <section v-else-if="activeTab === 'lineup'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">The Ensemble</h2>
-          <span class="artist-profiles">5 Musicians + Service Brigade</span>
-        </div>
-        <div class="lineup-grid">
-          <div class="lineup-card">
-            <div class="lineup-name">Violin</div>
-            <div class="lineup-detail">Concertmaster desk, baroque bow and gut strings, tuned a semitone below modern pitch.</div>
-            <div class="lineup-count">1 Player</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Viola</div>
-            <div class="lineup-detail">Period viola with a baroque bridge for the Four Seasons reduction.</div>
-            <div class="lineup-count">1 Player</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Cello</div>
-            <div class="lineup-detail">Five-string cello for the Piazzolla set and the Largo encore.</div>
-            <div class="lineup-count">1 Player</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Bandoneón</div>
-            <div class="lineup-detail">1920s bandoneón, guest artist on Adiós Nonino.</div>
-            <div class="lineup-count">1 Player</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Harpsichord</div>
-            <div class="lineup-detail">Single-manual harpsichord supplying the continuo line, lid removed.</div>
-            <div class="lineup-count">1 Player</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Service Brigade</div>
-            <div class="lineup-detail">Four-course brigade at a one-to-eight server-to-guest ratio.</div>
-            <div class="lineup-count">24 Staff</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Resident Virtuosos & Maestro -->
-      <section class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Resident Virtuosos &amp; Maestro</h2>
-          <span class="artist-profiles">Artist Profiles</span>
-        </div>
-        <div class="artist-grid">
-          <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-name">{{ a.name }}</div>
-            <p class="artist-bio">{{ a.bio }}</p>
-          </div>
-        </div>
-      </section>
+      </div>
 
     </div>
 
@@ -334,16 +270,6 @@ const addons = ref([
   { name: 'Cloakroom & Mask Concierge', price: 300, desc: 'Coat check, mask fitting and a reserved car at the door.', selected: false },
 ])
 
-const movements = ref([
-  { work: 'Vivaldi — The Four Seasons (Recomposed)', detail: 'Manila Chamber Quintet, candlelit string reduction · 32 Minutes', tempo: '19:00 · Act I' },
-  { work: 'Course II — Winter Consommé', detail: 'Served in the ballroom during the seasonal interlude', tempo: '20:00' },
-  { work: 'Piazzolla — Adiós Nonino', detail: 'Bandoneón and quintet · 18 Minutes', tempo: '20:45 · Act II' },
-  { work: 'Vivaldi — Winter, II. Largo (Encore)', detail: 'Full quintet, by candlelight only · 9 Minutes', tempo: '21:20 · Encore' },
-])
-
-// ---- Tab panels ----
-const activeTab = ref('program')
-
 // ---- Hero gallery ----
 // TODO: put your image paths here — src '' keeps the gradient placeholder until filled in.
 const heroImages = ref([
@@ -354,10 +280,7 @@ const heroImages = ref([
 ])
 const activeImage = ref(0)
 
-const artists = ref([
-  { name: 'Isabel Zaragoza', bio: 'Nine seasons as concertmaster of the Manila Symphony, and the driving force behind the city’s baroque-pitch chamber series. Her gut-string Four Seasons has been called “the warmest winter in Manila.”' },
-  { name: 'Tomás Aguirre', bio: 'A bandoneón player from Buenos Aires who has toured eighteen countries with the Piazzolla repertoire, and who plays a 1920s instrument restored by his family.' },
-])
+const artist = ref(['Isabel Zaragoza', 'Nine seasons as concertmaster of the Manila Symphony, and the driving force behind the city’s baroque-pitch chamber series. Her gut-string Four Seasons has been called “the warmest winter in Manila.”'])
 
 // ---- Booking state ----
 const step = ref('select')
@@ -385,8 +308,6 @@ const orderTotal = computed(() => tiersSubtotal.value + addonsSubtotal.value + s
 
 // ---- Formatters ----
 const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')
-const ROMANS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
-const roman = (i) => ROMANS[i] ?? (i + 1)
 
 // ---- Actions ----
 function selectTier(t) {

@@ -63,93 +63,29 @@
         </div>
       </div>
 
-      <!-- Section tabs (switch the content panel below) -->
-      <div class="section-tabs">
-        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Event Details</span>
-        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Performer Lineup</span>
-      </div>
-
-      <!-- Tab panel: Program Notes & Repertoire -->
-      <section v-if="activeTab === 'program'" class="event-section">
+      <!-- Program notes & repertoire -->
+      <div class="event-section">
+        <div class="section-head">
+          <h2 class="section-title">Event Details</h2>
+        </div>
         <p class="lead">
           Ring in 2027 poolside by Manila Bay inside the glass dome, with international headliners, a live pyro symphony and unlimited vintage bubbly from doors to the last set.
         </p>
         <p class="lead">
           The countdown is scored live: an eighteen-piece ensemble plays under the fireworks, cued to the bay, while the resident DJs keep the cove floor moving until 03:00.
         </p>
-      </section>
+      </div>
 
-      <!-- Curated Movement Schedule (part of Program Notes & Repertoire) -->
-      <section v-if="activeTab === 'program'" class="event-section">
+      <!-- Featured artist -->
+      <div class="event-section">
         <div class="section-head">
-          <h2 class="section-title">Countdown Programme</h2>
-          <span class="intermission">Doors 21:00 · Pyro 00:00</span>
+          <h2 class="section-title">Featured Artist</h2>
         </div>
-        <div class="movements">
-          <div v-for="(m, i) in movements" :key="i" class="movement-row">
-            <div class="movement-num">{{ roman(i) }}</div>
-            <div class="movement-main">
-              <div class="movement-work">{{ m.work }}</div>
-              <div class="movement-detail">{{ m.detail }}</div>
-            </div>
-            <div class="movement-tempo">{{ m.tempo }}</div>
-          </div>
+        <div class="artist-profile">
+          <div class="artist-name">{{ artist[0] }}</div>
+          <p class="lead">{{ artist[1] }}</p>
         </div>
-      </section>
-
-      <!-- Tab panel: Orchestra Lineup (placeholder content) -->
-      <section v-else-if="activeTab === 'lineup'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Headliners</h2>
-          <span class="artist-profiles">All Headliners Confirmed</span>
-        </div>
-        <div class="lineup-grid">
-          <div class="lineup-card">
-            <div class="lineup-name">Headline DJ</div>
-            <div class="lineup-detail">International guest DJ, headline set at 22:45 on the cove floor.</div>
-            <div class="lineup-count">1 Artist</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Pyro Symphony</div>
-            <div class="lineup-detail">Eighteen-piece ensemble performing live under the fireworks.</div>
-            <div class="lineup-count">18 Players</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Resident DJs</div>
-            <div class="lineup-detail">Three resident DJs across the cove floor and the pool deck.</div>
-            <div class="lineup-count">3 DJs</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Percussion</div>
-            <div class="lineup-detail">Live djembe and drumline for the countdown itself.</div>
-            <div class="lineup-count">8 Players</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Hosts</div>
-            <div class="lineup-detail">Bilingual hosts for the countdown and the midnight toast.</div>
-            <div class="lineup-count">2 Hosts</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Production</div>
-            <div class="lineup-detail">Pyro, laser and LED dome show, cued live to the orchestra.</div>
-            <div class="lineup-count">Full Crew</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Resident Virtuosos & Maestro -->
-      <section class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Featured Artists</h2>
-          <span class="artist-profiles">Artist Profiles</span>
-        </div>
-        <div class="artist-grid">
-          <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-name">{{ a.name }}</div>
-            <p class="artist-bio">{{ a.bio }}</p>
-          </div>
-        </div>
-      </section>
+      </div>
 
     </div>
 
@@ -334,16 +270,6 @@ const addons = ref([
   { name: 'Private Car & Chauffeur', price: 3500, desc: 'Round-trip chauffeur from Makati or BGC.', selected: false },
 ])
 
-const movements = ref([
-  { work: 'Opening — Manila All-Star DJs', detail: 'House and pop warm-up on the cove floor · 90 Minutes', tempo: '21:00' },
-  { work: 'Headline Set — International Guest DJ', detail: 'Live set with the Pyro Symphony · 75 Minutes', tempo: '22:45' },
-  { work: 'Countdown & Pyrotechnics', detail: 'Manila Bay fireworks, synchronized to the orchestra · 15 Minutes', tempo: '23:45' },
-  { work: 'After-Party — Until Late', detail: 'Poolside after-party with the resident DJs · Until 03:00', tempo: '00:15' },
-])
-
-// ---- Tab panels ----
-const activeTab = ref('program')
-
 // ---- Hero gallery ----
 // TODO: put your image paths here — src '' keeps the gradient placeholder until filled in.
 const heroImages = ref([
@@ -354,10 +280,7 @@ const heroImages = ref([
 ])
 const activeImage = ref(0)
 
-const artists = ref([
-  { name: 'Aurelia Vance', bio: 'A headline DJ with a decade-long Ibiza residency and a reputation for sets that run from ambient to peak-time without a visible seam. This is her first Manila New Year’s Eve.' },
-  { name: 'Marco Villanueva', bio: 'Marco conducts the Pyro Symphony, an eighteen-piece ensemble assembled each December to play live under the Manila Bay fireworks — a job that requires split-second cueing and no nerves.' },
-])
+const artist = ref(['Aurelia Vance', 'A headline DJ with a decade-long Ibiza residency and a reputation for sets that run from ambient to peak-time without a visible seam. This is her first Manila New Year’s Eve.'])
 
 // ---- Booking state ----
 const step = ref('select')
@@ -385,8 +308,6 @@ const orderTotal = computed(() => tiersSubtotal.value + addonsSubtotal.value + s
 
 // ---- Formatters ----
 const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')
-const ROMANS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
-const roman = (i) => ROMANS[i] ?? (i + 1)
 
 // ---- Actions ----
 function selectTier(t) {

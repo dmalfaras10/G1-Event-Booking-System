@@ -63,93 +63,29 @@
         </div>
       </div>
 
-      <!-- Section tabs (switch the content panel below) -->
-      <div class="section-tabs">
-        <span :class="['tab', { active: activeTab === 'program' }]" @click="activeTab = 'program'"><i class="bi bi-music-note-list"></i> Event Details</span>
-        <span :class="['tab', { active: activeTab === 'lineup' }]" @click="activeTab = 'lineup'"><i class="bi bi-people"></i> Performer Lineup</span>
-      </div>
-
-      <!-- Tab panel: Program Notes & Repertoire -->
-      <section v-if="activeTab === 'program'" class="event-section">
+      <!-- Program notes & repertoire -->
+      <div class="event-section">
+        <div class="section-head">
+          <h2 class="section-title">Event Details</h2>
+        </div>
         <p class="lead">
           An intimate three-hour improvisational performance on a grand upright piano and vintage analog modular synthesizers, staged in the round with the audience seated on three sides of the instrument.
         </p>
         <p class="lead">
           Nils Frahm returns to Manila with a programme that is never the same twice: prepared piano, felt-damped upright and live modular patches, performed without a set list and without amplification of any kind.
         </p>
-      </section>
+      </div>
 
-      <!-- Curated Movement Schedule (part of Program Notes & Repertoire) -->
-      <section v-if="activeTab === 'program'" class="event-section">
+      <!-- Featured artist -->
+      <div class="event-section">
         <div class="section-head">
-          <h2 class="section-title">Set List &amp; Running Order</h2>
-          <span class="intermission">One interval at 20:40 (20 min)</span>
+          <h2 class="section-title">Featured Artist</h2>
         </div>
-        <div class="movements">
-          <div v-for="(m, i) in movements" :key="i" class="movement-row">
-            <div class="movement-num">{{ roman(i) }}</div>
-            <div class="movement-main">
-              <div class="movement-work">{{ m.work }}</div>
-              <div class="movement-detail">{{ m.detail }}</div>
-            </div>
-            <div class="movement-tempo">{{ m.tempo }}</div>
-          </div>
+        <div class="artist-profile">
+          <div class="artist-name">{{ artist[0] }}</div>
+          <p class="lead">{{ artist[1] }}</p>
         </div>
-      </section>
-
-      <!-- Tab panel: Orchestra Lineup (placeholder content) -->
-      <section v-else-if="activeTab === 'lineup'" class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Performers</h2>
-          <span class="artist-profiles">6 Artists · No Conductor</span>
-        </div>
-        <div class="lineup-grid">
-          <div class="lineup-card">
-            <div class="lineup-name">Piano</div>
-            <div class="lineup-detail">Nils Frahm on a Hamburg Steinway D-274 and a 1930s upright, both tuned to 432 Hz.</div>
-            <div class="lineup-count">1 Pianist</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Modular Synthesizer</div>
-            <div class="lineup-detail">Two vintage analog modular systems, patched live on stage with no pre-recorded backing.</div>
-            <div class="lineup-count">2 Rigs</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Strings</div>
-            <div class="lineup-detail">Hardanger fiddle and cello, acoustic and close-miked for the second half.</div>
-            <div class="lineup-count">2 Players</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Tape &amp; Electronics</div>
-            <div class="lineup-detail">Tape loops and field recordings from the 2019 Felt Room sessions.</div>
-            <div class="lineup-count">1 Operator</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Lighting</div>
-            <div class="lineup-detail">Follow-spot only — no LED wall, no haze, no moving heads.</div>
-            <div class="lineup-count">Cue-Based</div>
-          </div>
-          <div class="lineup-card">
-            <div class="lineup-name">Stage</div>
-            <div class="lineup-detail">Cabaret seating is struck after the interval for the in-the-round finale.</div>
-            <div class="lineup-count">In The Round</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Resident Virtuosos & Maestro -->
-      <section class="event-section">
-        <div class="section-head">
-          <h2 class="section-title">Featured Artists</h2>
-          <span class="artist-profiles">Artist Profiles</span>
-        </div>
-        <div class="artist-grid">
-          <div v-for="(a, i) in artists" :key="i" class="artist-card">
-            <div class="artist-name">{{ a.name }}</div>
-            <p class="artist-bio">{{ a.bio }}</p>
-          </div>
-        </div>
-      </section>
+      </div>
 
     </div>
 
@@ -334,16 +270,6 @@ const addons = ref([
   { name: 'Coat Check & Cloakroom Priority', price: 250, desc: 'Priority cloakroom for the interval.', selected: false },
 ])
 
-const movements = ref([
-  { work: 'Nils Frahm — Solo', detail: 'Grand upright piano, prepared and unprepared · 40 Minutes', tempo: '19:30 · Part I' },
-  { work: 'Frode Haltli — Hardanger Fiddle', detail: 'Solo folk suite, no amplification · 15 Minutes', tempo: '20:10' },
-  { work: 'Frahm & Guests — Modular', detail: 'Vintage analog modular synthesizer, live patch · 35 Minutes', tempo: '20:40 · Part II' },
-  { work: 'All Artists — Improvisation', detail: 'Open ensemble improvisation, no set list · 25 Minutes', tempo: '21:30 · Encore' },
-])
-
-// ---- Tab panels ----
-const activeTab = ref('program')
-
 // ---- Hero gallery ----
 // TODO: put your image paths here — src '' keeps the gradient placeholder until filled in.
 const heroImages = ref([
@@ -354,10 +280,7 @@ const heroImages = ref([
 ])
 const activeImage = ref(0)
 
-const artists = ref([
-  { name: 'Nils Frahm', bio: 'A pianist and producer whose felt-damped piano recordings for Erased Tapes have made him one of the most streamed classical artists in the world, and one of the least predictable live.' },
-  { name: 'Frode Haltli', bio: 'A Hardanger fiddle player and classical violist who moves between folk suites and contemporary commissions, and who has never amplified the instrument on stage.' },
-])
+const artist = ref(['Nils Frahm', 'A pianist and producer whose felt-damped piano recordings for Erased Tapes have made him one of the most streamed classical artists in the world, and one of the least predictable live.'])
 
 // ---- Booking state ----
 const step = ref('select')
@@ -385,8 +308,6 @@ const orderTotal = computed(() => tiersSubtotal.value + addonsSubtotal.value + s
 
 // ---- Formatters ----
 const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')
-const ROMANS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII']
-const roman = (i) => ROMANS[i] ?? (i + 1)
 
 // ---- Actions ----
 function selectTier(t) {
