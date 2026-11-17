@@ -149,10 +149,6 @@
             <span class="order-line-name">Pass Allocation ({{ selectedTier.name }} × {{ qty }})</span>
             <span class="order-line-price">{{ peso(tiersSubtotal) }}</span>
           </div>
-          <div v-if="serviceFee > 0" class="order-line">
-            <span class="order-line-name">Concierge &amp; Facilities Surcharge (10%)</span>
-            <span class="order-line-price">{{ peso(serviceFee) }}</span>
-          </div>
           <div v-if="!selectedTier" class="order-empty">
             Select a seating tier to see your order summary.
           </div>
@@ -179,7 +175,7 @@
           <span class="accom-icon">🎟️</span>
           <div class="accom-text">
             <div class="accom-title">Special Patron Accommodations?</div>
-            <div class="accom-sub">Speak directly with Head Concierge Vivienne at ext. 408 for ADA seating or dietary requests.</div>
+            <div class="accom-sub">Contact our support team for ADA seating or dietary requests.</div>
           </div>
         </div>
       </div>
@@ -211,8 +207,7 @@
       :qty="qty"
       :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
-      :service-fee="serviceFee"
-      :total="orderTotal"
+       :total="orderTotal"
       :currency="'₱'"
       :code-prefix="'G1-NNS'"
       @close="step = 'seats'"
@@ -264,37 +259,26 @@ const event = {
   venueCapacity: 120,
   tickets: [
     {
-      ticketType: 'Bronze — Pool Deck General Admission',
-      ticketDescription: 'Standing room around the pool deck with full sight lines to the stage, DJ booth and delay towers.',
-      ticketPerks: ['Pool Deck Standing Access', 'Sky-Deck Drink Voucher', 'Commemorative Wristband'],
-      perksInput: 'Pool Deck Standing Access, Sky-Deck Drink Voucher, Commemorative Wristband',
-      price: 4800.0,
-      seatSection: 'Pool Deck GA',
-      seatRow: 'B',
-      quantity: 24,
-      seats: buildSeats('B', 24, [1, 2, 3, 4, 5], [6])
-    },
-    {
-      ticketType: 'Silver — Sky-Deck Lounge',
-      ticketDescription: 'Elevated sky-deck with a dedicated bar, lounge seating and a private balcony rail above the crowd.',
-      ticketPerks: ['Sky-Deck Lounge Access', 'Dedicated Bar Lane', 'Reserved Balcony Rail'],
-      perksInput: 'Sky-Deck Lounge Access, Dedicated Bar Lane, Reserved Balcony Rail',
-      price: 7500.0,
-      seatSection: 'Sky-Deck Lounge',
-      seatRow: 'C',
-      quantity: 30,
-      seats: buildSeats('C', 30, [1, 2, 3, 4], [5])
-    },
-    {
-      ticketType: 'Gold — Noir VIP Cabana',
-      ticketDescription: 'Private four-seat cabana with butler service, bottle service and a poolside daybed reserved for the night.',
-      ticketPerks: ['Private Cabana for Four', 'Butler & Bottle Service', 'Poolside Daybed'],
-      perksInput: 'Private Cabana for Four, Butler & Bottle Service, Poolside Daybed',
-      price: 12000.0,
+      ticketType: 'Sky-Deck VIP',
+      ticketDescription: 'Includes Sky-Deck Lounge Access and priority bar service.',
+      ticketPerks: ['Sky-Deck Lounge Access', 'Priority Bar Lane'],
+      perksInput: 'Sky-Deck Lounge Access, Priority Bar Lane',
+      price: 4800.00,
       seatSection: 'VIP Deck',
       seatRow: 'A',
-      quantity: 10,
-      seats: buildSeats('A', 10, [1, 2, 3], [4])
+      quantity: 20,
+      seats: buildSeats('A', 20, [1, 2, 3], [4, 5])
+    },
+    {
+      ticketType: 'General Admission',
+      ticketDescription: 'Standard floor access to the audiovisual zone.',
+      ticketPerks: ['Standard Entry'],
+      perksInput: 'Standard Entry',
+      price: 2500.00,
+      seatSection: 'Poolside GA',
+      seatRow: 'B',
+      quantity: 50,
+      seats: buildSeats('B', 50, [1, 2, 6, 7, 8, 9, 10], [11, 12, 13])
     }
   ]
 }
@@ -362,8 +346,7 @@ const MAX_SEATS_PER_ORDER = 6
 const maxQty = computed(() => Math.min(selectedTier.value?.capacity ?? MAX_SEATS_PER_ORDER, MAX_SEATS_PER_ORDER))
 
 const tiersSubtotal = computed(() => (selectedTier.value ? selectedTier.value.price * qty.value : 0))
-const serviceFee = computed(() => Math.round(tiersSubtotal.value * 0.10))
-const orderTotal = computed(() => tiersSubtotal.value + serviceFee.value)
+const orderTotal = computed(() => tiersSubtotal.value)
 
 // ---- Formatters ----
 const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')

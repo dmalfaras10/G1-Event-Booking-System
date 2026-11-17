@@ -151,10 +151,6 @@
             <span class="order-line-name">Pass Allocation ({{ selectedTier.name }} × {{ qty }})</span>
             <span class="order-line-price">{{ peso(tiersSubtotal) }}</span>
           </div>
-          <div v-if="serviceFee > 0" class="order-line">
-            <span class="order-line-name">Concierge &amp; Facilities Surcharge (10%)</span>
-            <span class="order-line-price">{{ peso(serviceFee) }}</span>
-          </div>
           <div v-if="!selectedTier" class="order-empty">
             Select a seating tier to see your order summary.
           </div>
@@ -181,7 +177,7 @@
           <span class="accom-icon">🎟️</span>
           <div class="accom-text">
             <div class="accom-title">Special Patron Accommodations?</div>
-            <div class="accom-sub">Speak directly with Head Concierge Vivienne at ext. 408 for ADA seating or dietary requests.</div>
+            <div class="accom-sub">Contact our support team for ADA seating or dietary requests.</div>
           </div>
         </div>
       </div>
@@ -213,8 +209,7 @@
       :qty="qty"
       :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
-      :service-fee="serviceFee"
-      :total="orderTotal"
+       :total="orderTotal"
       :currency="'₱'"
       :code-prefix="'G1-VIS'"
       @close="step = 'seats'"
@@ -266,37 +261,15 @@ const event = {
   venueCapacity: 160,
   tickets: [
     {
-      ticketType: 'Bronze — Balcony',
-      ticketDescription: 'Unreserved balcony seating with a full, elevated view of the stage.',
-      ticketPerks: ['Full Stage View', 'Digital Programme', 'One Drink Voucher'],
-      perksInput: 'Full Stage View, Digital Programme, One Drink Voucher',
-      price: 3000,
-      seatSection: 'Balcony',
-      seatRow: 'B',
-      quantity: 40,
-      seats: buildSeats('B', 40, [1, 2, 3, 4, 5, 6, 7], [8, 9, 10])
-    },
-    {
-      ticketType: 'Silver — Stalls Reserved',
-      ticketDescription: 'Reserved centre-block stalls seat, closest to the barricade, with priority bar service.',
-      ticketPerks: ['Reserved Centre Seat', 'Priority Bar Lane', 'One Drink Voucher', 'Digital Programme'],
-      perksInput: 'Reserved Centre Seat, Priority Bar Lane, One Drink Voucher, Digital Programme',
-      price: 5000,
-      seatSection: 'Stalls',
-      seatRow: 'C',
-      quantity: 30,
-      seats: buildSeats('C', 30, [1, 2, 10, 11, 12], [13, 14])
-    },
-    {
-      ticketType: 'Gold — Front Barricade + Soundcheck',
-      ticketDescription: 'Front-row barricade pass with early entry to the 17:30 soundcheck and a signed poster.',
-      ticketPerks: ['Front-Barricade Access', '17:30 Soundcheck Entry', 'Signed Poster', 'One Drink Voucher'],
-      perksInput: 'Front-Barricade Access, 17:30 Soundcheck Entry, Signed Poster, One Drink Voucher',
-      price: 7500,
-      seatSection: 'Front Barricade',
-      seatRow: 'A',
-      quantity: 6,
-      seats: buildSeats('A', 6, [1], [])
+      ticketType: 'Mezzanine Circle',
+      ticketDescription: 'Great sightlines with access to the vinyl merch booth area.',
+      ticketPerks: ['Early Merch Booth Access', 'Signed Poster Voucher'],
+      perksInput: 'Early Merch Booth Access, Signed Poster Voucher',
+      price: 3000.00,
+      seatSection: 'Mezzanine',
+      seatRow: 'M',
+      quantity: 50,
+      seats: buildSeats('M', 50, [1, 2, 3], [4, 5, 6])
     }
   ]
 }
@@ -370,8 +343,7 @@ const MAX_SEATS_PER_ORDER = 6
 const maxQty = computed(() => Math.min(selectedTier.value?.capacity ?? MAX_SEATS_PER_ORDER, MAX_SEATS_PER_ORDER))
 
 const tiersSubtotal = computed(() => (selectedTier.value ? selectedTier.value.price * qty.value : 0))
-const serviceFee = computed(() => Math.round(tiersSubtotal.value * 0.10))
-const orderTotal = computed(() => tiersSubtotal.value + serviceFee.value)
+const orderTotal = computed(() => tiersSubtotal.value)
 
 // ---- Actions ----
 function selectTier(t) {

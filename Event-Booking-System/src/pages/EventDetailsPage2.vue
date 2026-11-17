@@ -155,10 +155,6 @@
             <span class="order-line-name">Pass Allocation ({{ selectedTier.name }} × {{ qty }})</span>
             <span class="order-line-price">{{ peso(tiersSubtotal) }}</span>
           </div>
-          <div v-if="serviceFee > 0" class="order-line">
-            <span class="order-line-name">Concierge &amp; Facilities Surcharge (10%)</span>
-            <span class="order-line-price">{{ peso(serviceFee) }}</span>
-          </div>
           <div v-if="!selectedTier" class="order-empty">
             Select a seating tier to see your order summary.
           </div>
@@ -185,7 +181,7 @@
           <span class="accom-icon">🎟️</span>
           <div class="accom-text">
             <div class="accom-title">Special Patron Accommodations?</div>
-            <div class="accom-sub">Speak directly with Head Concierge Vivienne at ext. 408 for ADA seating or dietary requests.</div>
+            <div class="accom-sub">Contact our support team for ADA seating or dietary requests.</div>
           </div>
         </div>
       </div>
@@ -217,8 +213,7 @@
       :qty="qty"
       :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
-      :service-fee="serviceFee"
-      :total="orderTotal"
+       :total="orderTotal"
       :currency="'₱'"
       :code-prefix="'G1-SHR'"
       @close="step = 'seats'"
@@ -271,52 +266,21 @@ const buildSeats = (row, count, soldIndices = [], holdIndices = []) => {
 // Ticket tiers based on mockEvents.js structure
 const tiers = ref([
   {
-    id: 'tier_bronze',
-    ticketType: 'Bronze — Orchestra Cabaret',
-    name: 'Bronze — Orchestra Cabaret',
-    ticketDescription: 'Unreserved cabaret seating on the flat, closest to the piano.',
-    desc: 'Unreserved cabaret seating on the flat, closest to the piano.',
-    ticketPerks: ['Acoustic Check Access', 'Printed Set List'],
-    perks: ['Acoustic Check Access', 'Printed Set List'],
-    perksInput: 'Acoustic Check Access, Printed Set List',
+    id: 'tier_1',
+    ticketType: 'Orchestra Center',
+    name: 'Orchestra Center',
+    ticketDescription: 'Direct acoustic sweet spot with unobstructed stage view.',
+    desc: 'Direct acoustic sweet spot with unobstructed stage view.',
+    ticketPerks: ['Acoustic Check Access', 'Program Booklet'],
+    perks: ['Acoustic Check Access', 'Program Booklet'],
+    perksInput: 'Acoustic Check Access, Program Booklet',
     price: 3600.00,
     seatSection: 'Orchestra',
     seatRow: 'C',
-    quantity: 50,
-    seats: buildSeats('C', 50, [1, 2, 10, 11], [5, 6]),
+    quantity: 40,
+    seats: buildSeats('C', 40, [1, 2, 10, 11], [5, 6]),
+    capacity: 34,
     badge: null
-  },
-  {
-    id: 'tier_silver',
-    ticketType: 'Silver — Mezzanine Reserved',
-    name: 'Silver — Mezzanine Reserved',
-    ticketDescription: 'Reserved mezzanine seat with a clear sight line to the keyboard.',
-    desc: 'Reserved mezzanine seat with a clear sight line to the keyboard.',
-    ticketPerks: ['Reserved Seat', 'Interval Drink Voucher'],
-    perks: ['Reserved Seat', 'Interval Drink Voucher'],
-    perksInput: 'Reserved Seat, Interval Drink Voucher',
-    price: 6000.00,
-    seatSection: 'Mezzanine',
-    seatRow: 'M',
-    quantity: 30,
-    seats: buildSeats('M', 30, [4, 5], [1]),
-    badge: 'Best Value'
-  },
-  {
-    id: 'tier_gold',
-    ticketType: 'Gold — Front Box & Green Room',
-    name: 'Gold — Front Box & Green Room',
-    ticketDescription: 'Front box for two, with post-show green-room access and a signed programme.',
-    desc: 'Front box for two, with post-show green-room access and a signed programme.',
-    ticketPerks: ['Front Box Seating', 'Green Room Access', 'Signed Programme'],
-    perks: ['Front Box Seating', 'Green Room Access', 'Signed Programme'],
-    perksInput: 'Front Box Seating, Green Room Access, Signed Programme',
-    price: 9500.00,
-    seatSection: 'Front Box',
-    seatRow: 'F',
-    quantity: 12,
-    seats: buildSeats('F', 12, [1, 2], [3]),
-    badge: 'Includes Green Room Access'
   }
 ])
 
@@ -362,8 +326,7 @@ const MAX_SEATS_PER_ORDER = 6
 const maxQty = computed(() => Math.min(selectedTier.value?.capacity ?? MAX_SEATS_PER_ORDER, MAX_SEATS_PER_ORDER))
 
 const tiersSubtotal = computed(() => (selectedTier.value ? selectedTier.value.price * qty.value : 0))
-const serviceFee = computed(() => Math.round(tiersSubtotal.value * 0.10))
-const orderTotal = computed(() => tiersSubtotal.value + serviceFee.value)
+const orderTotal = computed(() => tiersSubtotal.value)
 
 // ---- Formatters ----
 const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')

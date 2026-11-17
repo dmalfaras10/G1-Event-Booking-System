@@ -168,14 +168,22 @@ function rowName(i) {
 // Each tier gets its own section. `capacity` is the number of seats still on
 // sale; a few extra "taken" seats are drawn around it so the map looks real.
 // Tiers are rendered premium-first (nearest the stage), and each section is
-// outlined in its own colour so the tiers are easy to tell apart.
+// outlined according to its price rank: the most expensive tier is gold,
+// followed by silver, then bronze.
 const TIER_COLORS = ['#f3c64f', '#c9d1d9', '#cd7f32', '#8b5cf6', '#38bdf8', '#34d399']
 
-// Extra seats drawn on each side of every row (5 left + 5 right) to widen the map.
-const EXTRA_SEATS_PER_SIDE = 5
+// A small number of visual seats on each side widens the map without forcing
+// larger events into additional wrapped rows on narrow screens.
+const EXTRA_SEATS_PER_SIDE = 2
 
 function buildSections() {
   const list = (props.tiers || []).slice().reverse()
+  const priceRank = [...(props.tiers || [])]
+    .sort((a, b) => (Number(b.price) || 0) - (Number(a.price) || 0))
+    .reduce((ranks, tier, index) => {
+      ranks.set(tier.id, index)
+      return ranks
+    }, new Map())
   let rowOffset = 0
 
   return list.map((t, index) => {
@@ -230,7 +238,7 @@ function buildSections() {
       capacity,
       mine,
       rows,
-      color: TIER_COLORS[index % TIER_COLORS.length],
+      color: TIER_COLORS[(priceRank.get(t.id) ?? index) % TIER_COLORS.length],
     }
   })
 }
@@ -407,12 +415,15 @@ onUnmounted(() => {
 
 .seat-map {
   max-height: 44vh;
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 0.2rem 0.2rem 0.6rem;
 }
 
 /* ---------- Sections (one colour-bordered box per tier) ---------- */
 .seat-section {
+  min-width: 0;
+  overflow: hidden;
   border: 1px solid var(--tier-color, rgba(255, 255, 255, 0.12));
   border-radius: 0.65rem;
   background: transparent;
@@ -422,17 +433,23 @@ onUnmounted(() => {
 }
 .seat-section:last-child { margin-bottom: 0.2rem; }
 
+/* Keep inactive tier borders understated so the selected section is clear. */
+.seat-section:not(.section-mine) {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
 /* The tier being booked gets a soft ring/glow in its own colour */
 .section-mine {
   border-color: var(--tier-color, var(--gold-accent));
   box-shadow:
-    0 0 0 1px var(--tier-color, var(--gold-accent)),
-    0 0 22px -8px var(--tier-color, var(--gold-accent));
+    0 0 4px var(--tier-color, var(--gold-accent)),
+    0 0 10px -2px var(--tier-color, var(--gold-accent));
 }
 
 /* ---------- Rows & seats ---------- */
 .seat-row {
   display: flex;
+  min-width: 0;
   align-items: center;
   gap: 0.55rem;
   margin-bottom: 0.35rem;
@@ -447,9 +464,10 @@ onUnmounted(() => {
 }
 .row-seats {
   flex: 1;
+  min-width: 0;
   display: flex;
   justify-content: center;
-  /* Falls back to flex-start when a wide row overflows, so no seats get clipped */
+  /* Keep each generated venue row visually intact. */
   justify-content: safe center;
   gap: 0.26rem;
 }
@@ -467,6 +485,17 @@ onUnmounted(() => {
   background: rgba(243, 198, 79, 0.08);
   cursor: pointer;
   transition: background 0.14s ease, border-color 0.14s ease, transform 0.1s ease;
+}
+
+@media (max-width: 480px) {
+  .seat-row { gap: 0.3rem; }
+  .row-seats { gap: 0.08rem; }
+  .seat {
+    width: 0.9rem;
+    height: 0.9rem;
+    font-size: 0.55rem;
+  }
+  .seat-aisle { margin-left: 0.15rem; }
 }
 .seat:hover:not(:disabled) {
   background: rgba(243, 198, 79, 0.24);
