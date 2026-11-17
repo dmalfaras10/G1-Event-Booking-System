@@ -15,12 +15,12 @@
         </div>
         <div class="banner-strip">
           <div class="strip-left">
-            <i class="bi bi-stars"></i> Shangri-La Grand Ballroom — Candlelit
+            <i class="bi bi-stars"></i> {{ venueName }} — Candlelit
             <span class="strip-sep">|</span>
-            <span class="strip-detail">480 covers · Four-course service</span>
+            <span class="strip-detail">{{ event.venueCapacity }} covers · Four-course service</span>
           </div>
           <div class="strip-right">
-            <i class="bi bi-ticket-perforated"></i> 7 Seats Left
+            <i class="bi bi-ticket-perforated"></i> {{ totalSeatsLeft }} Seats Left
           </div>
         </div>
       </div>
@@ -34,27 +34,27 @@
         </div>
       </div>
 
-      <span class="event-kicker"><i class="bi bi-snow"></i> Manila Winter Gala // Masquerade IV</span>
+      <span class="event-kicker"><i class="bi bi-snow"></i> {{ event.category }} // Masquerade IV</span>
       <h1 class="event-title">
-        Winter Masquerade at The Fort: Vivaldi Recomposed at Shangri-La Grand Ballroom
+        {{ eventName }}: Vivaldi Recomposed at {{ venueName }}
       </h1>
 
       <!-- Meta row: 4 quick facts in a single panel -->
       <div class="meta-grid">
         <div class="meta-card">
           <div class="meta-label">Date &amp; Evening</div>
-          <div class="meta-value"><i class="bi bi-calendar-event"></i> Sat, Dec 5, 2026</div>
+          <div class="meta-value"><i class="bi bi-calendar-event"></i> {{ dateLong }}</div>
           <div class="meta-sub">Champagne reception at 18:30</div>
         </div>
         <div class="meta-card">
           <div class="meta-label">Curtain</div>
-          <div class="meta-value"><i class="bi bi-clock"></i> 19:00 Sharp</div>
+          <div class="meta-value"><i class="bi bi-clock"></i> {{ time24 }} Sharp</div>
           <div class="meta-sub">Mask check from 18:00</div>
         </div>
         <div class="meta-card">
           <div class="meta-label">Venue</div>
-          <div class="meta-value"><i class="bi bi-bank2"></i> Shangri-La Grand Ballroom</div>
-          <div class="meta-sub">BGC, Taguig</div>
+          <div class="meta-value"><i class="bi bi-bank2"></i> {{ venueName }}</div>
+          <div class="meta-sub">{{ address }}</div>
         </div>
         <div class="meta-card">
           <div class="meta-label">Dress Attire</div>
@@ -69,10 +69,10 @@
           <h2 class="section-title">Event Details</h2>
         </div>
         <p class="lead">
-          An evening of velvet elegance at The Fort: Vivaldi’s Four Seasons recomposed for chamber quintet under candlelight, with a curated four-course dinner served between movements.
+          {{ event.description }}
         </p>
         <p class="lead">
-          The Manila Chamber Quintet performs on gut strings and period bows at baroque pitch, with a 1920s bandoneón joining for the Piazzolla. Masks are worn until the midnight toast and provided at the cloakroom.
+          The {{ event.artist }} performs on gut strings and period bows at baroque pitch, with a 1920s bandoneón joining for the Piazzolla. Masks are worn until the midnight toast and provided at the cloakroom.
         </p>
       </div>
 
@@ -82,8 +82,8 @@
           <h2 class="section-title">Featured Artist</h2>
         </div>
         <div class="artist-profile">
-          <div class="artist-name">{{ artist[0] }}</div>
-          <p class="lead">{{ artist[1] }}</p>
+          <div class="artist-name">{{ event.artist }}</div>
+          <p class="lead">{{ event.artistDescription }}</p>
         </div>
       </div>
 
@@ -101,7 +101,7 @@
 
         <!-- Price range -->
         <div class="price-range">
-          <span class="price-big">₱8,500 — ₱22,000</span>
+          <span class="price-big">{{ peso(priceRange.min) }} — {{ peso(priceRange.max) }}</span>
           <span class="price-sub">/ attendee</span>
         </div>
         <p class="price-note">Every admission includes the four-course dinner, vintage Champagne reception and a souvenir mask.</p>
@@ -250,20 +250,113 @@ import BookingCheckout from '../components/BookingCheckout.vue'
 import SeatSelection from '../components/SeatSelection.vue'
 
 const eventId = 'evt-003'
-const eventName = 'Winter Masquerade at The Fort'
-const venueName = 'Shangri-La Grand Ballroom'
-const dateLong = 'Sat, Dec 5, 2026'
-const dateShort = 'Sat, Dec 5'
-const time24 = '19:00'
 
-const tiers = ref([
-  { id: 'tier_bronze', name: 'Bronze — Ballroom Seat', price: 8500, capacity: 7,
-    desc: 'A seat at a shared round table of ten, with the full four-course menu.', badge: null },
-  { id: 'tier_silver', name: 'Silver — Private Table for Two', price: 14000, capacity: 12,
-    desc: 'Your own table for two, with dedicated service and a candle centrepiece.', badge: 'Best Value' },
-  { id: 'tier_gold', name: 'Gold — Grand Balcony Box', price: 22000, capacity: 6,
-    desc: 'Private balcony box for four with a butler and a magnum of vintage Champagne.', badge: 'Complimentary Champagne' },
-])
+// ---------------------------------------------------------------------------
+// Mock record — same shape as src/data/mockEvents.js (and therefore the
+// AdminEventListing table + EventModal form):
+//   id, image, name, artist, artistDescription, category, description, date,
+//   status, venueName, address, venueCapacity, tickets[]
+//   tickets[]: ticketType, ticketDescription, ticketPerks, perksInput, price,
+//              seatSection, seatRow, quantity, seats[]
+//   seats[]:   seatRow, seatNumber, code, status ('available' | 'hold' | 'sold')
+// ---------------------------------------------------------------------------
+
+const buildSeats = (row, count, soldIndices = [], holdIndices = []) => (
+  Array.from({ length: count }, (_, i) => {
+    const num = i + 1
+    let status = 'available'
+    if (soldIndices.includes(num)) status = 'sold'
+    else if (holdIndices.includes(num)) status = 'hold'
+    return { seatRow: row, seatNumber: num, code: `${row}-${num}`, status }
+  })
+)
+
+const event = {
+  id: 3,
+  image: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?auto=format&fit=crop&w=900&q=80',
+  name: 'Winter Masquerade at The Fort',
+  artist: 'Manila Chamber Quintet',
+  artistDescription: 'Award-winning classical string ensemble celebrated across Southeast Asia for contemporary reinterpretations of Baroque masterpieces. Now in its ninth season, the five players perform on gut strings and period bows at baroque pitch (A = 415 Hz).',
+  category: 'Classical & Gala',
+  description: 'Step into an evening of velvet elegance at The Fort: Vivaldi’s Four Seasons recomposed for chamber quintet under candlelight, with a curated four-course dinner served between movements. A 1920s bandoneón joins the ensemble for Piazzolla’s Adiós Nonino, and the midnight toast is poured as the last candle is extinguished.',
+  date: '2026-12-05T19:00:00',
+  status: 'Upcoming',
+  venueName: 'Shangri-La Grand Ballroom',
+  address: 'BGC, Taguig',
+  venueCapacity: 100,
+  tickets: [
+    {
+      ticketType: 'Bronze — Ballroom Seat',
+      ticketDescription: 'A seat at a shared round table of ten, with the full four-course menu.',
+      ticketPerks: ['Four-course Dinner', 'Vintage Champagne Reception', 'Souvenir Mask'],
+      perksInput: 'Four-course Dinner, Vintage Champagne Reception, Souvenir Mask',
+      price: 8500,
+      seatSection: 'Grand Ballroom',
+      seatRow: 'B',
+      quantity: 60,
+      seats: [
+        ...buildSeats('B', 30, [1, 2, 3, 4, 5, 6, 7, 8, 9], [10, 11]),
+        ...buildSeats('C', 30, [4, 5, 6, 7], [8])
+      ]
+    },
+    {
+      ticketType: 'Silver — Private Table for Two',
+      ticketDescription: 'Your own table for two, with dedicated service and a candle centrepiece.',
+      ticketPerks: ['Table for Two', 'Dedicated Butler', 'Candle Centrepiece'],
+      perksInput: 'Table for Two, Dedicated Butler, Candle Centrepiece',
+      price: 14000,
+      seatSection: 'Grand Tier',
+      seatRow: 'D',
+      quantity: 24,
+      seats: buildSeats('D', 24, [1, 2, 3, 4, 5, 6], [7, 8])
+    },
+    {
+      ticketType: 'Gold — Grand Balcony Box',
+      ticketDescription: 'Private balcony box for four with a butler and a magnum of vintage Champagne.',
+      ticketPerks: ['Private Balcony Box', 'Magnum of Vintage Champagne', 'Private Butler'],
+      perksInput: 'Private Balcony Box, Magnum of Vintage Champagne, Private Butler',
+      price: 22000,
+      seatSection: 'Grand Balcony',
+      seatRow: 'E',
+      quantity: 16,
+      seats: buildSeats('E', 16, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], [13])
+    }
+  ]
+}
+
+// ---- Derived from the mock record (keeps the panel in step with the data) ----
+const eventName = event.name
+const venueName = event.venueName
+const address = event.address
+
+const eventDate = new Date(event.date)
+const dateLong = eventDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
+const dateShort = eventDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+const time24 = `${String(eventDate.getHours()).padStart(2, '0')}:${String(eventDate.getMinutes()).padStart(2, '0')}`
+
+// Seats still on sale for a ticket tier (mockEvents stores the per-seat status).
+const seatsLeft = (ticket) => (ticket.seats || []).filter(s => s.status === 'available').length
+
+// The booking panel's tier cards are a view over event.tickets.
+const tiers = computed(() => event.tickets.map((ticket, i) => ({
+  id: `tier_${ticket.seatSection.toLowerCase().replace(/[^a-z0-9]+/g, '_')}`,
+  name: ticket.ticketType,
+  desc: ticket.ticketDescription,
+  perks: ticket.ticketPerks,
+  price: ticket.price,
+  quantity: ticket.quantity,
+  seatSection: ticket.seatSection,
+  seatRow: ticket.seatRow,
+  capacity: seatsLeft(ticket),
+  badge: i === 1 ? 'Best Value' : null,
+})))
+
+const priceRange = computed(() => {
+  const prices = tiers.value.map(t => t.price)
+  return { min: Math.min(...prices), max: Math.max(...prices) }
+})
+
+const totalSeatsLeft = computed(() => tiers.value.reduce((sum, t) => sum + t.capacity, 0))
 
 const addons = ref([
   { name: 'Midnight Waltz Masterclass', price: 1800, desc: 'A 30-minute waltz lesson with the ensemble after the encore.', selected: false },
@@ -279,8 +372,6 @@ const heroImages = ref([
   { src: 'https://images.unsplash.com/photo-1566737236500-c8ac43014a67?auto=format&fit=crop&w=900&q=80', alt: 'Champagne service at the table' },
 ])
 const activeImage = ref(0)
-
-const artist = ref(['Isabel Zaragoza', 'Nine seasons as concertmaster of the Manila Symphony, and the driving force behind the city’s baroque-pitch chamber series. Her gut-string Four Seasons has been called “the warmest winter in Manila.”'])
 
 // ---- Booking state ----
 const step = ref('select')
