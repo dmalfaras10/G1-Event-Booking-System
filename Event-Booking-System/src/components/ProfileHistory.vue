@@ -5,8 +5,25 @@
 	const activeFilter = ref('All');
 	const searchQuery = ref('');
 
+	// Grab ONLY the first booking item from the mock dataset and split its seats
+	const rawFirstBooking = mockBookings[0] || {};
+
+	// Expand the first booking into individual seat passes based on seatCodes array
+	const splitSeatBookings = computed(() => {
+		const seats = rawFirstBooking.seatCodes || ['A-1'];
+		return seats.map((seatCode, index) => ({
+			...rawFirstBooking,
+			id: `${rawFirstBooking.id}-${index + 1}`,
+			bookingCode: `${rawFirstBooking.bookingCode}-${index + 1}`,
+			seatCodes: [seatCode],
+			quantity: 1,
+			totalPrice: rawFirstBooking.unitPrice, // Individual unit price per separated pass
+			passIndex: index + 1
+		}));
+	});
+
 	const filteredBookings = computed(() => {
-		return mockBookings.filter(booking => {
+		return splitSeatBookings.value.filter(booking => {
 			const matchesFilter = 
 				activeFilter.value === 'All' ? true :
 				activeFilter.value === 'Active' ? booking.status === 'Confirmed' :
@@ -16,21 +33,22 @@
 				booking.eventName.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
 				booking.bookingCode.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
 				booking.fullName.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-				booking.seatSection.toLowerCase().includes(searchQuery.value.toLowerCase());
+				booking.seatSection.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+				booking.seatCodes[0].toLowerCase().includes(searchQuery.value.toLowerCase());
 
 			return matchesFilter && matchesSearch;
 		});
 	});
 
 	const totalFolioValue = computed(() => {
-		return mockBookings
+		return splitSeatBookings.value
 			.filter(b => b.status === 'Confirmed')
 			.reduce((sum, b) => sum + b.totalPrice, 0)
 			.toLocaleString('en-US', { minimumFractionDigits: 2 });
 	});
 
 	const activeCount = computed(() => {
-		return mockBookings.filter(b => b.status === 'Confirmed').length;
+		return splitSeatBookings.value.filter(b => b.status === 'Confirmed').length;
 	});
 
 	const formatDate = (isoString) => {
@@ -60,13 +78,7 @@
 		<!-- Top Page Header & Summary Box -->
 		<div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-start gap-3">
 			<div>
-				<div class="text-gold small fw-bold text-uppercase mb-1" style="font-size: 0.7rem; letter-spacing: 0.08em;">
-					&bull; Sovereign Patron Sanctum
-				</div>
-				<h1 class="text-white fw-bold mb-1" style="font-family: Georgia, serif;">Passes &amp; Ticket Vault</h1>
-				<p class="text-vault-muted small mb-0">
-					Review secured allocations, digital NFC admittance keys, and bespoke hospitality provisions reserved under your personal patronage.
-				</p>
+				<h1 class="text-white fw-bold mb-1" style="font-family: Georgia, serif;">Ticket Inventory &amp; Booking History</h1>
 			</div>
 
 			<!-- Right Summary Pill Box -->
@@ -74,12 +86,12 @@
 				<div class="d-flex align-items-center gap-3">
 					<div class="rounded bg-dark border border-subtle p-2 text-gold">🎫</div>
 					<div>
-						<div class="text-white fw-semibold small">{{ activeCount }} Sovereign Passes</div>
+						<div class="text-white fw-semibold small">{{ activeCount }} Bookings</div>
 						<div class="text-gold" style="font-size: 0.65rem; letter-spacing: 0.05em;">ACTIVE &amp; ADMITTANCE READY</div>
 					</div>
 				</div>
 				<div class="border-start border-subtle ps-3 text-end">
-					<div class="text-vault-muted" style="font-size: 0.65rem;">CONFIRMED FOLIO VALUE</div>
+					<div class="text-vault-muted" style="font-size: 0.65rem;">TOTAL TICKETS VALUE</div>
 					<div class="text-white fw-bold small">₱{{ totalFolioValue }} <span class="text-vault-muted fw-normal">USD</span></div>
 				</div>
 			</div>
@@ -94,7 +106,7 @@
 					:class="{ active: activeFilter === 'All' }"
 					@click="activeFilter = 'All'"
 				>
-					All Bookings ({{ mockBookings.length }})
+					All Passes ({{ splitSeatBookings.length }})
 				</button>
 				<button 
 					type="button" 
@@ -126,9 +138,9 @@
 				<input 
 					type="text" 
 					class="form-control form-control-sm py-1 px-3 text-white" 
-					placeholder="Search orders..." 
+					placeholder="Search separated passes..." 
 					v-model="searchQuery"
-					style="max-width: 200px;"
+					style="max-width: 220px;"
 				>
 			</div>
 		</div>
@@ -136,11 +148,11 @@
 		<!-- Empty State Check -->
 		<div v-if="filteredBookings.length === 0" class="text-center py-5 bg-surface border border-subtle rounded-3">
 			<div class="text-gold fs-3 mb-2">🔍</div>
-			<h6 class="text-white fw-semibold">No booking records found</h6>
+			<h6 class="text-white fw-semibold">No separated pass records found</h6>
 			<p class="text-vault-muted small mb-0">Try selecting a different filter category or search term.</p>
 		</div>
 
-		<!-- Dynamic Booking Cards -->
+		<!-- Dynamic Separated Seat Pass Cards -->
 		<div 
 			v-for="booking in filteredBookings" 
 			:key="booking.id" 
@@ -150,23 +162,18 @@
 				<div class="col-12 col-lg-8 p-4 border-end border-subtle d-flex flex-column justify-content-between">
 					<div>
 						<div class="d-flex flex-wrap align-items-center justify-content-between mb-2" style="font-size: 0.7rem;">
-							<span class="text-gold fw-bold font-monospace">ORDER #{{ booking.bookingCode }}</span>
+							<span class="text-gold fw-bold font-monospace">PASS ORDER #{{ booking.bookingCode }}</span>
 							<span class="badge px-2 py-1" :class="getStatusBadgeClass(booking.status)" style="font-size: 0.65rem;">
 								{{ booking.status.toUpperCase() }}
 							</span>
 						</div>
 
 						<div class="badge badge-magenta rounded-pill px-2 py-1 mb-2 text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.05em;">
-							{{ booking.ticketType }} // {{ booking.seatSection }}
+							{{ booking.ticketType }} // {{ booking.seatSection }})
 						</div>
 						<h3 class="text-white fw-semibold mb-3" style="font-family: Georgia, serif;">
 							{{ booking.eventName }}
 						</h3>
-						
-						<div class="text-vault-muted small mb-3">
-							Patron Name: <strong class="text-white fw-normal">{{ booking.fullName }}</strong> &nbsp;&bull;&nbsp; 
-							Email: <span class="font-monospace text-gold">{{ booking.email }}</span>
-						</div>
 
 						<div class="row g-2 mb-3">
 							<div class="col-md-4">
@@ -178,16 +185,16 @@
 							</div>
 							<div class="col-md-4">
 								<div class="p-2 px-3 rounded bg-dark border border-subtle h-100">
-									<div class="text-vault-muted" style="font-size: 0.65rem;">SEAT CODES &amp; QTY</div>
-									<div class="text-white fw-semibold small font-monospace">{{ booking.seatCodes.join(', ') }}</div>
-									<div class="text-vault-muted" style="font-size: 0.7rem;">{{ booking.quantity }} Passes Allocated</div>
+									<div class="text-vault-muted" style="font-size: 0.65rem;">INDIVIDUAL SEAT CODE</div>
+									<div class="text-white fw-semibold small font-monospace text-gold">{{ booking.seatCodes[0] }}</div>
+									<div class="text-vault-muted" style="font-size: 0.7rem;">Single Pass Allocation</div>
 								</div>
 							</div>
 							<div class="col-md-4">
 								<div class="p-2 px-3 rounded bg-dark border border-subtle h-100">
-									<div class="text-vault-muted" style="font-size: 0.65rem;">TOTAL AMOUNT</div>
+									<div class="text-vault-muted" style="font-size: 0.65rem;">PASS TARIFF PRICE</div>
 									<div class="text-white fw-semibold small">₱{{ booking.totalPrice.toLocaleString('en-US', { minimumFractionDigits: 2 }) }}</div>
-									<div class="text-vault-muted" style="font-size: 0.7rem;">(₱{{ booking.unitPrice.toLocaleString() }} ea)</div>
+									<div class="text-vault-muted" style="font-size: 0.7rem;">Dedicated Seat Pass</div>
 								</div>
 							</div>
 						</div>
@@ -201,7 +208,7 @@
 
 				<div class="col-12 col-lg-4 p-4 d-flex flex-column justify-content-between bg-black bg-opacity-25">
 					<div class="d-flex justify-content-between align-items-center">
-						<span class="text-vault-muted" style="font-size: 0.65rem;">ACCESS STUB</span>
+						<span class="text-vault-muted" style="font-size: 0.65rem;">INDIVIDUAL ACCESS STUB</span>
 						<span class="badge bg-dark border border-subtle text-gold" style="font-size: 0.65rem;">{{ booking.seatSection }}</span>
 					</div>
 
@@ -209,16 +216,16 @@
 					<div class="my-3 text-center">
 						<div class="d-inline-flex flex-column align-items-center justify-content-center p-3 rounded-3 border border-subtle bg-dark" style="width: 130px; height: 130px;">
 							<div class="border border-2 border-warning rounded p-2 text-gold fw-bold small lh-sm">
-								[ QR ]<br><span style="font-size: 0.55rem;">{{ booking.bookingCode }}</span>
+								[ QR ]<br><span style="font-size: 0.55rem;">SEAT: {{ booking.seatCodes[0] }}</span>
 							</div>
 						</div>
-						<div class="text-vault-muted mt-2 font-monospace" style="font-size: 0.65rem;">STATUS: {{ booking.status.toUpperCase() }}</div>
+						<div class="text-vault-muted mt-2 font-monospace" style="font-size: 0.65rem;">PASS: {{ booking.bookingCode }}</div>
 					</div>
 
 					<div class="border-top border-subtle pt-2" style="font-size: 0.7rem;">
 						<div class="d-flex justify-content-between text-vault-muted">
-							<span>RESERVATION ID</span>
-							<span class="text-white font-monospace">#{{ booking.id }}</span>
+							<span>ASSIGNED SEAT</span>
+							<span class="text-warning font-monospace fw-bold">{{ booking.seatCodes[0] }}</span>
 						</div>
 						<div class="d-flex justify-content-between text-vault-muted">
 							<span>PRIMARY HOLDER</span>
