@@ -293,32 +293,36 @@
 
 ## 8. Non-Functional Requirements
 - **Performance**: 
-  - Pages and API endpoints must respond within acceptable latencies under normal workloads.
-  - MongoDB queries must utilize indexes for event searches, venue lookups, seat availability checks, bookings, tickets, and membership verification.
-  - Event listings must use cursor-based pagination to prevent loading excessive documents at once.
-  - Ticket and seat inventory updates must use concurrency control to prevent overselling during simultaneous checkout attempts.
-  - Membership eligibility and discount calculations must execute without delaying checkout.
-  - System architecture must scale smoothly as users, events, bookings, and tickets grow.
+  - Ensure pages load efficiently and API requests respond quickly under normal workloads.
+  - Optimize database queries with appropriate indexes and support pagination on event listings to prevent excessive data loading.
+  - Return event search and filter results efficiently, and process membership eligibility and discount calculations quickly during checkout.
+  - Safely update ticket inventory to prevent overselling during simultaneous purchases.
+  - Provide timely payment status updates without blocking other website operations.
+  - Scale smoothly without significant performance degradation as users, events, bookings, and tickets increase.
 - **Security**: 
-  - User passwords must be hashed using Bcrypt prior to database storage.
-  - Authentication and Role-Based Access Control (RBAC) must be enforced on all protected API endpoints using JWT access and refresh tokens.
-  - Backend input validation must sanitize all incoming payloads to prevent injection attacks, Cross-Site Scripting (XSS), and unauthorized data manipulation.
-  - Users may only access their own bookings, tickets, and subscription records unless granted admin privileges.
-  - Sensitive data (password hashes, tokens, API keys, database connection strings) must never be exposed in API responses or logs and must be stored in server-side environment variables.
-  - Payment gateway webhooks must be cryptographically signature-verified by the backend before updating payment or booking statuses.
+  - Hash passwords securely with Bcrypt and manage authentication/authorization via JSON Web Tokens (JWT).
+  - Perform backend input validation and secure payment processing through the selected gateway, verifying all gateway notifications before updating statuses.
+  - Restrict system record management, membership perks, and user data access (bookings, tickets, subscriptions) through rigorous backend authorization and role verification.
+  - Protect against common web vulnerabilities (injection, XSS) and prevent exposure of sensitive information in API responses or logs.
+  - Store database credentials, API keys, and secrets securely using environment variables or dedicated management mechanisms.
 - **Usability**: 
-  - Responsive, consistent user interface supporting desktop, tablet, and mobile viewports, guided by WCAG 2.2 Level AA accessibility standards (readability, contrast, keyboard navigation).
-  - Clear display of ticket tier prices, membership prices, applicable discounts, seat-hold countdown timers, and real-time availability badges (*Selling Fast*, *Low Stock*, *Sold Out*).
-  - Distinct visual states for ticket statuses (*valid*, *used*, *cancelled*) and payment states (*pending*, *succeeded*, *failed*) with actionable recovery guidance.
+  - Provide a simple, consistent, responsive interface across desktop, tablet, and mobile devices with clear navigation and readable elements.
+  - Display transparent pricing, discounts, and subscription details (benefits, eligibility, duration, expiration).
+  - Guide users through a straightforward process for viewing events, selecting tickets, and completing checkout.
+  - Deliver clear confirmation messages for successful registrations, bookings, payments, and subscriptions.
+  - Provide helpful, actionable error messages that explain problems and solutions.
+  - Distinguish ticket statuses clearly (valid, used, cancelled, refunded).
 - **Reliability**: 
-  - Strict data consistency across related `Bookings`, `Seats`, `Payments`, and `Tickets` collections using atomic updates or database transactions.
-  - Failed or pending payments must never generate confirmed tickets; expired checkout holds must automatically release locked seats.
-  - Webhook and payment processing must be idempotent so repeated notifications never create duplicate bookings, double-decrement inventory, or double-charge users.
-  - A digital ticket (`ticketCode`) must not be redeemable more than once, and expired/inactive subscriptions must not grant checkout discounts.
-  - Graceful error handling and server logging for unexpected application or database connection failures, supported by regular database backups.
+  - Maintain data consistency across bookings, payments, tickets, and subscriptions using database transactions, ensuring failed transactions never generate confirmed tickets.
+  - Prevent duplicate bookings, ticket issuance, or order completion from repeated payment notifications or temporary external service failures, while properly tracking payment states * (pending, confimred, cancelled, refunded).
+  - Ensure strict inventory and redemption accuracy by keeping ticket availability precise during simultaneous purchases and preventing single tickets from being redeemed more than once.
+  - Restrict subscription perks exclusively to active, eligible statuses.
+  - Maintain deployment-appropriate database backups, handle errors gracefully without leaking sensitive details, and log operational issues for effective debugging.
 - **Supportability**: 
-  - Modular MEVN source code organization, comprehensive API and schema documentation, and Git version control.
-  - Extensible Mongoose schemas designed to accommodate future membership perks and post-MVP payment/notification integrations without data duplication.
+  - Organize source code into maintainable modules and document API endpoints and database structures.
+  - Utilize version control during development and design flexible database schemas to easily accommodate future updates and additional features without redundancy.
+  - Test core ticketing and membership functions—as well as feature changes—to prevent regressions.
+  - Review and update project dependencies regularly to address compatibility issues and security vulnerabilities.
 
 ## 9. Data Requirements
 - **Data Models**:
@@ -485,18 +489,21 @@
 - **Page Inventory**:
   | Page | Client Route | Purpose | Auth Role |
   | :--- | :--- | :--- | :--- |
-  | **Homepage** | `/` | Hero carousel, featured events, upcoming shows, FAQ preview | Public |
-  | **Event Listings** | `/events` | Filterable, searchable catalogue with interactive calendar | Public |
-  | **Event Details** | `/events/:id` | Full event info, ticket tier table, rules, booking policy | Public |
-  | **Venue Details** | `/venues/:id` | Address, capacity, transit, layout | Public |
-  | **Memberships** | `/membership` | Bronze, Silver, and Gold plan comparison, perks checklist, pricing, enrollment | Public |
-  | **Checkout** | `/checkout/:bookingId` | Ticket checkout details, seat-hold countdown, payment form | Registered User |
-  | **Booking Confirmation** | `/checkout/:bookingId/confirmation` | Success state, e-ticket access, VIP timeline | Registered User |
-  | **Sign In / Register** | `/auth/:mode` | Credential entry and account creation | Public |
-  | **Profile** | `/account/profile` | View and update personal details and password | Registered User |
-  | **My Tickets** | `/account/tickets` | Booking history, ticket status, cancel, and PDF download | Registered User |
-  | **Contact / About** | `/contact` | Inquiry submission form and company information | Public |
-  | **Admin Dashboard** | `/admin` | Event CRUD, booking monitoring, user & inventory oversight | System Admin |
+  | **Homepage** | `/` | Hero carousel, featured events, partner banner | Public |
+  | **Event Listings** | `/events` | Searchable, filterable catalogue with dual-month date-range filter and grid/agenda views | Public |
+  | **Event Details** | `/events/:id` | Event info, ticket tier selection, seat selection, and checkout | Public |
+  | **Sign In** | `/login` | Credential entry | Public |
+  | **Register** | `/register` | Account creation | Public |
+  | **Forgot Password** | `/forgot-password` | Password recovery request | Public |
+  | **Profile** | `/profile` | Profile, booking history, and password change | Registered User |
+  | **Contact / About** | `/contact` (also `/about`) | Inquiry form and company information | Public |
+  | **Admin Event Listing** | `/AdminEventList` | Event CRUD and seat map management | System Admin |
+  | **Admin User Bookings** | `/AdminUserBookings` | Booking list, status override, and removal | System Admin |
+  | **Admin Subscriptions** | `/AdminSubscriptions` | Membership plan and subscriber management | System Admin |
+  | **Sign Out** | `/logout` | Clears the current session | Registered User |
+  | **Not Found** | `/:pathMatch(.*)*` | Fallback page for unmatched routes | Public |
+
+    *Auth roles above indicate the intended audience; route-level guards are a planned addition and are not yet enforced.*
 
 ### API Interfaces (Internal)
 - **Conventions**: JSON REST API consumed exclusively by the Vue.js frontend. `POST /api/v1/auth/login` returns a short-lived access token (sent via `Authorization: Bearer <token>`) and a server-persisted refresh token. Roles: `guest`, `user`, `admin`.
