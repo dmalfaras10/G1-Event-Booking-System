@@ -4,7 +4,7 @@ const { user } = useGlobalStore();
 </script>
 
 <template>
-    <footer class="footer-section pt-5 pb-4 mt-auto">
+    <footer class="footer-section pt-5 pb-4 mt-auto" v-if="!user?.isAdmin">
         <div class="container">
             <div class="row g-4 pb-4 footer-divider-row">
                 <!-- Brand Column -->

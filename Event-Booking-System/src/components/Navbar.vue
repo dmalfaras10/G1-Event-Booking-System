@@ -41,11 +41,23 @@ const handleSelectEvent = (event) => {
 		<div class="container">
 			<!-- Brand Logo & Search Bar Group on Left -->
 			<div class="d-flex align-items-center gap-3 position-relative">
-				<router-link class="navbar-brand d-flex align-items-center gap-2 m-0" to="/">
+				<router-link 
+					class="navbar-brand d-flex align-items-center gap-2 m-0" 
+					:to="user?.isAdmin ? '' : '/'"
+					:class="{ 'disabled-brand': user?.isAdmin }"
+					@click.prevent="user?.isAdmin && $event.preventDefault()"
+				>
 					<span class="navbar-brand-emblem">
 						<i class="bi bi-vinyl-fill"></i>
 					</span>
-					<span class="navbar-brand-text">G<span class="navbar-brand-hyphen">-</span>ONE</span>
+					<span class="navbar-brand-text" :class="{ 'admin-brand-text': user?.isAdmin }">
+						<template v-if="user?.isAdmin">
+							G-ONE <span class="navbar-brand-hyphen">Admin</span> Panel
+						</template>
+						<template v-else>
+							G<span class="navbar-brand-hyphen">-</span>ONE
+						</template>
+					</span>
 				</router-link>
 				<!-- Search Bar -->
 				<div class="navbar-search-form d-none d-md-block" v-if="!user.isAdmin">
@@ -140,17 +152,17 @@ const handleSelectEvent = (event) => {
 					</li>
 					<template v-if="user.isAdmin">
 						<li class="navbar-nav-item nav-item">
-							<router-link class="navbar-nav-link nav-link text-warning" to="/adminEventList">
+							<router-link class="navbar-nav-link nav-link" to="/adminEventList">
 								<i class="bi bi-shield-check me-1"></i>Admin Events
 							</router-link>
 						</li>
 						<li class="navbar-nav-item nav-item">
-							<router-link class="navbar-nav-link nav-link text-warning" to="/adminUserBookings">
+							<router-link class="navbar-nav-link nav-link" to="/adminUserBookings">
 								<i class="bi bi-receipt me-1"></i>User Bookings
 							</router-link>
 						</li>
 						<li class="navbar-nav-item nav-item">
-							<router-link class="navbar-nav-link nav-link text-warning" to="/adminSubscriptions">
+							<router-link class="navbar-nav-link nav-link" to="/adminSubscriptions">
 								<i class="bi bi-gem me-1"></i>Subscriptions
 							</router-link>
 						</li>
@@ -200,8 +212,6 @@ const handleSelectEvent = (event) => {
 							<div class="user-avatar-inner d-flex align-items-center justify-content-center">
 								<i class="bi bi-person"></i>
 							</div>
-							<span class="user-status-ping"></span>
-							<span class="user-status-dot"></span>
 						</button>
 						<ul class="dropdown-menu dropdown-menu-end navbar-user-dropdown shadow-lg rounded-4 mt-2" aria-labelledby="userMenuDropdown">
 							<li>
@@ -254,6 +264,16 @@ const handleSelectEvent = (event) => {
     transform: translateY(-1px);
 }
 
+.disabled-brand {
+    cursor: default;
+    pointer-events: none;
+}
+
+.admin-brand-text {
+    font-size: 1.15rem;
+    letter-spacing: 1px;
+}
+
 .navbar-brand-emblem {
     display: inline-flex;
     align-items: center;
@@ -303,6 +323,29 @@ const handleSelectEvent = (event) => {
     color: var(--gold-accent);
     background-color: rgba(243, 198, 79, 0.08);
     font-weight: 600;
+}
+
+/* Active Nav Link Styling */
+.navbar-main .navbar-nav-link.router-link-active,
+.navbar-main .navbar-nav-link.router-link-exact-active {
+    color: var(--gold-accent) !important;
+    background-color: rgba(243, 198, 79, 0.12) !important;
+    font-weight: 600;
+}
+
+/* Subtle indicator bar underneath active links on large screens */
+@media (min-width: 992px) {
+    .navbar-main .navbar-nav-link.router-link-active::after,
+    .navbar-main .navbar-nav-link.router-link-exact-active::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0.95rem;
+        right: 0.95rem;
+        height: 2px;
+        background-color: var(--gold-accent);
+        border-radius: 2px;
+    }
 }
 
 .navbar-text-gold {
@@ -501,38 +544,7 @@ const handleSelectEvent = (event) => {
     border-radius: 50%;
     color: var(--gold-accent);
     font-size: 1.2rem;
-    transition: background-color 0.25s ease, color 0.25s ease;
-}
-
-.user-status-dot {
-    position: absolute;
-    bottom: 2px;
-    right: 2px;
-    width: 10px;
-    height: 10px;
-    background-color: #10b981;
-    border: 2px solid var(--bg-primary);
-    border-radius: 50%;
-    z-index: 3;
-}
-
-.user-status-ping {
-    position: absolute;
-    bottom: 2px;
-    right: 2px;
-    width: 10px;
-    height: 10px;
-    background-color: #10b981;
-    border-radius: 50%;
-    animation: status-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
-    z-index: 2;
-}
-
-@keyframes status-ping {
-    75%, 100% {
-        transform: scale(2.2);
-        opacity: 0;
-    }
+    transition: background-color 0.25s ease, color 0.2s ease;
 }
 
 .navbar-user-icon-btn:hover,

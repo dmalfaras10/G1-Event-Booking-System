@@ -30,9 +30,16 @@ function handleSubmit (event){
 
     notyf.success("Login Successful");
 
+    const enteredEmail = email.value;
     email.value = "";
     password.value = "";
-    router.push({ path : '/'});    
+
+    // Redirect based on whether the email is admin@mail.com
+    if (enteredEmail === 'admin@mail.com') {
+        router.push({ path: '/adminEventList' });
+    } else {
+        router.push({ path: '/' });
+    }
 }
 </script>
 
