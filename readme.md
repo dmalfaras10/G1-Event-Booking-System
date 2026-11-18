@@ -19,7 +19,7 @@
 10. [Appendices](#12-appendices)
 
 ## 3. Introduction
-- **Overview**: The G1 Event Booking System is a centralized web-based application designed for browsing upcoming concerts and special events, viewing event details, booking tickets online, and enrolling in tiered memberships. It also equips administrators with tools to manage event listings, venues, ticket categories, membership plans, user records, and booking transactions. As a mock system and side project, it demonstrates core concepts of web development, database management, authentication, and booking management within the defined scope.
+- **Overview**: The G1 Event Booking System is a centralized web-based application designed for browsing upcoming concerts and special events, viewing event details, booking tickets online, and enrolling in tiered memberships. It also equips administrators with tools to manage event listings, venues, ticket categories, membership plans, user records, and booking transactions.
 - **Purpose**: 
   - Provide attendees with an organized platform to discover events, check schedules and real-time seat/ticket availability, secure digital tickets, and review booking history.
   - Enhance customer experience through Bronze, Silver, and Gold membership plans offering ticket discounts, presale access, and member-only perks.
@@ -79,9 +79,9 @@
 ## 6. Features
 - **Search & Navigation**: Global search bar and top-level navigation linking the Homepage, Event Listings, About Us, Contact Us, and Membership pages.
 - **User Accounts & Profile Management**: Account registration, login/logout, personal profile editing, password change/recovery, upcoming event checks, and booking history access.
-- **Homepage & Featured Shows**: Hero carousel showcasing featured performances and popular shows, key event highlights (dates, venues, starting prices), quick navigation links, and a Frequently Asked Questions (FAQ) section.
+- **Homepage & Featured Shows**: Hero carousel showcasing featured performances and popular shows, key event highlights (dates, venues, starting prices), and quick navigation links.
 - **Event Listings**: Browsable catalog organized by category and month, supporting keyword search, multi-criteria filtering (location, venue, price, genre), an interactive calendar for date-based discovery, and real-time availability badges.
-- **Event Details & Booking**: Comprehensive event view (description, schedule, venue, performers, rules), ticket tier comparison, seat selection, temporary seat-hold timer, order summary, payment processing, and digital ticket issuance.
+- **Event Details & Booking**: Comprehensive event view (description, schedule, venue, and performers), ticket tier comparison, seat selection, temporary seat-hold timer, order summary, payment processing, and digital ticket issuance.
 - **Contact Us and About Us Page**: Organizational background, service overview, support contact details (email, phone, social media), terms/policies links, and an interactive inquiry/feedback submission form.
 - **Membership and Subscriptions**: Side-by-side comparison of Bronze, Silver, and Gold membership tiers, pricing, and perks (ticket discounts, priority booking, presale access, exclusive offers), plus enrollment, status tracking, and renewal/upgrade management.
 - **Email and Notifications**: Automated email alerts for booking confirmations, payment receipts, digital ticket availability, membership enrollments/renewals, event reminders, schedule changes, and cancellations.
