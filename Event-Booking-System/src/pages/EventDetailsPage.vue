@@ -151,37 +151,13 @@
           <i class="bi bi-exclamation-triangle-fill"></i> All seating tiers are currently sold out.
         </div>
 
-        <!-- Add-ons -->
-        <div class="addons-section">
-          <h4 class="addons-title">Bespoke Concierge Add-ons</h4>
-          <div v-for="(a, i) in addons" :key="i" class="addon-row">
-            <label class="addon-label">
-              <input type="checkbox" v-model="a.selected" class="addon-checkbox">
-              <span class="addon-check"></span>
-              <div class="addon-main">
-                <div class="addon-name">{{ a.name }}</div>
-                <div class="addon-price">+${{ a.price }} / seat</div>
-              </div>
-              <span class="addon-desc">{{ a.desc }}</span>
-            </label>
-          </div>
-        </div>
-
         <!-- Order summary: dynamic line items derived from user selection -->
         <div class="order-summary">
           <div v-if="selectedTier" class="order-line">
             <span class="order-line-name">Pass Allocation ({{ selectedTier.name }} × {{ qty }})</span>
             <span class="order-line-price">${{ tiersSubtotal }}</span>
           </div>
-          <div v-for="a in selectedAddons" :key="a.name" class="order-line">
-            <span class="order-line-name">{{ a.name }} (× {{ qty }})</span>
-            <span class="order-line-price">${{ a.price * qty }}</span>
-          </div>
-          <div v-if="serviceFee > 0" class="order-line">
-            <span class="order-line-name">Concierge &amp; Facilities Surcharge (10%)</span>
-            <span class="order-line-price">${{ serviceFee }}</span>
-          </div>
-          <div v-if="!selectedTier && selectedAddons.length === 0" class="order-empty">
+          <div v-if="!selectedTier" class="order-empty">
             Select a seating tier to see your order summary.
           </div>
           <div class="order-divider"></div>
@@ -207,7 +183,7 @@
           <span class="accom-icon">🎟️</span>
           <div class="accom-text">
             <div class="accom-title">Special Patron Accommodations?</div>
-            <div class="accom-sub">Speak directly with Head Concierge Vivienne at ext. 408 for ADA seating or dietary requests.</div>
+            <div class="accom-sub">Contact our support team for ADA seating or dietary requests.</div>
           </div>
         </div>
       </div>
@@ -239,9 +215,7 @@
       :qty="qty"
       :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
-      :add-ons="selectedAddons"
-      :service-fee="serviceFee"
-      :total="orderTotal"
+       :total="orderTotal"
       :currency="'$'"
       :code-prefix="'G1-NC'"
       @close="step = 'seats'"
@@ -265,11 +239,6 @@ const tiers = ref([
     desc: 'Elevated panoramic sight lines with superior acoustics. Box Front.', badge: 'Most Requested by Guild Benefactors' },
   { id: 'tier_founders', name: 'Private Mezzanine Box', price: 1250, capacity: 6,
     desc: 'Dedicated 4‑Seat Enclave with Private Butler & Dom Pérignon Vintage Pour. Private Salon Anteroom Access.', badge: null },
-])
-
-const addons = ref([
-  { name: 'Post‑Show Green Room Reception', price: 120, desc: 'Meet the artists after the curtain.', selected: false },
-  { name: 'Valet Parking Guarantee (Porte‑Cochère)', price: 45, desc: 'Guaranteed valet at the private entrance.', selected: false },
 ])
 
 // ---- Hero gallery ----
@@ -303,10 +272,7 @@ const MAX_SEATS_PER_ORDER = 6
 const maxQty = computed(() => Math.min(selectedTier.value?.capacity ?? MAX_SEATS_PER_ORDER, MAX_SEATS_PER_ORDER))
 
 const tiersSubtotal = computed(() => (selectedTier.value ? selectedTier.value.price * qty.value : 0))
-const selectedAddons = computed(() => addons.value.filter(a => a.selected))
-const addonsSubtotal = computed(() => selectedAddons.value.reduce((s, a) => s + a.price * qty.value, 0))
-const serviceFee = computed(() => Math.round((tiersSubtotal.value + addonsSubtotal.value) * 0.10))
-const orderTotal = computed(() => tiersSubtotal.value + addonsSubtotal.value + serviceFee.value)
+const orderTotal = computed(() => tiersSubtotal.value)
 
 // ---- Actions ----
 function selectTier(t) {

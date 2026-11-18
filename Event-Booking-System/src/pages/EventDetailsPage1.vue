@@ -6,8 +6,7 @@
       <!-- Hero banner (switches when a thumbnail below is clicked) -->
       <div class="banner">
         <div class="banner-media">
-          <!-- TODO: fill in the src values in heroImages (script) — banner auto-switches on thumb click -->
-          <img v-if="heroImages[activeImage]?.src" :key="activeImage" :src="heroImages[activeImage].src" class="banner-img" alt="">
+          <img v-if="heroImages[activeImage]?.src" :key="activeImage" :src="heroImages[activeImage].src" :alt="heroImages[activeImage].alt || event.name" class="banner-img">
         </div>
         <div class="badge-row">
           <span class="badge badge-magenta">15% Off with Gold VIP</span>
@@ -20,7 +19,7 @@
             <span class="strip-detail">Line-array delay towers · 103 dB(A)</span>
           </div>
           <div class="strip-right">
-            <i class="bi bi-ticket-perforated"></i> 18 Bronze Seats Left
+            <i class="bi bi-ticket-perforated"></i> {{ totalSeatsLeft }} {{ totalSeatsLeft === 1 ? 'Seat' : 'Seats' }} Left
           </div>
         </div>
       </div>
@@ -30,36 +29,28 @@
         <div v-for="(img, i) in heroImages" :key="i"
              :class="['thumb', { active: activeImage === i }]"
              @click="activeImage = i">
-          <!-- TODO: thumbnails render automatically once src is set in heroImages -->
         </div>
       </div>
 
       <span class="event-kicker"><i class="bi bi-moon-stars-fill"></i> Manila After Dark Series // Volume I</span>
-      <h1 class="event-title">
-        Neon Noir Symphony: An Evening of Strings &amp; Synths at The Palace Pool Club
-      </h1>
+      <h1 class="event-title">{{ event.name }}</h1>
 
       <!-- Meta row: 4 quick facts in a single panel -->
       <div class="meta-grid">
         <div class="meta-card">
           <div class="meta-label">Date &amp; Evening</div>
-          <div class="meta-value"><i class="bi bi-calendar-event"></i> Sat, Nov 21, 2026</div>
-          <div class="meta-sub">Gates &amp; pool deck open at 19:00</div>
+          <div class="meta-value"><i class="bi bi-calendar-event"></i> {{ dateLong }}</div>
+          <div class="meta-sub">Gates &amp; pool deck open at {{ doorsOpen }}</div>
         </div>
         <div class="meta-card">
           <div class="meta-label">Show Start</div>
-          <div class="meta-value"><i class="bi bi-clock"></i> 20:00 Sharp</div>
-          <div class="meta-sub">DJ Kaito warm-up from 19:15</div>
+          <div class="meta-value"><i class="bi bi-clock"></i> {{ time24 }} Sharp</div>
+          <div class="meta-sub">DJ Kaito warm-up from {{ warmUpTime }}</div>
         </div>
         <div class="meta-card">
           <div class="meta-label">Venue</div>
-          <div class="meta-value"><i class="bi bi-geo-alt"></i> The Palace Pool Club</div>
-          <div class="meta-sub">BGC, Taguig</div>
-        </div>
-        <div class="meta-card">
-          <div class="meta-label">Dress Code</div>
-          <div class="meta-value"><i class="bi bi-sunglasses"></i> Noir Cocktail</div>
-          <div class="meta-sub">Pool deck closes at 22:00</div>
+          <div class="meta-value"><i class="bi bi-geo-alt"></i> {{ event.venueName }}</div>
+          <div class="meta-sub">{{ event.address }}</div>
         </div>
       </div>
 
@@ -68,9 +59,7 @@
         <div class="section-head">
           <h2 class="section-title">Event Details</h2>
         </div>
-        <p class="lead">
-          An immersive nocturnal audiovisual takeover on the Palace pool deck, where a 24-piece string ensemble and deep melodic synth sets trade the same stage from dusk until the last light leaves the water.
-        </p>
+        <p class="lead">{{ event.description }}</p>
         <p class="lead">
           Headlining the night is DJ Kaito, whose live modular patches are answered in real time by the Nocturne Philharmonic — a single continuous set with no interval, built to move from ambient strings to peak-time house without a break.
         </p>
@@ -82,8 +71,8 @@
           <h2 class="section-title">Featured Artist</h2>
         </div>
         <div class="artist-profile">
-          <div class="artist-name">{{ artist[0] }}</div>
-          <p class="lead">{{ artist[1] }}</p>
+          <div class="artist-name">{{ event.artist }}</div>
+          <p class="lead">{{ event.artistDescription }}</p>
         </div>
       </div>
 
@@ -101,7 +90,7 @@
 
         <!-- Price range -->
         <div class="price-range">
-          <span class="price-big">₱4,800 — ₱12,000</span>
+          <span class="price-big">{{ priceRange }}</span>
           <span class="price-sub">/ attendee</span>
         </div>
         <p class="price-note">All admissions include one Sky-Deck drink voucher and a commemorative wristband.</p>
@@ -145,20 +134,13 @@
           <i class="bi bi-exclamation-triangle-fill"></i> All seating tiers are currently sold out.
         </div>
 
-        <!-- Add-ons -->
+        <!-- Perks included with the selected seating tier -->
         <div class="addons-section">
-          <h4 class="addons-title">Bespoke Concierge Add-ons</h4>
-          <div v-for="(a, i) in addons" :key="i" class="addon-row">
-            <label class="addon-label">
-              <input type="checkbox" v-model="a.selected" class="addon-checkbox">
-              <span class="addon-check"></span>
-              <div class="addon-main">
-                <div class="addon-name">{{ a.name }}</div>
-                <div class="addon-price">+{{ peso(a.price) }} / seat</div>
-              </div>
-              <span class="addon-desc">{{ a.desc }}</span>
-            </label>
-          </div>
+          <h4 class="addons-title">Included With Your Seating</h4>
+          <ul v-if="selectedTier" class="perks-list">
+            <li v-for="perk in selectedTier.perks" :key="perk" class="perk-item">{{ perk }}</li>
+          </ul>
+          <p v-else class="perks-empty">Select a seating tier to see what is included.</p>
         </div>
 
         <!-- Order summary: dynamic line items derived from user selection -->
@@ -167,15 +149,7 @@
             <span class="order-line-name">Pass Allocation ({{ selectedTier.name }} × {{ qty }})</span>
             <span class="order-line-price">{{ peso(tiersSubtotal) }}</span>
           </div>
-          <div v-for="a in selectedAddons" :key="a.name" class="order-line">
-            <span class="order-line-name">{{ a.name }} (× {{ qty }})</span>
-            <span class="order-line-price">{{ peso(a.price * qty) }}</span>
-          </div>
-          <div v-if="serviceFee > 0" class="order-line">
-            <span class="order-line-name">Concierge &amp; Facilities Surcharge (10%)</span>
-            <span class="order-line-price">{{ peso(serviceFee) }}</span>
-          </div>
-          <div v-if="!selectedTier && selectedAddons.length === 0" class="order-empty">
+          <div v-if="!selectedTier" class="order-empty">
             Select a seating tier to see your order summary.
           </div>
           <div class="order-divider"></div>
@@ -201,7 +175,7 @@
           <span class="accom-icon">🎟️</span>
           <div class="accom-text">
             <div class="accom-title">Special Patron Accommodations?</div>
-            <div class="accom-sub">Speak directly with Head Concierge Vivienne at ext. 408 for ADA seating or dietary requests.</div>
+            <div class="accom-sub">Contact our support team for ADA seating or dietary requests.</div>
           </div>
         </div>
       </div>
@@ -233,9 +207,7 @@
       :qty="qty"
       :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
-      :add-ons="selectedAddons"
-      :service-fee="serviceFee"
-      :total="orderTotal"
+       :total="orderTotal"
       :currency="'₱'"
       :code-prefix="'G1-NNS'"
       @close="step = 'seats'"
@@ -249,38 +221,111 @@ import { ref, computed, onUnmounted } from 'vue'
 import BookingCheckout from '../components/BookingCheckout.vue'
 import SeatSelection from '../components/SeatSelection.vue'
 
-const eventId = 'evt-001'
-const eventName = 'Neon Noir Symphony: Manila Edition'
-const venueName = 'The Palace Pool Club'
-const dateLong = 'Sat, Nov 21, 2026'
-const dateShort = 'Sat, Nov 21'
-const time24 = '20:00'
+// ---------------------------------------------------------------------------
+// Mock payload — same shape as the documents in src/data/mockEvents.js (the
+// admin event-listing schema) so this page can later be pointed at a store or
+// API response without rewriting the template:
+//   id, image, name, artist, artistDescription, category, description,
+//   date, status, venueName, address, venueCapacity,
+//   tickets[{ ticketType, ticketDescription, ticketPerks, perksInput, price,
+//             seatSection, seatRow, quantity,
+//             seats[{ seatRow, seatNumber, code, status }] }]
+// ---------------------------------------------------------------------------
+const buildSeats = (row, count, soldIndices = [], holdIndices = []) =>
+  Array.from({ length: count }, (_, i) => {
+    const num = i + 1
+    let status = 'available'
+    if (soldIndices.includes(num)) status = 'sold'
+    else if (holdIndices.includes(num)) status = 'hold'
+    return { seatRow: row, seatNumber: num, code: `${row}-${num}`, status }
+  })
 
-const tiers = ref([
-  { id: 'tier_bronze', name: 'Bronze — Pool Deck General Admission', price: 4800, capacity: 18,
-    desc: 'Standing room around the pool deck with full sight lines to the stage and DJ booth.', badge: null },
-  { id: 'tier_silver', name: 'Silver — Sky-Deck Lounge', price: 7500, capacity: 25,
-    desc: 'Elevated sky-deck with a dedicated bar, lounge seating and a private balcony rail.', badge: 'Includes Sky-Deck Lounge Access' },
-  { id: 'tier_gold', name: 'Gold — Noir VIP Cabana', price: 12000, capacity: 6,
-    desc: 'Private four-seat cabana with butler service, bottle service and a poolside daybed.', badge: 'Most Requested by Patrons' },
-])
+const POSTER_IMAGE = 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=80'
 
-const addons = ref([
-  { name: 'Post-Show Sky-Deck Afterparty', price: 1500, desc: 'DJ Kaito B2B set until 01:00 with the orchestra strings.', selected: false },
-  { name: 'Valet Parking (11th Avenue Porte-Cochère)', price: 500, desc: 'Guaranteed valet at the private BGC entrance.', selected: false },
-])
+const event = {
+  id: 1,
+  image: POSTER_IMAGE,
+  name: 'Neon Noir Symphony: Manila Edition',
+  artist: 'Nocturne Philharmonic & DJ Kaito',
+  artistDescription:
+    'A collaborative powerhouse pairing Manila’s progressive 24-piece chamber orchestra with Tokyo-based electronic producer DJ Kaito — one continuous bill that moves from ambient strings to peak-time house without a break.',
+  category: 'Live Concert',
+  description:
+    'An immersive nocturnal audiovisual takeover on the Palace pool deck, where a 24-piece string ensemble and deep melodic synth sets trade the same stage from dusk until the last light leaves the water.',
+  date: '2026-11-21T20:00:00',
+  status: 'Upcoming',
+  venueName: 'The Palace Pool Club',
+  address: 'BGC, Taguig',
+  venueCapacity: 120,
+  tickets: [
+    {
+      ticketType: 'Sky-Deck VIP',
+      ticketDescription: 'Includes Sky-Deck Lounge Access and priority bar service.',
+      ticketPerks: ['Sky-Deck Lounge Access', 'Priority Bar Lane'],
+      perksInput: 'Sky-Deck Lounge Access, Priority Bar Lane',
+      price: 4800.00,
+      seatSection: 'VIP Deck',
+      seatRow: 'A',
+      quantity: 20,
+      seats: buildSeats('A', 20, [1, 2, 3], [4, 5])
+    },
+    {
+      ticketType: 'General Admission',
+      ticketDescription: 'Standard floor access to the audiovisual zone.',
+      ticketPerks: ['Standard Entry'],
+      perksInput: 'Standard Entry',
+      price: 2500.00,
+      seatSection: 'Poolside GA',
+      seatRow: 'B',
+      quantity: 50,
+      seats: buildSeats('B', 50, [1, 2, 6, 7, 8, 9, 10], [11, 12, 13])
+    }
+  ]
+}
 
-// ---- Hero gallery ----
-// TODO: put your image paths here — src '' keeps the gradient placeholder until filled in.
+// ---- Hero gallery (first slide is the event poster) ----
 const heroImages = ref([
-  { src: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=80', alt: 'Palace pool deck at night' },
-  { src: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=80', alt: 'Crowd under the neon rig' },
-  { src: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=80', alt: 'String section on stage' },
-  { src: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=80', alt: 'Sky-deck cabana view' },
+  { src: POSTER_IMAGE, alt: 'Palace pool deck at night' },
+  { src: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=900&q=80', alt: 'Crowd under the neon rig' },
+  { src: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80', alt: 'Light rig over the pool deck' },
+  { src: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80', alt: 'String section on stage' },
 ])
 const activeImage = ref(0)
 
-const artist = ref(['DJ Kaito', 'A fixture of the Tokyo underground, Kaito is known for live modular sets that dissolve the line between DJ booth and orchestra pit. His 2025 Boiler Room Manila set was called “a sunrise in the middle of the night.”'])
+// ---- Derived event facts (everything below reads from `event`) ----
+const hhmm = (d) => `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+
+const eventId = 'evt-' + String(event.id).padStart(3, '0')
+const eventName = event.name
+const venueName = event.venueName
+
+const eventDate = new Date(event.date)
+const dateLong = eventDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
+const dateShort = eventDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+const time24 = hhmm(eventDate)
+const doorsOpen = hhmm(new Date(eventDate.getTime() - 60 * 60 * 1000))
+const warmUpTime = hhmm(new Date(eventDate.getTime() - 45 * 60 * 1000))
+
+// ---- Ticket tiers --------------------------------------------------------
+// The booking UI (and SeatSelection) speak in "tiers" with id/name/price/
+// capacity, while the payload speaks in "tickets" with seats[]. `capacity` is
+// the number of seats still on sale, derived from the seat statuses so sold or
+// held seats in the mock data immediately shrink the allocation.
+const seatsAvailable = (ticket) => (ticket.seats || []).filter(s => s.status === 'available').length
+
+const tiers = computed(() =>
+  event.tickets.map((ticket, i) => ({
+    id: `tier_${i + 1}`,
+    name: ticket.ticketType,
+    price: Number(ticket.price) || 0,
+    capacity: seatsAvailable(ticket),
+    desc: ticket.ticketDescription,
+    badge: (ticket.ticketPerks && ticket.ticketPerks[0]) || null,
+    seatSection: ticket.seatSection,
+    seatRow: ticket.seatRow,
+    perks: ticket.ticketPerks || []
+  }))
+)
 
 // ---- Booking state ----
 const step = ref('select')
@@ -301,13 +346,20 @@ const MAX_SEATS_PER_ORDER = 6
 const maxQty = computed(() => Math.min(selectedTier.value?.capacity ?? MAX_SEATS_PER_ORDER, MAX_SEATS_PER_ORDER))
 
 const tiersSubtotal = computed(() => (selectedTier.value ? selectedTier.value.price * qty.value : 0))
-const selectedAddons = computed(() => addons.value.filter(a => a.selected))
-const addonsSubtotal = computed(() => selectedAddons.value.reduce((s, a) => s + a.price * qty.value, 0))
-const serviceFee = computed(() => Math.round((tiersSubtotal.value + addonsSubtotal.value) * 0.10))
-const orderTotal = computed(() => tiersSubtotal.value + addonsSubtotal.value + serviceFee.value)
+const orderTotal = computed(() => tiersSubtotal.value)
 
 // ---- Formatters ----
 const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')
+
+// ---- Derived pricing & availability (all read from the ticket tiers) ----
+const priceRange = computed(() => {
+  const prices = tiers.value.map(t => t.price).filter(p => p > 0)
+  if (!prices.length) return '—'
+  const low = Math.min(...prices)
+  const high = Math.max(...prices)
+  return low === high ? peso(low) : `${peso(low)} — ${peso(high)}`
+})
+const totalSeatsLeft = computed(() => tiers.value.reduce((sum, t) => sum + t.capacity, 0))
 
 // ---- Actions ----
 function selectTier(t) {
@@ -342,7 +394,6 @@ function resetFlow() {
   selectedSeats.value = []
   selectedTierId.value = null
   qty.value = 1
-  addons.value.forEach(a => a.selected = false)
   holdExpired.value = false
 }
 </script>

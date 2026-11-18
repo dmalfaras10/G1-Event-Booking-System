@@ -38,8 +38,18 @@ const adminEventGetSeatStatusClass = (status) => {
         <span class="d-flex align-items-center gap-1"><i class="rounded-circle admin-event-legend-dot-blocked d-inline-block admin-event-dot-size"></i> Blocked</span>
       </div>
 
-      <div class="modal-body p-4 overflow-y-auto d-flex flex-column gap-3">
-        <div v-for="(ticket, tIdx) in event.tickets" :key="tIdx" class="p-3 rounded-3 admin-event-stage-tier-card">
+      <div
+        class="modal-body p-4 overflow-y-auto admin-event-seat-map-body"
+        :class="`admin-event-seat-map-tier-count-${event.tickets.length}`"
+      >
+        <div
+          v-for="(ticket, tIdx) in event.tickets"
+          :key="tIdx"
+          :class="[
+            'p-3 rounded-3 admin-event-stage-tier-card',
+            `admin-event-seat-map-tier-index-${tIdx}`
+          ]"
+        >
           <div class="d-flex justify-content-between align-items-center mb-2">
             <div>
               <strong class="admin-event-title-text">{{ ticket.ticketType }}</strong>

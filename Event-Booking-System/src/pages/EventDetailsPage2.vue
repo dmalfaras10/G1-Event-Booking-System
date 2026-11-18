@@ -56,11 +56,6 @@
           <div class="meta-value"><i class="bi bi-geo-alt"></i> Samsung Performing Arts Theater</div>
           <div class="meta-sub">Makati City</div>
         </div>
-        <div class="meta-card">
-          <div class="meta-label">Dress Code</div>
-          <div class="meta-value"><i class="bi bi-person-badge"></i> Smart Casual</div>
-          <div class="meta-sub">Unreserved cabaret seating</div>
-        </div>
       </div>
 
       <!-- Program notes & repertoire -->
@@ -101,7 +96,7 @@
 
         <!-- Price range -->
         <div class="price-range">
-          <span class="price-big">₱3,600 — ₱9,500</span>
+          <span class="price-big">{{ priceRangeLabel }}</span>
           <span class="price-sub">/ attendee</span>
         </div>
         <p class="price-note">All admissions include one interval drink voucher and a printed set list.</p>
@@ -145,20 +140,13 @@
           <i class="bi bi-exclamation-triangle-fill"></i> All seating tiers are currently sold out.
         </div>
 
-        <!-- Add-ons -->
+        <!-- Perks included with the selected seating tier -->
         <div class="addons-section">
-          <h4 class="addons-title">Bespoke Concierge Add-ons</h4>
-          <div v-for="(a, i) in addons" :key="i" class="addon-row">
-            <label class="addon-label">
-              <input type="checkbox" v-model="a.selected" class="addon-checkbox">
-              <span class="addon-check"></span>
-              <div class="addon-main">
-                <div class="addon-name">{{ a.name }}</div>
-                <div class="addon-price">+{{ peso(a.price) }} / seat</div>
-              </div>
-              <span class="addon-desc">{{ a.desc }}</span>
-            </label>
-          </div>
+          <h4 class="addons-title">Included With Your Seating</h4>
+          <ul v-if="selectedTier" class="perks-list">
+            <li v-for="perk in selectedTier.perks" :key="perk" class="perk-item">{{ perk }}</li>
+          </ul>
+          <p v-else class="perks-empty">Select a seating tier to see what is included.</p>
         </div>
 
         <!-- Order summary: dynamic line items derived from user selection -->
@@ -167,15 +155,7 @@
             <span class="order-line-name">Pass Allocation ({{ selectedTier.name }} × {{ qty }})</span>
             <span class="order-line-price">{{ peso(tiersSubtotal) }}</span>
           </div>
-          <div v-for="a in selectedAddons" :key="a.name" class="order-line">
-            <span class="order-line-name">{{ a.name }} (× {{ qty }})</span>
-            <span class="order-line-price">{{ peso(a.price * qty) }}</span>
-          </div>
-          <div v-if="serviceFee > 0" class="order-line">
-            <span class="order-line-name">Concierge &amp; Facilities Surcharge (10%)</span>
-            <span class="order-line-price">{{ peso(serviceFee) }}</span>
-          </div>
-          <div v-if="!selectedTier && selectedAddons.length === 0" class="order-empty">
+          <div v-if="!selectedTier" class="order-empty">
             Select a seating tier to see your order summary.
           </div>
           <div class="order-divider"></div>
@@ -201,7 +181,7 @@
           <span class="accom-icon">🎟️</span>
           <div class="accom-text">
             <div class="accom-title">Special Patron Accommodations?</div>
-            <div class="accom-sub">Speak directly with Head Concierge Vivienne at ext. 408 for ADA seating or dietary requests.</div>
+            <div class="accom-sub">Contact our support team for ADA seating or dietary requests.</div>
           </div>
         </div>
       </div>
@@ -233,9 +213,7 @@
       :qty="qty"
       :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
-      :add-ons="selectedAddons"
-      :service-fee="serviceFee"
-      :total="orderTotal"
+       :total="orderTotal"
       :currency="'₱'"
       :code-prefix="'G1-SHR'"
       @close="step = 'seats'"
@@ -249,26 +227,68 @@ import { ref, computed, onUnmounted } from 'vue'
 import BookingCheckout from '../components/BookingCheckout.vue'
 import SeatSelection from '../components/SeatSelection.vue'
 
-const eventId = 'evt-002'
+// Event data based on mockEvents.js structure (Event ID: 2)
+const eventId = 2
 const eventName = 'Solitary Harmonics: Acoustic Piano Night'
-const venueName = 'Samsung Performing Arts Theater'
+const artist = ref([
+  'Nils Frahm & Guests',
+  'Acclaimed Berlin composer and multi-instrumentalist renowned for bridging classical piano intimacy with tactile analog synthesis.'
+])
+const artistDescription = 'Acclaimed Berlin composer and multi-instrumentalist renowned for bridging classical piano intimacy with tactile analog synthesis.'
+const category = 'Classical & Gala'
+const description = 'An intimate three-hour improvisational performance on grand upright piano and vintage analog modular synthesizers.'
 const dateLong = 'Sat, Nov 28, 2026'
 const dateShort = 'Sat, Nov 28'
 const time24 = '19:30'
+const status = 'Upcoming'
 
+// Venue information
+const venueName = 'Samsung Performing Arts Theater'
+const address = 'Makati City'
+const venueCapacity = 150
+
+// Build seats function (matching mockEvents.js)
+const buildSeats = (row, count, soldIndices = [], holdIndices = []) => {
+  return Array.from({ length: count }, (_, i) => {
+    const num = i + 1
+    let seatStatus = 'available'
+    if (soldIndices.includes(num)) seatStatus = 'sold'
+    else if (holdIndices.includes(num)) seatStatus = 'hold'
+    return {
+      seatRow: row,
+      seatNumber: num,
+      code: `${row}-${num}`,
+      status: seatStatus
+    }
+  })
+}
+
+// Ticket tiers based on mockEvents.js structure
 const tiers = ref([
-  { id: 'tier_bronze', name: 'Bronze — Orchestra Cabaret', price: 3600, capacity: 30,
-    desc: 'Unreserved cabaret seating on the flat, closest to the piano.', badge: null },
-  { id: 'tier_silver', name: 'Silver — Mezzanine Reserved', price: 6000, capacity: 20,
-    desc: 'Reserved mezzanine seat with a clear sight line to the keyboard.', badge: 'Best Value' },
-  { id: 'tier_gold', name: 'Gold — Front Box & Green Room', price: 9500, capacity: 8,
-    desc: 'Front box for two, with post-show green-room access and a signed programme.', badge: 'Includes Green Room Access' },
+  {
+    id: 'tier_1',
+    ticketType: 'Orchestra Center',
+    name: 'Orchestra Center',
+    ticketDescription: 'Direct acoustic sweet spot with unobstructed stage view.',
+    desc: 'Direct acoustic sweet spot with unobstructed stage view.',
+    ticketPerks: ['Acoustic Check Access', 'Program Booklet'],
+    perks: ['Acoustic Check Access', 'Program Booklet'],
+    perksInput: 'Acoustic Check Access, Program Booklet',
+    price: 3600.00,
+    seatSection: 'Orchestra',
+    seatRow: 'C',
+    quantity: 40,
+    seats: buildSeats('C', 40, [1, 2, 10, 11], [5, 6]),
+    capacity: 34,
+    badge: null
+  }
 ])
 
-const addons = ref([
-  { name: 'Post-Show Green Room Reception', price: 1200, desc: 'Meet the artists after the curtain.', selected: false },
-  { name: 'Coat Check & Cloakroom Priority', price: 250, desc: 'Priority cloakroom for the interval.', selected: false },
-])
+// Capacity is the number of seats still bookable, so the panel's maxQty and the
+// SeatSelection map can never disagree with the seat data.
+tiers.value.forEach(t => {
+  t.capacity = t.seats.filter(s => s.status === 'available').length
+})
 
 // ---- Hero gallery ----
 // TODO: put your image paths here — src '' keeps the gradient placeholder until filled in.
@@ -279,8 +299,6 @@ const heroImages = ref([
   { src: 'https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?auto=format&fit=crop&w=900&q=80', alt: 'Cabaret seating in the round' },
 ])
 const activeImage = ref(0)
-
-const artist = ref(['Nils Frahm', 'A pianist and producer whose felt-damped piano recordings for Erased Tapes have made him one of the most streamed classical artists in the world, and one of the least predictable live.'])
 
 // ---- Booking state ----
 const step = ref('select')
@@ -294,17 +312,21 @@ const selectedTier = computed(() => tiers.value.find(t => t.id === selectedTierI
 const allSoldOut = computed(() => tiers.value.every(t => t.capacity === 0))
 const canCheckout = computed(() => !!selectedTier.value && qty.value > 0 && selectedTier.value.capacity > 0 && !holdExpired.value)
 
+// Price headline derived from the tiers, so it can't drift from the data.
+const priceRangeLabel = computed(() => {
+  const prices = tiers.value.map(t => t.price)
+  if (!prices.length) return '—'
+  const min = Math.min(...prices)
+  const max = Math.max(...prices)
+  return min === max ? peso(min) : `${peso(min)} — ${peso(max)}`
+})
+
 // ---- Attendees ----
-// Per-order cap from the UI note. The effective max is the smaller of the tier's
-// remaining capacity and this per-order cap, so the note and the +/- buttons agree.
 const MAX_SEATS_PER_ORDER = 6
 const maxQty = computed(() => Math.min(selectedTier.value?.capacity ?? MAX_SEATS_PER_ORDER, MAX_SEATS_PER_ORDER))
 
 const tiersSubtotal = computed(() => (selectedTier.value ? selectedTier.value.price * qty.value : 0))
-const selectedAddons = computed(() => addons.value.filter(a => a.selected))
-const addonsSubtotal = computed(() => selectedAddons.value.reduce((s, a) => s + a.price * qty.value, 0))
-const serviceFee = computed(() => Math.round((tiersSubtotal.value + addonsSubtotal.value) * 0.10))
-const orderTotal = computed(() => tiersSubtotal.value + addonsSubtotal.value + serviceFee.value)
+const orderTotal = computed(() => tiersSubtotal.value)
 
 // ---- Formatters ----
 const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')
@@ -342,7 +364,6 @@ function resetFlow() {
   selectedSeats.value = []
   selectedTierId.value = null
   qty.value = 1
-  addons.value.forEach(a => a.selected = false)
   holdExpired.value = false
 }
 </script>

@@ -15,12 +15,12 @@
         </div>
         <div class="banner-strip">
           <div class="strip-left">
-            <i class="bi bi-vinyl"></i> Solaire Theatre — Main Hall
+            <i class="bi bi-vinyl"></i> {{ venueName }} — {{ address }}
             <span class="strip-sep">|</span>
-            <span class="strip-detail">Line array · 1,400 seats</span>
+            <span class="strip-detail">{{ event.category }}</span>
           </div>
           <div class="strip-right">
-            <i class="bi bi-ticket-perforated"></i> 95 Seats Available
+            <i class="bi bi-ticket-perforated"></i> {{ totalAvailable }} Seats Available
           </div>
         </div>
       </div>
@@ -35,31 +35,24 @@
       </div>
 
       <span class="event-kicker"><i class="bi bi-stars"></i> Manila Velvet Sessions // Volume V</span>
-      <h1 class="event-title">
-        Velvet Indie Sessions: Where Time Goes — The Coastal Drift Collective at Solaire Theatre
-      </h1>
+      <h1 class="event-title">{{ eventTitle }}</h1>
 
       <!-- Meta row: 4 quick facts in a single panel -->
       <div class="meta-grid">
         <div class="meta-card">
           <div class="meta-label">Date &amp; Evening</div>
-          <div class="meta-value"><i class="bi bi-calendar-event"></i> Sat, Dec 19, 2026</div>
+          <div class="meta-value"><i class="bi bi-calendar-event"></i> {{ dateLong }}</div>
           <div class="meta-sub">Merch booth opens at 18:00</div>
         </div>
         <div class="meta-card">
           <div class="meta-label">Show Start</div>
-          <div class="meta-value"><i class="bi bi-clock"></i> 20:00 Sharp</div>
+          <div class="meta-value"><i class="bi bi-clock"></i> {{ time24 }} Sharp</div>
           <div class="meta-sub">Support act from 19:15</div>
         </div>
         <div class="meta-card">
           <div class="meta-label">Venue</div>
-          <div class="meta-value"><i class="bi bi-geo-alt"></i> Solaire Theatre</div>
-          <div class="meta-sub">Pasay City</div>
-        </div>
-        <div class="meta-card">
-          <div class="meta-label">Dress Code</div>
-          <div class="meta-value"><i class="bi bi-person-badge"></i> Come As You Are</div>
-          <div class="meta-sub">Standing floor + seated balcony</div>
+          <div class="meta-value"><i class="bi bi-geo-alt"></i> {{ venueName }}</div>
+          <div class="meta-sub">{{ address }}</div>
         </div>
       </div>
 
@@ -68,9 +61,7 @@
         <div class="section-head">
           <h2 class="section-title">Event Details</h2>
         </div>
-        <p class="lead">
-          Warm analog guitars and nostalgic indie rock anthems, performed live in an acoustically engineered theatre by a nine-piece collective that has spent three years turning Where Time Goes into a full-band record.
-        </p>
+        <p class="lead">{{ event.description }}</p>
         <p class="lead">
           The Coastal Drift Collective bring a string quartet for the second set, a pedal steel player from Cebu, and a support slot from Paper Lanterns — all of it mixed for a seated room rather than a festival field.
         </p>
@@ -101,7 +92,7 @@
 
         <!-- Price range -->
         <div class="price-range">
-          <span class="price-big">₱3,000 — ₱7,500</span>
+          <span class="price-big">{{ priceRangeLabel }}</span>
           <span class="price-sub">/ attendee</span>
         </div>
         <p class="price-note">All admissions include one drink voucher and a digital programme.</p>
@@ -145,20 +136,13 @@
           <i class="bi bi-exclamation-triangle-fill"></i> All seating tiers are currently sold out.
         </div>
 
-        <!-- Add-ons -->
+        <!-- Perks included with the selected seating tier -->
         <div class="addons-section">
-          <h4 class="addons-title">Bespoke Concierge Add-ons</h4>
-          <div v-for="(a, i) in addons" :key="i" class="addon-row">
-            <label class="addon-label">
-              <input type="checkbox" v-model="a.selected" class="addon-checkbox">
-              <span class="addon-check"></span>
-              <div class="addon-main">
-                <div class="addon-name">{{ a.name }}</div>
-                <div class="addon-price">+{{ peso(a.price) }} / seat</div>
-              </div>
-              <span class="addon-desc">{{ a.desc }}</span>
-            </label>
-          </div>
+          <h4 class="addons-title">Included With Your Seating</h4>
+          <ul v-if="selectedTier" class="perks-list">
+            <li v-for="perk in selectedTier.perks" :key="perk" class="perk-item">{{ perk }}</li>
+          </ul>
+          <p v-else class="perks-empty">Select a seating tier to see what is included.</p>
         </div>
 
         <!-- Order summary: dynamic line items derived from user selection -->
@@ -167,15 +151,7 @@
             <span class="order-line-name">Pass Allocation ({{ selectedTier.name }} × {{ qty }})</span>
             <span class="order-line-price">{{ peso(tiersSubtotal) }}</span>
           </div>
-          <div v-for="a in selectedAddons" :key="a.name" class="order-line">
-            <span class="order-line-name">{{ a.name }} (× {{ qty }})</span>
-            <span class="order-line-price">{{ peso(a.price * qty) }}</span>
-          </div>
-          <div v-if="serviceFee > 0" class="order-line">
-            <span class="order-line-name">Concierge &amp; Facilities Surcharge (10%)</span>
-            <span class="order-line-price">{{ peso(serviceFee) }}</span>
-          </div>
-          <div v-if="!selectedTier && selectedAddons.length === 0" class="order-empty">
+          <div v-if="!selectedTier" class="order-empty">
             Select a seating tier to see your order summary.
           </div>
           <div class="order-divider"></div>
@@ -201,7 +177,7 @@
           <span class="accom-icon">🎟️</span>
           <div class="accom-text">
             <div class="accom-title">Special Patron Accommodations?</div>
-            <div class="accom-sub">Speak directly with Head Concierge Vivienne at ext. 408 for ADA seating or dietary requests.</div>
+            <div class="accom-sub">Contact our support team for ADA seating or dietary requests.</div>
           </div>
         </div>
       </div>
@@ -233,9 +209,7 @@
       :qty="qty"
       :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
-      :add-ons="selectedAddons"
-      :service-fee="serviceFee"
-      :total="orderTotal"
+       :total="orderTotal"
       :currency="'₱'"
       :code-prefix="'G1-VIS'"
       @close="step = 'seats'"
@@ -249,38 +223,106 @@ import { ref, computed, onUnmounted } from 'vue'
 import BookingCheckout from '../components/BookingCheckout.vue'
 import SeatSelection from '../components/SeatSelection.vue'
 
-const eventId = 'evt-005'
-const eventName = 'Velvet Indie Sessions: Where Time Goes'
-const venueName = 'Solaire Theatre'
-const dateLong = 'Sat, Dec 19, 2026'
-const dateShort = 'Sat, Dec 19'
-const time24 = '20:00'
+// ---- Seat seed helper (mirrors src/data/mockEvents.js) ----
+// Builds a full seats[] array for a ticket. Seats listed in `soldIndices` are
+// marked sold, `holdIndices` are on hold, the rest stay available.
+const buildSeats = (row, count, soldIndices = [], holdIndices = []) => {
+  return Array.from({ length: count }, (_, i) => {
+    const num = i + 1
+    let status = 'available'
+    if (soldIndices.includes(num)) status = 'sold'
+    else if (holdIndices.includes(num)) status = 'hold'
+    return {
+      seatRow: row,
+      seatNumber: num,
+      code: `${row}-${num}`,
+      status
+    }
+  })
+}
 
-const tiers = ref([
-  { id: 'tier_bronze', name: 'Bronze — Balcony', price: 3000, capacity: 40,
-    desc: 'Unreserved balcony seating with a full view of the stage.', badge: null },
-  { id: 'tier_silver', name: 'Silver — Stalls Reserved', price: 5000, capacity: 30,
-    desc: 'Reserved stalls seat, centre block, closest to the barricade.', badge: 'Best Value' },
-  { id: 'tier_gold', name: 'Gold — Front Barricade + Soundcheck', price: 7500, capacity: 6,
-    desc: 'Front-row barricade pass with early entry to the 17:30 soundcheck.', badge: 'Includes Soundcheck Access' },
-])
+// ---- Event record (same shape as src/data/mockEvents.js) ----
+// id, image, name, artist, artistDescription, category, description, date,
+// status, venueName, address, venueCapacity, and a tickets[] array whose entries
+// carry ticketType, ticketDescription, ticketPerks, perksInput, price,
+// seatSection, seatRow, quantity and a full seats[] array.
+const event = {
+  id: 5,
+  image: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=900&q=80',
+  name: 'Velvet Indie Sessions: Where Time Goes',
+  artist: 'The Coastal Drift Collective',
+  artistDescription: 'Five-piece indie dream-pop and alt-rock band known for lush, reverb-drenched guitar arrangements, pedal-steel textures and poetic storytelling.',
+  category: 'Live Concert',
+  description: 'Warm analog guitars and nostalgic indie rock anthems performed live in an acoustically engineered theatre, with a string quartet joining the ensemble for the second set.',
+  date: '2026-12-19T20:00:00',
+  status: 'Upcoming',
+  venueName: 'Solaire Theatre',
+  address: 'Pasay City',
+  venueCapacity: 160,
+  tickets: [
+    {
+      ticketType: 'Mezzanine Circle',
+      ticketDescription: 'Great sightlines with access to the vinyl merch booth area.',
+      ticketPerks: ['Early Merch Booth Access', 'Signed Poster Voucher'],
+      perksInput: 'Early Merch Booth Access, Signed Poster Voucher',
+      price: 3000.00,
+      seatSection: 'Mezzanine',
+      seatRow: 'M',
+      quantity: 50,
+      seats: buildSeats('M', 50, [1, 2, 3], [4, 5, 6])
+    }
+  ]
+}
 
-const addons = ref([
-  { name: 'Soundcheck Early Entry', price: 900, desc: 'Watch the 17:30 soundcheck from the barricade.', selected: false },
-  { name: 'Signed Vinyl (Where Time Goes)', price: 1400, desc: 'Hand-numbered LP signed by the band, collected at the merch booth.', selected: false },
-])
+// ---- Values derived from the event record ----
+const eventId = 'evt-' + String(event.id).padStart(3, '0')
+const eventName = event.name
+const venueName = event.venueName
+const address = event.address
+
+// Parse the ISO date once so every date/time label stays in sync with `event`.
+const eventDate = new Date(event.date)
+const dateLong = eventDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
+const dateShort = eventDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+const time24 = eventDate.toTimeString().slice(0, 5)
+
+// Booking tiers are projected from event.tickets. `capacity` is the number of
+// seats still available (status === 'available') so the panel, the attendee
+// stepper and the seat map all agree on what is left to sell.
+const tiers = ref(event.tickets.map((t, i) => ({
+  id: 'tier_' + t.seatSection.toLowerCase().replace(/[^a-z]+/g, '_'),
+  name: t.ticketType,
+  price: t.price,
+  capacity: t.seats.filter(s => s.status === 'available').length,
+  desc: t.ticketDescription,
+  perks: t.ticketPerks || [],
+  badge: /soundcheck/i.test(t.ticketType) ? 'Includes Soundcheck Access' : (i === 1 ? 'Best Value' : null),
+})))
+
+const eventTitle = `${event.name} — ${event.artist} at ${event.venueName}`
+const totalAvailable = computed(() => tiers.value.reduce((sum, t) => sum + t.capacity, 0))
 
 // ---- Hero gallery ----
 // TODO: put your image paths here — src '' keeps the gradient placeholder until filled in.
 const heroImages = ref([
-  { src: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=900&q=80', alt: 'Band on a theatre stage' },
-  { src: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=900&q=80', alt: 'Guitarist under warm stage light' },
-  { src: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=900&q=80', alt: 'Crowd in the stalls' },
-  { src: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=900&q=80', alt: 'Vinyl merch booth in the lobby' },
+  { src: event.image, alt: `${event.artist} on the ${event.venueName} stage` },
+  { src: event.image, alt: 'Guitarist under warm stage light' },
+  { src: event.image, alt: 'The stalls and balcony from the sound desk' },
+  { src: event.image, alt: 'Vinyl merch booth in the lobby' },
 ])
 const activeImage = ref(0)
 
-const artist = ref(['Elias Manalo', 'Elias writes the songs, sings them, and plays the loudest guitar in the room — a Cebu-raised songwriter whose Where Time Goes turned a bedroom demo into a national tour.'])
+const artist = ref([event.artist, event.artistDescription])
+
+const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')
+
+// Price range label shown in the booking header, derived from the tier prices.
+const priceRangeLabel = computed(() => {
+  const prices = tiers.value.map(t => t.price)
+  const min = Math.min(...prices)
+  const max = Math.max(...prices)
+  return min === max ? peso(min) : `${peso(min)} — ${peso(max)}`
+})
 
 // ---- Booking state ----
 const step = ref('select')
@@ -301,13 +343,7 @@ const MAX_SEATS_PER_ORDER = 6
 const maxQty = computed(() => Math.min(selectedTier.value?.capacity ?? MAX_SEATS_PER_ORDER, MAX_SEATS_PER_ORDER))
 
 const tiersSubtotal = computed(() => (selectedTier.value ? selectedTier.value.price * qty.value : 0))
-const selectedAddons = computed(() => addons.value.filter(a => a.selected))
-const addonsSubtotal = computed(() => selectedAddons.value.reduce((s, a) => s + a.price * qty.value, 0))
-const serviceFee = computed(() => Math.round((tiersSubtotal.value + addonsSubtotal.value) * 0.10))
-const orderTotal = computed(() => tiersSubtotal.value + addonsSubtotal.value + serviceFee.value)
-
-// ---- Formatters ----
-const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')
+const orderTotal = computed(() => tiersSubtotal.value)
 
 // ---- Actions ----
 function selectTier(t) {
@@ -342,7 +378,6 @@ function resetFlow() {
   selectedSeats.value = []
   selectedTierId.value = null
   qty.value = 1
-  addons.value.forEach(a => a.selected = false)
   holdExpired.value = false
 }
 </script>
