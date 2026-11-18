@@ -351,9 +351,7 @@ const getStatusBadgeClass = (status) => {
         </div>
       </div>
 
-      <!-- =============================================================== -->
-      <!-- TAB 1: SUBSCRIPTION_PLAN TABLE                                  -->
-      <!-- =============================================================== -->
+      <!-- TAB 1: SUBSCRIPTION_PLAN TABLE -->
       <div v-if="activeTab === 'plans'">
         <div v-if="filteredPlans.length > 0">
           <div class="card rounded-4 overflow-hidden shadow-lg admin-event-table-container-card mb-3">
@@ -402,7 +400,7 @@ const getStatusBadgeClass = (status) => {
                     </td>
 
                     <!-- Included Perks -->
-                    <td class="py-3 px-3" style="max-width: 340px;">
+                    <td class="py-3 px-3 admin-perks-cell">
                       <div class="p-2 rounded-3 d-flex flex-wrap gap-1 admin-event-ticket-tier-inner-card">
                         <span
                           v-for="(perk, idx) in parsePerksList(plan.subscriptionPerks)"
@@ -434,7 +432,7 @@ const getStatusBadgeClass = (status) => {
 
                     <!-- Actions -->
                     <td class="py-3 px-3 pe-4 text-center">
-                      <div class="d-flex flex-column gap-2 align-items-center mx-auto" style="width: 110px;">
+                      <div class="d-flex flex-column gap-2 align-items-center mx-auto admin-action-col-width">
                         <button
                           class="btn btn-sm w-100 py-1 fs-8 admin-event-action-edit-btn"
                           @click="openPlanModal(plan)"
@@ -473,9 +471,7 @@ const getStatusBadgeClass = (status) => {
         </div>
       </div>
 
-      <!-- =============================================================== -->
       <!-- TAB 2: USER_SUBSCRIPTIONS TABLE (TOGGLE STATUS & REMOVE ONLY)   -->
-      <!-- =============================================================== -->
       <div v-else>
         <div v-if="filteredUserSubscriptions.length > 0">
           <div class="card rounded-4 overflow-hidden shadow-lg admin-event-table-container-card mb-3">
@@ -549,7 +545,7 @@ const getStatusBadgeClass = (status) => {
 
                     <!-- Actions: Toggle Status & Remove Only -->
                     <td class="py-3 px-3 pe-4 text-center">
-                      <div class="d-flex flex-column gap-2 align-items-center mx-auto" style="width: 100px;">
+                      <div class="d-flex flex-column gap-2 align-items-center mx-auto admin-subscriber-action-col-width">
                         <button
                           class="btn btn-sm w-100 py-1 fs-8 admin-event-action-edit-btn"
                           @click="cycleUserSubStatus(sub)"
@@ -621,9 +617,7 @@ const getStatusBadgeClass = (status) => {
       </nav>
     </div>
 
-    <!-- =============================================================== -->
-    <!-- MODAL 1: CREATE / EDIT SUBSCRIPTION_PLAN                        -->
-    <!-- =============================================================== -->
+    <!-- MODAL 1: CREATE / EDIT SUBSCRIPTION_PLAN -->
     <div v-if="isPlanModalOpen" class="admin-modal-backdrop" @click.self="closePlanModal">
       <div class="card rounded-4 p-4 shadow-lg admin-modal-card">
         <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary border-opacity-25">
@@ -708,15 +702,13 @@ const getStatusBadgeClass = (status) => {
       </div>
     </div>
 
-    <!-- =============================================================== -->
-    <!-- MODAL 2: DELETE CONFIRMATION (PLANS OR SUBSCRIBERS)             -->
-    <!-- =============================================================== -->
+    <!-- MODAL 2: DELETE CONFIRMATION (PLANS OR SUBSCRIBERS) -->
     <div
       v-if="planToDelete || subscriberToDelete"
       class="admin-modal-backdrop"
       @click.self="planToDelete = null; subscriberToDelete = null"
     >
-      <div class="card rounded-4 p-4 shadow-lg admin-modal-card" style="max-width: 440px;">
+      <div class="card rounded-4 p-4 shadow-lg admin-modal-card admin-delete-modal-card">
         <h5 class="fw-bold mb-2 admin-event-title-text">Confirm Removal</h5>
 
         <p v-if="planToDelete" class="small admin-event-dashboard-subtitle mb-3">
@@ -752,25 +744,3 @@ const getStatusBadgeClass = (status) => {
     </div>
   </div>
 </template>
-
-<style scoped>
-.admin-modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  z-index: 1060;
-}
-
-.admin-modal-card {
-  width: 100%;
-  max-width: 600px;
-  background-color: var(--bg-surface, #141416);
-  border: 1px solid rgba(243, 198, 79, 0.35);
-  color: var(--text-main, #f4f4f5);
-}
-</style>

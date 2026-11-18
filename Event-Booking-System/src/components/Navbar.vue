@@ -75,14 +75,9 @@ const handleSelectEvent = (event) => {
 					</span>
 				</router-link>
 
-				<!-- 3. User Dropdown / Auth on Right -->
-				<div class="d-flex align-items-center gap-2">
-					<template v-if="!user.email">
-						<router-link to="/login" class="btn btn-sm navbar-btn-login px-2 py-1">
-							<i class="bi bi-box-arrow-in-right"></i>
-						</router-link>
-					</template>
-					<div class="dropdown" v-else>
+				<!-- 3. User Dropdown / Auth on Right (Only shown when logged in on mobile/tablet) -->
+				<div class="d-flex align-items-center gap-2" v-if="user.email">
+					<div class="dropdown">
 						<button
 							class="btn navbar-user-icon-btn d-flex align-items-center justify-content-center p-0"
 							type="button"
