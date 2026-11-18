@@ -38,9 +38,87 @@ const handleSelectEvent = (event) => {
 
 <template>
 	<nav class="navbar navbar-expand-lg navbar-dark navbar-main sticky-top">
-		<div class="container">
-			<!-- Brand Logo & Search Bar Group on Left -->
-			<div class="d-flex align-items-center gap-3 position-relative">
+		<div class="container d-flex justify-content-between align-items-center">
+			
+			<!-- Mobile/Tablet Layout Header Row: [Toggler] [Centered Brand] [Right User/Auth] -->
+			<div class="d-flex d-lg-none w-100 align-items-center justify-content-between position-relative">
+				<!-- 1. Hamburger Toggler on Left -->
+				<button
+					class="navbar-toggler border-0 p-1"
+					type="button"
+					data-bs-toggle="collapse"
+					data-bs-target="#mainNav"
+					aria-controls="mainNav"
+					aria-expanded="false"
+					aria-label="Toggle navigation"
+				>
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<!-- 2. Brand Logo at Center -->
+				<router-link 
+					class="navbar-brand d-flex align-items-center gap-2 m-0 position-absolute start-50 translate-middle-x" 
+					:to="user?.isAdmin ? '' : '/'"
+					:class="{ 'disabled-brand': user?.isAdmin }"
+					@click.prevent="user?.isAdmin && $event.preventDefault()"
+				>
+					<span class="navbar-brand-emblem">
+						<i class="bi bi-vinyl-fill"></i>
+					</span>
+					<span class="navbar-brand-text" :class="{ 'admin-brand-text': user?.isAdmin }">
+						<template v-if="user?.isAdmin">
+							G-ONE <span class="navbar-brand-hyphen">Admin</span>
+						</template>
+						<template v-else>
+							G<span class="navbar-brand-hyphen">-</span>ONE
+						</template>
+					</span>
+				</router-link>
+
+				<!-- 3. User Dropdown / Auth on Right -->
+				<div class="d-flex align-items-center gap-2">
+					<template v-if="!user.email">
+						<router-link to="/login" class="btn btn-sm navbar-btn-login px-2 py-1">
+							<i class="bi bi-box-arrow-in-right"></i>
+						</router-link>
+					</template>
+					<div class="dropdown" v-else>
+						<button
+							class="btn navbar-user-icon-btn d-flex align-items-center justify-content-center p-0"
+							type="button"
+							id="mobileUserMenuDropdown"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+							aria-label="User menu"
+						>
+							<div class="user-avatar-inner d-flex align-items-center justify-content-center">
+								<i class="bi bi-person"></i>
+							</div>
+						</button>
+						<ul class="dropdown-menu dropdown-menu-end navbar-user-dropdown shadow-lg rounded-4 mt-2" aria-labelledby="mobileUserMenuDropdown">
+							<li>
+								<router-link class="dropdown-item d-flex align-items-center gap-2" to="/profile">
+									<i class="bi bi-person"></i>My Profile
+								</router-link>
+							</li>
+							<li>
+								<router-link class="dropdown-item d-flex align-items-center gap-2" to="/MyTickets">
+									<i class="bi bi-ticket-perforated"></i>My Ticket
+								</router-link>
+							</li>
+							<li><hr class="dropdown-divider" /></li>
+							<li>
+								<router-link class="dropdown-item dropdown-item-logout d-flex align-items-center gap-2" to="/logout">
+									<i class="bi bi-box-arrow-right"></i>Logout
+								</router-link>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<!-- Desktop Layout (lg and up): Normal left-to-right flow -->
+			<div class="d-none d-lg-flex align-items-center gap-3 position-relative">
 				<router-link 
 					class="navbar-brand d-flex align-items-center gap-2 m-0" 
 					:to="user?.isAdmin ? '' : '/'"
@@ -59,8 +137,8 @@ const handleSelectEvent = (event) => {
 						</template>
 					</span>
 				</router-link>
-				<!-- Search Bar -->
-				<div class="navbar-search-form d-none d-md-block" v-if="!user.isAdmin">
+				<!-- Desktop Search Bar -->
+				<div class="navbar-search-form" v-if="!user.isAdmin">
 					<div class="navbar-search-wrapper" :class="{ 'active': isSearchOpen && searchQuery.trim() }">
 						<i class="bi bi-search navbar-search-icon"></i>
 						<input
@@ -73,7 +151,7 @@ const handleSelectEvent = (event) => {
 						/>
 						<span class="navbar-search-shortcut">⌘K</span>
 					</div>
-					<!-- Search Results Live Dropdown -->
+					<!-- Desktop Search Results Live Dropdown -->
 					<div v-if="isSearchOpen && searchQuery.trim()" class="navbar-search-dropdown shadow-lg rounded-4 overflow-hidden">
 						<div v-if="filteredEvents.length > 0" class="list-group list-group-flush">
 							<button
@@ -96,34 +174,28 @@ const handleSelectEvent = (event) => {
 					</div>
 				</div>
 			</div>
-			<!-- Mobile Toggler -->
-			<button
-				class="navbar-toggler"
-				type="button"
-				data-bs-toggle="collapse"
-				data-bs-target="#mainNav"
-				aria-controls="mainNav"
-				aria-expanded="false"
-				aria-label="Toggle navigation"
-			>
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<!-- Navigation Links & Actions -->
+
+			<!-- Navigation Links & Desktop Auth Actions -->
 			<div class="collapse navbar-collapse" id="mainNav">
-				<!-- Mobile Search Bar -->
-				<div class="navbar-search-form d-md-none my-3 position-relative" v-if="!user.isAdmin">
-					<div class="navbar-search-wrapper">
+				<!-- Mobile & Tablet Search Bar (Inside Collapsible Menu) -->
+				<div class="navbar-search-form d-lg-none my-3 position-relative w-100" v-if="!user.isAdmin">
+					<div class="navbar-search-wrapper w-100" :class="{ 'active': isSearchOpen && searchQuery.trim() }">
 						<i class="bi bi-search navbar-search-icon"></i>
 						<input
 							type="search"
 							v-model="searchQuery"
 							@focus="isSearchOpen = true"
-							class="form-control navbar-search-input"
-							placeholder="Search events, artists..."
+							class="form-control navbar-search-input w-100"
+							placeholder="Search events, artists, venues..."
 							aria-label="Search events"
 						/>
 					</div>
-					<div v-if="isSearchOpen && searchQuery.trim()" class="navbar-search-dropdown shadow-lg rounded-4 overflow-hidden mt-1">
+					<!-- Mobile/Tablet Search Results Dropdown -->
+					<div v-if="isSearchOpen && searchQuery.trim()" class="navbar-mobile-search-dropdown shadow-lg rounded-4 overflow-hidden mt-2">
+						<div class="mobile-dropdown-header px-3 py-2 small text-muted border-bottom border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
+							<span>Search Results</span>
+							<span class="badge bg-dark text-gold border border-warning border-opacity-25">{{ filteredEvents.length }} found</span>
+						</div>
 						<div v-if="filteredEvents.length > 0" class="list-group list-group-flush">
 							<button
 								v-for="event in filteredEvents"
@@ -135,15 +207,19 @@ const handleSelectEvent = (event) => {
 								<img :src="event.eventImage" :alt="event.eventName" class="navbar-result-thumb rounded-3 object-fit-cover" />
 								<div class="flex-grow-1 text-start overflow-hidden">
 									<h6 class="mb-0 text-truncate navbar-result-title fw-bold">{{ event.eventName }}</h6>
+									<p class="mb-0 small text-muted text-truncate">{{ event.venueName }} • {{ event.location }}</p>
 								</div>
+								<i class="bi bi-chevron-right text-muted opacity-50 small"></i>
 							</button>
 						</div>
-						<div v-else class="p-3 text-center text-muted small">
-							No matching events found for "{{ searchQuery }}"
+						<div v-else class="p-4 text-center text-muted small">
+							<i class="bi bi-search mb-2 d-block fs-3 opacity-50 text-gold"></i>
+							No matching events found for "<span class="text-white">{{ searchQuery }}</span>"
 						</div>
 					</div>
 				</div>
-				<!-- Main Navigation  -->
+
+				<!-- Main Navigation Links -->
 				<ul class="navbar-nav mx-auto mb-3 mb-lg-0 gap-1">
 					<li class="navbar-nav-item nav-item">
 						<router-link class="navbar-nav-link nav-link" to="/" v-if="!user.isAdmin">
@@ -174,7 +250,7 @@ const handleSelectEvent = (event) => {
 					</li>
 					<li class="navbar-nav-item nav-item">
 						<router-link class="navbar-nav-link nav-link" to="/vip" v-if="!user.isAdmin">
-							<i class="bi bi-gem navbar-text-gold me-1"></i>VIP
+							<i class="bi bi-gem navbar-text me-1"></i>VIP
 						</router-link>
 					</li>
 					<li class="navbar-nav-item nav-item">
@@ -188,8 +264,9 @@ const handleSelectEvent = (event) => {
 						</router-link>
 					</li>
 				</ul>
-				<!-- Auth Buttons -->
-				<div class="d-flex flex-column flex-lg-row align-items-stretch align-items-lg-center gap-2">
+
+				<!-- Desktop Auth Buttons & User Dropdown -->
+				<div class="d-none d-lg-flex flex-row align-items-center gap-2">
 					<template v-if="!user.email">
 						<router-link to="/register" class="btn navbar-btn-register">
 							<i class="bi bi-person-plus me-1"></i>Register
@@ -199,12 +276,11 @@ const handleSelectEvent = (event) => {
 						</router-link>
 					</template>
 
-					<!-- Logged-in User Dropdown -->
 					<div class="dropdown" v-else>
 						<button
 							class="btn navbar-user-icon-btn d-flex align-items-center justify-content-center p-0"
 							type="button"
-							id="userMenuDropdown"
+							id="desktopUserMenuDropdown"
 							data-bs-toggle="dropdown"
 							aria-expanded="false"
 							aria-label="User menu"
@@ -213,7 +289,7 @@ const handleSelectEvent = (event) => {
 								<i class="bi bi-person"></i>
 							</div>
 						</button>
-						<ul class="dropdown-menu dropdown-menu-end navbar-user-dropdown shadow-lg rounded-4 mt-2" aria-labelledby="userMenuDropdown">
+						<ul class="dropdown-menu dropdown-menu-end navbar-user-dropdown shadow-lg rounded-4 mt-2" aria-labelledby="desktopUserMenuDropdown">
 							<li>
 								<router-link class="dropdown-item d-flex align-items-center gap-2" to="/profile">
 									<i class="bi bi-person"></i>My Profile
@@ -232,6 +308,16 @@ const handleSelectEvent = (event) => {
 							</li>
 						</ul>
 					</div>
+				</div>
+
+				<!-- Mobile Bottom Auth Links (Shown inside expanded menu if logged out) -->
+				<div class="d-flex d-lg-none flex-column gap-2 mt-3 pt-3 border-top border-secondary border-opacity-25" v-if="!user.email">
+					<router-link to="/register" class="btn navbar-btn-register w-100 text-center">
+						<i class="bi bi-person-plus me-1"></i>Register
+					</router-link>
+					<router-link to="/login" class="btn navbar-btn-login w-100 text-center">
+						<i class="bi bi-box-arrow-in-right me-1"></i>Login
+					</router-link>
 				</div>
 			</div>
 		</div>
@@ -270,8 +356,8 @@ const handleSelectEvent = (event) => {
 }
 
 .admin-brand-text {
-    font-size: 1.15rem;
-    letter-spacing: 1px;
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
 }
 
 .navbar-brand-emblem {
@@ -325,7 +411,6 @@ const handleSelectEvent = (event) => {
     font-weight: 600;
 }
 
-/* Active Nav Link Styling */
 .navbar-main .navbar-nav-link.router-link-active,
 .navbar-main .navbar-nav-link.router-link-exact-active {
     color: var(--gold-accent) !important;
@@ -333,7 +418,6 @@ const handleSelectEvent = (event) => {
     font-weight: 600;
 }
 
-/* Subtle indicator bar underneath active links on large screens */
 @media (min-width: 992px) {
     .navbar-main .navbar-nav-link.router-link-active::after,
     .navbar-main .navbar-nav-link.router-link-exact-active::after {
@@ -455,6 +539,16 @@ const handleSelectEvent = (event) => {
     overflow-y: auto;
 }
 
+.navbar-mobile-search-dropdown {
+    position: relative;
+    width: 100%;
+    background-color: var(--bg-surface) !important;
+    border: 1px solid var(--border-subtle);
+    z-index: 1050;
+    max-height: 320px;
+    overflow-y: auto;
+}
+
 .navbar-search-result-item {
     background-color: transparent !important;
     color: var(--text-main) !important;
@@ -476,14 +570,14 @@ const handleSelectEvent = (event) => {
 }
 
 .navbar-result-thumb {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     flex-shrink: 0;
     border: 1px solid var(--border-subtle);
 }
 
 .navbar-result-title {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     color: var(--text-main);
     transition: color 0.2s ease;
 }
@@ -524,15 +618,14 @@ const handleSelectEvent = (event) => {
     box-shadow: 0 4px 16px rgba(243, 198, 79, 0.35);
 }
 
-/* Redesigned User Avatar Icon Button */
 .navbar-user-icon-btn {
     position: relative;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     background: linear-gradient(135deg, var(--gold-accent), #c59b27);
     border: none;
-    padding: 2px !important; /* Creates gradient border effect */
+    padding: 2px !important;
     cursor: pointer;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
@@ -543,7 +636,7 @@ const handleSelectEvent = (event) => {
     background-color: var(--bg-primary);
     border-radius: 50%;
     color: var(--gold-accent);
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     transition: background-color 0.25s ease, color 0.2s ease;
 }
 
