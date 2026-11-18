@@ -32,7 +32,7 @@ const { user } = useGlobalStore();
                     <ul class="list-unstyled small d-flex flex-column gap-2">
                         <li><router-link to="/"><i class="bi bi-chevron-right small me-1 footer-text-gold"></i>Home</router-link></li>
                         <li><router-link to="/events"><i class="bi bi-chevron-right small me-1 footer-text-gold"></i>Events</router-link></li>
-                        <li v-if="!user?.isAdmin"><router-link to="/vip"><i class="bi bi-chevron-right small me-1 footer-text-gold"></i>VIP</router-link></li>
+                        <li><router-link to="/vip"><i class="bi bi-chevron-right small me-1 footer-text-gold"></i>VIP</router-link></li>
                         <li><router-link to="/about"><i class="bi bi-chevron-right small me-1 footer-text-gold"></i>About</router-link></li>
                         <li><router-link to="/contact"><i class="bi bi-chevron-right small me-1 footer-text-gold"></i>Contact</router-link></li>
                     </ul>
