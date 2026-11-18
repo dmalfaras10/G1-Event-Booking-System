@@ -22,6 +22,7 @@ import ForgotPassword from './pages/ForgotPassword.vue'
 import ErrorPage from './pages/ErrorPage.vue'
 import AboutContactPage from './pages/AboutContactPage.vue';
 import UserProfile from './pages/UserProfile.vue'
+import BookingHistory from './pages/MyTicket.vue'
 import VipPage from './pages/Vip.vue';
 // Admin Side
 import AdminEventListing from './pages/AdminEventListing.vue';
@@ -43,6 +44,7 @@ const routes = [
   { path: '/register', name: 'Register', component: RegisterPage },
   { path: '/login', name: 'Login', component: LoginPage },
   { path: '/profile', name: 'Profile', component: UserProfile, meta: { fullWidth: true }},
+  { path: '/MyTickets', name: 'Tickets', component: BookingHistory},
   { path: '/forgot-password', name: 'Forgot-Password', component: ForgotPassword },
   { path: '/logout', name: 'logout', component: LogoutPage},
   { path: '/event/event-details1', name: 'event-details', component: EventDetailsPage },

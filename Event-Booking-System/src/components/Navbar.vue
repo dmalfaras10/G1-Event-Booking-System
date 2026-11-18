@@ -209,6 +209,11 @@ const handleSelectEvent = (event) => {
 									<i class="bi bi-person"></i>My Profile
 								</router-link>
 							</li>
+							<li>
+								<router-link class="dropdown-item d-flex align-items-center gap-2" to="/MyTickets">
+									<i class="bi bi-ticket-perforated"></i>My Ticket
+								</router-link>
+							</li>
 							<li><hr class="dropdown-divider" /></li>
 							<li>
 								<router-link class="dropdown-item dropdown-item-logout d-flex align-items-center gap-2" to="/logout">

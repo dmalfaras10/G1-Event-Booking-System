@@ -11,9 +11,7 @@ import {
   faqsData
 } from '../data/aboutData.js'
 
-//router
 const route = useRoute();
-
 
 // --- CONTACT FORM STATE & VALIDATION ---
 const form = reactive({
@@ -104,12 +102,10 @@ const handleSubmit = () => {
 
   if (!validateForm()) return
 
-  // Simulate inquiry reference generation (pre-API placeholder)
   const randomCode = Math.floor(100000 + Math.random() * 900000)
   submittedRef.value = `G1-INQ-${randomCode}`
   submittedSuccess.value = true
 
-  // Reset form inputs
   form.fullName = ''
   form.email = ''
   form.inquiryType = 'general'
@@ -135,17 +131,14 @@ function scrollToWithOffset(element, offset = 80) {
   });
 }
 
-
-//handle dynamic scrolling to about / contact
 const handleRouteScroll = async () => {
   await nextTick()
 
   if (route.path === '/contact') {
     const contactSection = document.getElementById('contact-section');
-
-    scrollToWithOffset(contactSection, 110);
-
-
+    if (contactSection) {
+      scrollToWithOffset(contactSection, 110);
+    }
   } else {
     window.scrollTo({
       top: 0,
@@ -155,143 +148,132 @@ const handleRouteScroll = async () => {
   }
 }
 
-//user clicks /contact path
 onMounted(() => {
   handleRouteScroll()
 });
 
-// switching between paths
 watch(
   () => route.path,
   () => {
     handleRouteScroll()
   }
 )
-
 </script>
 
 <template>
   <main class="main-wrapper py-5">
     <div class="container">
 
-      <!-- SECTION 1: ABOUT US / ORGANIZATION BACKGROUND HERO -->
-      <section id="about-section" class="mb-5 pb-3">
-        <div class="d-flex align-items-center gap-2 mb-3">
-          <span class="pulse-dot"></span>
-          <span class="text-uppercase small fw-bold browse-lineup-title">
-            About G-ONE // Est. 2026
-          </span>
-        </div>
+      <!-- SECTION 1: REDESIGNED HERO / ABOUT BACKGROUND -->
+      <section id="about-section" class="mb-5 pb-5">
+        <div class="hero-bento-card p-4 p-lg-5 rounded-5 position-relative overflow-hidden">
+          <div class="hero-glow-accent"></div>
+          
+          <div class="row g-5 align-items-center position-relative z-1">
+            <div class="col-lg-7">
+              <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-4 hero-tag-pill">
+                <span class="pulse-dot"></span>
+                <span class="text-uppercase extra-small fw-bold text-warning tracking-wider">
+                  G-ONE Ecosystem // Est. 2026
+                </span>
+              </div>
 
-        <div class="row g-4 g-lg-5 align-items-center">
-          <!-- Left Narrative Column -->
-          <div class="col-lg-6">
-            <h1 class="display-5 fw-bold text-white lh-sm mb-3">
-              Redefining Live Event Discovery &amp;
-              <span class="text-warning">Effortless Ticketing</span>
-            </h1>
+              <h1 class="display-4 fw-extrabold text-white lh-tight mb-4">
+                Redefining Live Event Discovery &amp; <span class="text-gradient-gold">Seamless Ticketing</span>
+              </h1>
 
-            <p class="lead-text mb-3">
-              <strong>G-ONE</strong> is a modern web-based event booking platform built to connect audiences with concerts, gala performances, and premier live experiences through one centralized, reliable portal.
-            </p>
+              <p class="lead-text mb-4">
+                <strong>G-ONE</strong> is a next-generation event booking platform connecting audiences with world-class concerts, gala performances, and exclusive live experiences through a lightning-fast digital portal.
+              </p>
 
-            <p class="small text-secondary-light mb-4">
-              From browsing schedules and checking real-time seat availability to securing exclusive Bronze, Silver, and Gold membership benefits, we eliminate manual booking friction so both attendees and event organizers can focus on unforgettable moments.
-            </p>
+              <div class="d-flex flex-wrap gap-3 mb-5">
+                <button
+                  type="button"
+                  class="btn btn-login px-4 py-3 d-inline-flex align-items-center gap-2 shadow-gold"
+                  @click="scrollToSection('contact-section')"
+                >
+                  <span>Connect With Support</span>
+                  <i class="bi bi-arrow-down-right"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-register px-4 py-3 d-inline-flex align-items-center gap-2"
+                  @click="scrollToSection('policies-section')"
+                >
+                  <i class="bi bi-shield-check text-warning"></i>
+                  <span>Platform Policies</span>
+                </button>
+              </div>
 
-            <!-- Action Buttons -->
-            <div class="d-flex flex-wrap gap-3 mb-4">
-              <button
-                type="button"
-                class="btn btn-login px-4 py-2 d-inline-flex align-items-center gap-2"
-                @click="scrollToSection('contact-section')"
-              >
-                <span>Contact Support</span>
-                <i class="bi bi-arrow-down-right"></i>
-              </button>
-              <button
-                type="button"
-                class="btn btn-register px-4 py-2 d-inline-flex align-items-center gap-2"
-                @click="scrollToSection('policies-section')"
-              >
-                <i class="bi bi-shield-check text-warning"></i>
-                <span>Terms &amp; Policies</span>
-              </button>
-            </div>
-
-            <!-- Micro Metric Strip -->
-            <div class="row g-3 pt-3 border-top border-secondary border-opacity-25">
-              <div
-                v-for="stat in companyStats"
-                :key="stat.label"
-                class="col-4"
-              >
-                <div class="fs-4 fw-bold text-warning lh-1">{{ stat.value }}</div>
-                <div class="extra-small text-uppercase text-secondary-light mt-1">
-                  {{ stat.label }}
+              <!-- Metric Grid -->
+              <div class="row g-4 pt-4 border-top border-secondary border-opacity-25">
+                <div
+                  v-for="stat in companyStats"
+                  :key="stat.label"
+                  class="col-4"
+                >
+                  <div class="fs-3 fw-black text-warning lh-1 mb-1">{{ stat.value }}</div>
+                  <div class="extra-small text-uppercase text-secondary-light tracking-wide fw-semibold">
+                    {{ stat.label }}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <!-- Right Visual Showcase Frame -->
-          <div class="col-lg-6">
-            <div class="hero-image-card position-relative rounded-4 overflow-hidden">
-              <img
-                src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=85"
-                alt="G-ONE Live Event Venue Experience"
-                class="w-100 h-100 object-fit-cover about-hero-img"
-              />
-              <div class="hero-img-gradient"></div>
+            <!-- Hero Visual Frame -->
+            <div class="col-lg-5">
+              <div class="hero-image-frame position-relative rounded-4 overflow-hidden shadow-2xl">
+                <img
+                  src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=85"
+                  alt="G-ONE Live Event Experience"
+                  class="w-100 h-100 object-fit-cover about-hero-img"
+                />
+                <div class="hero-img-gradient"></div>
 
-              <!-- Floating Highlight Card -->
-              <div class="floating-badge-card position-absolute bottom-0 start-0 end-0 m-3 p-3 rounded-3 d-flex align-items-center justify-content-between gap-2">
-                <div class="d-flex align-items-center gap-3">
-                  <div class="icon-circle d-flex align-items-center justify-content-center flex-shrink-0">
-                    <i class="bi bi-ticket-perforated-fill text-warning fs-5"></i>
-                  </div>
-                  <div>
-                    <div class="fw-bold text-white small">G-ONE Event Booking System</div>
-                    <div class="extra-small text-secondary-light">
-                      Verified Venues • Real-Time Seat Holds • Digital Passes
+                <div class="floating-badge-card position-absolute bottom-0 start-0 end-0 m-3 p-3 rounded-3 d-flex align-items-center justify-content-between gap-2">
+                  <div class="d-flex align-items-center gap-3">
+                    <div class="icon-circle d-flex align-items-center justify-content-center flex-shrink-0">
+                      <i class="bi bi-ticket-perforated-fill text-warning fs-5"></i>
+                    </div>
+                    <div>
+                      <div class="fw-bold text-white small">Verified Live Hub</div>
+                      <div class="extra-small text-secondary-light">Real-Time Secure Allocations</div>
                     </div>
                   </div>
+                  <span class="hero-badge px-2 py-1 flex-shrink-0">Manila</span>
                 </div>
-                <span class="hero-badge px-2 py-1 flex-shrink-0">Metro Manila</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- SECTION 2: ORGANIZATION SERVICES (4 PILLARS) -->
-      <section id="services-section" class="mb-5 pb-3">
-        <div class="row align-items-end g-3 mb-4">
-          <div class="col-lg-7">
-            <span class="text-uppercase small fw-bold browse-lineup-title">
-              <i class="bi bi-layers me-1"></i>What We Offer
-            </span>
-            <h2 class="fw-bold text-white mb-0 mt-1">Core Platform Services</h2>
-          </div>
-          <div class="col-lg-5">
-            <p class="small text-secondary-light mb-0">
-              Built for speed, transparency, and convenience—delivering a seamless journey from event discovery to venue check-in.
-            </p>
-          </div>
+      <!-- SECTION 2: CORE PLATFORM SERVICES -->
+      <section id="services-section" class="mb-5 pb-4">
+        <div class="text-center mx-auto mb-5" style="max-width: 650px;">
+          <span class="text-uppercase small fw-bold browse-lineup-title tracking-wider">
+            <i class="bi bi-layers me-1"></i> What We Offer
+          </span>
+          <h2 class="fw-bold text-white mt-1 mb-2 display-6">Core Platform Services</h2>
+          <p class="small text-secondary-light">
+            Engineered for high concurrency, transparency, and effortless navigation from discovery to check-in.
+          </p>
         </div>
 
         <div class="row g-4">
           <div
             v-for="service in servicesData"
             :key="service.code"
-            class="col-md-6"
+            class="col-md-6 col-lg-3"
           >
-            <div class="card event-card h-100 rounded-4 p-4">
-              <div class="d-flex align-items-center justify-content-between mb-3">
-                <span class="service-code-pill px-2 py-1 rounded-2 extra-small fw-bold">
+            <div class="card event-card h-100 rounded-4 p-4 d-flex flex-column">
+              <div class="d-flex align-items-center justify-content-between mb-4">
+                <span class="service-code-pill px-2.5 py-1 rounded-2 extra-small fw-bold font-monospace">
                   {{ service.code }}
                 </span>
-                <i :class="['bi', service.icon, 'fs-4 text-warning']"></i>
+                <div class="service-icon-box">
+                  <i :class="['bi', service.icon, 'fs-4 text-warning']"></i>
+                </div>
               </div>
 
               <h5 class="fw-bold text-white mb-2">{{ service.title }}</h5>
@@ -301,52 +283,50 @@ watch(
 
               <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center extra-small text-uppercase">
                 <span class="text-secondary-light">{{ service.meta }}</span>
-                <span class="text-warning fw-semibold">
-                  G-ONE Standard <i class="bi bi-check2-circle ms-1"></i>
-                </span>
+                <span class="text-warning fw-bold">G-ONE Ready</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- SECTION 3: CONTACT US (FORM + DETAILS & SOCIAL LINKS) -->
-      <section id="contact-section" class="mb-5 pb-3">
-        <div class="mb-4">
-          <span class="text-uppercase small fw-bold browse-lineup-title">
-            <i class="bi bi-chat-dots me-1"></i>Get In Touch
+      <!-- SECTION 3: CONTACT FORM & DIRECT CHANNELS -->
+      <section id="contact-section" class="mb-5 pb-4">
+        <div class="mb-5">
+          <span class="text-uppercase small fw-bold browse-lineup-title tracking-wider">
+            <i class="bi bi-chat-dots me-1"></i> Get In Touch
           </span>
-          <h2 class="fw-bold text-white mb-1 mt-1">Contact G-ONE Support</h2>
-          <p class="small text-secondary-light mb-0">
-            Have a question about an upcoming event, ticket order, or membership tier? Send us an inquiry, share feedback, or reach us directly.
+          <h2 class="fw-bold text-white mb-1 mt-1 display-6">Contact G-ONE Support</h2>
+          <p class="small text-secondary-light">
+            Have questions regarding an upcoming show, ticket transfer, or VIP benefits? Our support desk is here for you.
           </p>
         </div>
 
         <div class="row g-4">
-          <!-- Left Column: Contact Form -->
+          <!-- Left Column: Modern Form Box -->
           <div class="col-lg-7">
-            <div class="surface-panel rounded-4 p-4 p-md-5 h-100">
-              <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
-                <h4 class="fw-bold text-white mb-0">Send an Inquiry or Feedback</h4>
-                <span class="hero-badge px-2.5 py-1">Response within 24h</span>
+            <div class="surface-panel rounded-5 p-4 p-md-5 h-auto position-relative">
+              <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+                <h4 class="fw-bold text-white mb-0">Send an Inquiry</h4>
+                <span class="hero-badge px-3 py-1">24h Response Window</span>
               </div>
               <p class="small text-secondary-light mb-4">
-                Fill out the form below for general questions, booking concerns, membership assistance, or platform feedback.
+                Fill out the secure dispatch form below and our response team will get back to your inbox promptly.
               </p>
 
-              <!-- Success Confirmation Banner -->
+              <!-- Success Alert -->
               <div
                 v-if="submittedSuccess"
-                class="alert-success-gold rounded-3 p-3 mb-4 d-flex align-items-start gap-3"
+                class="alert-success-gold rounded-4 p-4 mb-4 d-flex align-items-start gap-3 animate-fade-in"
                 role="alert"
               >
-                <i class="bi bi-check-circle-fill text-warning fs-4 flex-shrink-0"></i>
+                <i class="bi bi-check-circle-fill text-warning fs-3 flex-shrink-0"></i>
                 <div>
-                  <div class="fw-bold text-white small">
-                    Inquiry Submitted Successfully ({{ submittedRef }})
+                  <div class="fw-bold text-white mb-1">
+                    Inquiry Dispatched Successfully! Reference: <span class="text-warning font-monospace">{{ submittedRef }}</span>
                   </div>
-                  <div class="extra-small text-secondary-light mt-1">
-                    Thank you for contacting G-ONE. Our support team has received your message and will respond to your email shortly.
+                  <div class="extra-small text-secondary-light">
+                    Thank you for reaching out. A confirmation has been registered in our system and an agent will email you shortly.
                   </div>
                 </div>
               </div>
@@ -355,7 +335,7 @@ watch(
                 <div class="row g-3">
                   <!-- Full Name -->
                   <div class="col-md-6">
-                    <label for="contactName" class="form-label small text-secondary-light fw-semibold">
+                    <label for="contactName" class="form-label extra-small text-secondary-light fw-bold text-uppercase tracking-wider">
                       Full Name <span class="text-warning">*</span>
                     </label>
                     <input
@@ -373,7 +353,7 @@ watch(
 
                   <!-- Email -->
                   <div class="col-md-6">
-                    <label for="contactEmail" class="form-label small text-secondary-light fw-semibold">
+                    <label for="contactEmail" class="form-label extra-small text-secondary-light fw-bold text-uppercase tracking-wider">
                       Email Address <span class="text-warning">*</span>
                     </label>
                     <input
@@ -389,10 +369,10 @@ watch(
                     </div>
                   </div>
 
-                  <!-- Category -->
+                  <!-- Inquiry Type -->
                   <div class="col-md-6">
-                    <label for="inquiryType" class="form-label small text-secondary-light fw-semibold">
-                      Inquiry Type
+                    <label for="inquiryType" class="form-label extra-small text-secondary-light fw-bold text-uppercase tracking-wider">
+                      Inquiry Category
                     </label>
                     <select
                       id="inquiryType"
@@ -411,7 +391,7 @@ watch(
 
                   <!-- Subject -->
                   <div class="col-md-6">
-                    <label for="contactSubject" class="form-label small text-secondary-light fw-semibold">
+                    <label for="contactSubject" class="form-label extra-small text-secondary-light fw-bold text-uppercase tracking-wider">
                       Subject <span class="text-warning">*</span>
                     </label>
                     <input
@@ -420,7 +400,7 @@ watch(
                       type="text"
                       class="form-control dark-input"
                       :class="{ 'is-invalid-dark': errors.subject }"
-                      placeholder="Booking Ref or Topic"
+                      placeholder="Booking ID or Topic"
                     />
                     <div v-if="errors.subject" class="error-text mt-1">
                       <i class="bi bi-exclamation-circle me-1"></i>{{ errors.subject }}
@@ -429,7 +409,7 @@ watch(
 
                   <!-- Message -->
                   <div class="col-12">
-                    <label for="contactMessage" class="form-label small text-secondary-light fw-semibold">
+                    <label for="contactMessage" class="form-label extra-small text-secondary-light fw-bold text-uppercase tracking-wider">
                       Message / Concern <span class="text-warning">*</span>
                     </label>
                     <textarea
@@ -438,39 +418,26 @@ watch(
                       rows="4"
                       class="form-control dark-input"
                       :class="{ 'is-invalid-dark': errors.message }"
-                      placeholder="Share details about your inquiry, feedback, or booking reference number..."
+                      placeholder="Provide details regarding your booking, membership, or feedback..."
                     ></textarea>
                     <div v-if="errors.message" class="error-text mt-1">
                       <i class="bi bi-exclamation-circle me-1"></i>{{ errors.message }}
                     </div>
                   </div>
 
-                  <!-- Terms Consent Checkbox -->
-                  <div class="col-12">
-                    <div class="form-check">
+                  <!-- Checkbox Agreement -->
+                  <div class="col-12 mt-3">
+                    <div class="form-check d-flex align-items-center gap-2">
                       <input
                         id="agreePolicies"
                         v-model="form.agreeToPolicies"
                         type="checkbox"
-                        class="form-check-input gold-checkbox"
+                        class="form-check-input gold-checkbox mt-0"
                       />
                       <label for="agreePolicies" class="form-check-label extra-small text-secondary-light">
-                        I agree to the G-ONE
-                        <a
-                          href="#policies-section"
-                          class="text-warning text-decoration-none fw-semibold"
-                          @click.prevent="openPolicyModal(policiesData[0])"
-                        >
-                          Terms of Service
-                        </a>
-                        and
-                        <a
-                          href="#policies-section"
-                          class="text-warning text-decoration-none fw-semibold"
-                          @click.prevent="openPolicyModal(policiesData[1])"
-                        >
-                          Privacy Policy
-                        </a>.
+                        I agree to G-ONE's 
+                        <a href="#policies-section" class="text-warning text-decoration-none fw-semibold" @click.prevent="openPolicyModal(policiesData[0])">Terms</a> &amp; 
+                        <a href="#policies-section" class="text-warning text-decoration-none fw-semibold" @click.prevent="openPolicyModal(policiesData[1])">Privacy Policy</a>.
                       </label>
                     </div>
                     <div v-if="errors.agreeToPolicies" class="error-text mt-1">
@@ -478,10 +445,10 @@ watch(
                     </div>
                   </div>
 
-                  <!-- Submit Button -->
-                  <div class="col-12 pt-2 d-flex justify-content-end">
-                    <button type="submit" class="btn btn-login px-4 py-2 d-inline-flex align-items-center gap-2">
-                      <span>Submit Inquiry</span>
+                  <!-- Submit Action -->
+                  <div class="col-12 pt-4 d-flex justify-content-end">
+                    <button type="submit" class="btn btn-login px-5 py-3 d-inline-flex align-items-center gap-2 shadow-gold">
+                      <span>Send Inquiry</span>
                       <i class="bi bi-send-fill"></i>
                     </button>
                   </div>
@@ -490,12 +457,12 @@ watch(
             </div>
           </div>
 
-          <!-- Right Column: Contact Information & Social Media -->
+          <!-- Right Column: Direct Channels & Social Matrix -->
           <div class="col-lg-5 d-flex flex-column gap-4">
-            <!-- Direct Contact Details Card -->
-            <div class="surface-panel rounded-4 p-4">
+            <!-- Info Card -->
+            <div class="surface-panel rounded-5 p-4">
               <div class="d-flex align-items-center justify-content-between mb-3">
-                <span class="service-code-pill px-2 py-1 rounded-2 extra-small fw-bold">
+                <span class="service-code-pill px-2.5 py-1 rounded-2 extra-small fw-bold font-monospace">
                   DIRECT CHANNELS
                 </span>
                 <i class="bi bi-headset text-warning fs-5"></i>
@@ -507,8 +474,7 @@ watch(
                 {{ contactDetails.addressLine2 }}
               </p>
 
-              <div class="d-flex flex-column gap-2">
-                <!-- Phone Primary -->
+              <div class="d-flex flex-column gap-2.5">
                 <div class="contact-info-row rounded-3 p-3 d-flex align-items-center justify-content-between gap-2">
                   <div class="d-flex align-items-center gap-2 small text-secondary-light">
                     <i class="bi bi-telephone-fill text-warning"></i>
@@ -519,44 +485,40 @@ watch(
                   </a>
                 </div>
 
-                <!-- Mobile Support -->
                 <div class="contact-info-row rounded-3 p-3 d-flex align-items-center justify-content-between gap-2">
                   <div class="d-flex align-items-center gap-2 small text-secondary-light">
                     <i class="bi bi-phone-fill text-warning"></i>
-                    <span>Mobile</span>
+                    <span>Mobile Desk</span>
                   </div>
                   <a :href="'tel:' + contactDetails.phoneMobile" class="small fw-semibold text-white text-decoration-none contact-link">
                     {{ contactDetails.phoneMobile }}
                   </a>
                 </div>
 
-                <!-- Support Email -->
                 <div class="contact-info-row rounded-3 p-3 d-flex align-items-center justify-content-between gap-2">
                   <div class="d-flex align-items-center gap-2 small text-secondary-light">
                     <i class="bi bi-envelope-fill text-warning"></i>
-                    <span>Support</span>
+                    <span>Support Desk</span>
                   </div>
                   <a :href="'mailto:' + contactDetails.emailSupport" class="small fw-semibold text-warning text-decoration-none contact-link">
                     {{ contactDetails.emailSupport }}
                   </a>
                 </div>
 
-                <!-- Partnerships Email -->
                 <div class="contact-info-row rounded-3 p-3 d-flex align-items-center justify-content-between gap-2">
                   <div class="d-flex align-items-center gap-2 small text-secondary-light">
                     <i class="bi bi-briefcase-fill text-warning"></i>
-                    <span>Partners</span>
+                    <span>Partnerships</span>
                   </div>
                   <a :href="'mailto:' + contactDetails.emailPartnerships" class="small fw-semibold text-white text-decoration-none contact-link">
                     {{ contactDetails.emailPartnerships }}
                   </a>
                 </div>
 
-                <!-- Hours -->
                 <div class="contact-info-row rounded-3 p-3 d-flex align-items-center justify-content-between gap-2">
                   <div class="d-flex align-items-center gap-2 small text-secondary-light">
                     <i class="bi bi-clock-fill text-warning"></i>
-                    <span>Hours</span>
+                    <span>Support Hours</span>
                   </div>
                   <span class="extra-small fw-medium text-white text-end">
                     {{ contactDetails.supportHours }}
@@ -565,17 +527,18 @@ watch(
               </div>
             </div>
 
-            <!-- Social Media Card -->
-            <div class="surface-panel rounded-4 p-4">
+            <!-- Social Media Matrix (Fixed spacing, inner padding, and alignment) -->
+            <div class="surface-panel rounded-5 p-4">
               <div class="d-flex align-items-center justify-content-between mb-3">
                 <h6 class="fw-bold text-white mb-0">Follow G-ONE Socials</h6>
-                <span class="extra-small text-warning text-uppercase fw-bold">Live Updates</span>
+                <span class="extra-small text-warning text-uppercase fw-bold tracking-wider">Live Feeds</span>
               </div>
               <p class="extra-small text-secondary-light mb-3">
-                Stay updated on newly announced shows, presale schedules, and exclusive VIP member drops.
+                Get instant notifications on priority presales, lineup announcements, and exclusive community drops.
               </p>
 
-              <div class="row g-2">
+              <!-- Adjusted columns spacing and card padding -->
+              <div class="row g-3">
                 <div
                   v-for="social in socialLinks"
                   :key="social.name"
@@ -585,12 +548,12 @@ watch(
                     :href="social.url"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="social-card rounded-3 p-2 d-flex align-items-center gap-2 text-decoration-none"
+                    class="social-card rounded-3 p-3 d-flex align-items-center gap-3 text-decoration-none h-100"
                   >
-                    <i :class="['bi', social.icon, 'fs-5 text-warning']"></i>
+                    <i :class="['bi', social.icon, 'fs-4 text-warning flex-shrink-0']"></i>
                     <div class="overflow-hidden">
-                      <div class="extra-small fw-bold text-white lh-1">{{ social.name }}</div>
-                      <div class="extra-small text-secondary-light text-truncate mt-1">
+                      <div class="extra-small fw-bold text-white lh-1 mb-1">{{ social.name }}</div>
+                      <div class="extra-small text-secondary-light text-truncate">
                         {{ social.handle }}
                       </div>
                     </div>
@@ -602,19 +565,19 @@ watch(
         </div>
       </section>
 
-      <!-- SECTION 4: TERMS & POLICIES LINKS -->
-      <section id="policies-section" class="mb-5 pb-3">
+      <!-- SECTION 4: TERMS & POLICIES -->
+      <section id="policies-section" class="mb-5 pb-4">
         <div class="mb-4">
-          <span class="text-uppercase small fw-bold browse-lineup-title">
-            <i class="bi bi-file-earmark-check me-1"></i>Transparency &amp; Trust
+          <span class="text-uppercase small fw-bold browse-lineup-title tracking-wider">
+            <i class="bi bi-shield-lock me-1"></i> Transparency &amp; Trust
           </span>
-          <h2 class="fw-bold text-white mb-1 mt-1">Terms &amp; Platform Policies</h2>
-          <p class="small text-secondary-light mb-0">
-            Review our official ticketing guidelines, data privacy practices, and cancellation policies.
+          <h2 class="fw-bold text-white mb-1 mt-1 display-6">Platform Policies &amp; Terms</h2>
+          <p class="small text-secondary-light">
+            Review official guidelines regarding seat expirations, data safeguards, and ticket protection rules.
           </p>
         </div>
 
-        <div class="row g-3">
+        <div class="row g-4">
           <div
             v-for="policy in policiesData"
             :key="policy.id"
@@ -622,19 +585,21 @@ watch(
           >
             <button
               type="button"
-              class="policy-link-card w-100 h-100 text-start rounded-4 p-4 d-flex flex-column"
+              class="policy-link-card w-100 h-100 text-start rounded-4 p-4 d-flex flex-column border-0"
               @click="openPolicyModal(policy)"
             >
               <div class="d-flex align-items-center justify-content-between mb-3">
-                <i :class="['bi', policy.icon, 'fs-4 text-warning']"></i>
+                <div class="service-icon-box">
+                  <i :class="['bi', policy.icon, 'fs-4 text-warning']"></i>
+                </div>
                 <i class="bi bi-arrow-up-right text-secondary-light small"></i>
               </div>
               <h6 class="fw-bold text-white mb-2">{{ policy.title }}</h6>
-              <p class="extra-small text-secondary-light mb-3 flex-grow-1">
+              <p class="extra-small text-secondary-light mb-4 flex-grow-1">
                 {{ policy.summary }}
               </p>
-              <span class="extra-small text-warning fw-semibold">
-                Read Policy &rarr;
+              <span class="extra-small text-warning fw-semibold d-inline-flex align-items-center gap-1">
+                Read Policy <i class="bi bi-arrow-right"></i>
               </span>
             </button>
           </div>
@@ -643,17 +608,17 @@ watch(
 
       <!-- SECTION 5: FREQUENTLY ASKED QUESTIONS -->
       <section id="faq-section" class="mb-4">
-        <div class="text-center mx-auto mb-4" style="max-width: 620px;">
-          <span class="text-uppercase small fw-bold browse-lineup-title">
+        <div class="text-center mx-auto mb-5" style="max-width: 650px;">
+          <span class="text-uppercase small fw-bold browse-lineup-title tracking-wider">
             Quick Answers
           </span>
-          <h2 class="fw-bold text-white mt-1 mb-2">Frequently Asked Questions</h2>
-          <p class="small text-secondary-light mb-0">
-            Essential information about seat holds, membership perks, and digital tickets on G-ONE.
+          <h2 class="fw-bold text-white mt-1 mb-2 display-6">Frequently Asked Questions</h2>
+          <p class="small text-secondary-light">
+            Everything you need to know about transactional locks, seat reservations, and digital passes.
           </p>
         </div>
 
-        <div class="mx-auto d-flex flex-column gap-3" style="max-width: 860px;">
+        <div class="mx-auto d-flex flex-column gap-3" style="max-width: 880px;">
           <div
             v-for="faq in faqsData"
             :key="faq.id"
@@ -666,17 +631,17 @@ watch(
               @click="toggleFaq(faq.id)"
             >
               <span class="fw-semibold text-white d-flex align-items-center gap-3">
-                <span class="text-warning small font-monospace">{{ faq.number }}</span>
-                <span>{{ faq.question }}</span>
+                <span class="text-warning small font-monospace px-2 py-1 rounded bg-dark border border-secondary border-opacity-25">{{ faq.number }}</span>
+                <span class="fs-6">{{ faq.question }}</span>
               </span>
               <i
-                class="bi bi-chevron-down text-warning faq-chevron"
+                class="bi bi-chevron-down text-warning faq-chevron fs-5"
                 :class="{ rotated: openFaqId === faq.id }"
               ></i>
             </button>
 
-            <div v-if="openFaqId === faq.id" class="px-4 pb-4 pt-0">
-              <p class="small text-secondary-light mb-0 ps-md-4">
+            <div v-if="openFaqId === faq.id" class="px-4 pb-4 pt-0 animate-fade-in">
+              <p class="small text-secondary-light mb-0 ps-md-4 lh-lg">
                 {{ faq.answer }}
               </p>
             </div>
@@ -689,18 +654,20 @@ watch(
     <!-- POLICY READER MODAL -->
     <div
       v-if="activePolicy"
-      class="policy-modal-backdrop d-flex align-items-center justify-content-center p-3"
+      class="policy-modal-backdrop d-flex align-items-center justify-content-center p-3 animate-fade-in"
       @click.self="closePolicyModal"
     >
-      <div class="policy-modal-box rounded-4 p-4 p-md-5 w-100" style="max-width: 580px;">
+      <div class="policy-modal-box rounded-5 p-4 p-md-5 w-100 position-relative shadow-2xl" style="max-width: 620px;">
         <div class="d-flex align-items-center justify-content-between mb-3">
-          <div class="d-flex align-items-center gap-2">
-            <i :class="['bi', activePolicy.icon, 'fs-4 text-warning']"></i>
-            <h5 class="fw-bold text-white mb-0">{{ activePolicy.title }}</h5>
+          <div class="d-flex align-items-center gap-3">
+            <div class="service-icon-box">
+              <i :class="['bi', activePolicy.icon, 'fs-4 text-warning']"></i>
+            </div>
+            <h5 class="fw-bold text-white mb-0 fs-4">{{ activePolicy.title }}</h5>
           </div>
           <button
             type="button"
-            class="btn btn-sm btn-register px-2 py-1"
+            class="btn btn-sm btn-register px-2.5 py-1.5"
             aria-label="Close modal"
             @click="closePolicyModal"
           >
@@ -708,17 +675,17 @@ watch(
           </button>
         </div>
 
-        <div class="extra-small text-warning text-uppercase fw-bold mb-3">
+        <div class="extra-small text-warning text-uppercase fw-bold mb-4 tracking-wider font-monospace">
           Last Updated: {{ activePolicy.updated }}
         </div>
 
-        <p class="small text-secondary-light lh-lg mb-4">
+        <p class="small text-secondary-light lh-lg mb-5" style="max-height: 50vh; overflow-y: auto;">
           {{ activePolicy.content }}
         </p>
 
         <div class="d-flex justify-content-end">
-          <button type="button" class="btn btn-login px-4 py-2" @click="closePolicyModal">
-            Close
+          <button type="button" class="btn btn-login px-4 py-2.5" @click="closePolicyModal">
+            Acknowledge &amp; Close
           </button>
         </div>
       </div>
@@ -729,8 +696,8 @@ watch(
 <style scoped>
 .main-wrapper {
   background:
-    radial-gradient(circle at 85% 15%, rgba(158, 28, 78, 0.16), transparent 45%),
-    radial-gradient(circle at 15% 45%, rgba(243, 198, 79, 0.08), transparent 45%),
+    radial-gradient(circle at 85% 10%, rgba(158, 28, 78, 0.18), transparent 40%),
+    radial-gradient(circle at 15% 50%, rgba(243, 198, 79, 0.09), transparent 45%),
     var(--bg-primary);
   min-height: 100vh;
   font-family: 'Montserrat', sans-serif;
@@ -742,17 +709,30 @@ watch(
 
 .lead-text {
   color: var(--text-main);
-  font-size: 1.02rem;
-  line-height: 1.7;
+  font-size: 1.05rem;
+  line-height: 1.75;
 }
 
 .extra-small {
-  font-size: 0.74rem;
+  font-size: 0.75rem;
+}
+
+.tracking-wider {
+  letter-spacing: 1.5px;
+}
+
+.fw-black {
+  font-weight: 900;
 }
 
 .browse-lineup-title {
   color: var(--gold-accent);
-  letter-spacing: 1.5px;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #f3c64f 0%, #ffd875 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .pulse-dot {
@@ -760,7 +740,28 @@ watch(
   height: 8px;
   border-radius: 50%;
   background-color: var(--gold-accent);
-  box-shadow: 0 0 10px var(--gold-accent);
+  box-shadow: 0 0 12px var(--gold-accent);
+}
+
+.hero-bento-card {
+  background: linear-gradient(145deg, rgba(24, 24, 28, 0.85) 0%, rgba(14, 14, 16, 0.95) 100%);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
+}
+
+.hero-glow-accent {
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(243, 198, 79, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-tag-pill {
+  background-color: rgba(243, 198, 79, 0.1);
+  border: 1px solid rgba(243, 198, 79, 0.25);
 }
 
 /* Shared Buttons & Badges */
@@ -779,10 +780,10 @@ watch(
   color: var(--text-main);
   background-color: transparent;
   border: 1px solid var(--border-subtle);
-  font-size: 0.875rem;
+  font-size: 0.9rem;
   font-weight: 500;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  border-radius: 8px;
+  transition: all 0.25s ease;
 }
 
 .btn-register:hover {
@@ -795,79 +796,95 @@ watch(
   background-color: var(--gold-accent);
   color: #0b0b0c;
   border: 1px solid var(--gold-accent);
-  font-size: 0.875rem;
-  font-weight: 600;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 8px;
+  transition: all 0.25s ease;
 }
 
 .btn-login:hover {
   background-color: var(--gold-accent-hover);
   border-color: var(--gold-accent-hover);
   color: #0b0b0c;
-  box-shadow: 0 0 14px rgba(243, 198, 79, 0.35);
+  box-shadow: 0 0 20px rgba(243, 198, 79, 0.45);
+  transform: translateY(-1px);
 }
 
-/* Hero Image Card */
-.hero-image-card {
+.shadow-gold {
+  box-shadow: 0 8px 25px rgba(243, 198, 79, 0.25);
+}
+
+/* Hero Image Frame */
+.hero-image-frame {
   aspect-ratio: 4 / 3;
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
 }
 
 .about-hero-img {
-  transition: transform 0.6s ease;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.hero-image-card:hover .about-hero-img {
-  transform: scale(1.04);
+.hero-image-frame:hover .about-hero-img {
+  transform: scale(1.05);
 }
 
 .hero-img-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, transparent 35%, rgba(11, 11, 12, 0.92) 100%);
+  background: linear-gradient(180deg, transparent 40%, rgba(11, 11, 12, 0.92) 100%);
   pointer-events: none;
 }
 
 .floating-badge-card {
-  background-color: rgba(20, 20, 22, 0.88);
-  backdrop-filter: blur(10px);
+  background-color: rgba(20, 20, 24, 0.9);
+  backdrop-filter: blur(12px);
   border: 1px solid var(--border-subtle);
 }
 
 .icon-circle {
-  width: 42px;
-  height: 42px;
-  border-radius: 10px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
   background-color: rgba(243, 198, 79, 0.12);
   border: 1px solid rgba(243, 198, 79, 0.3);
+}
+
+.service-icon-box {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background-color: rgba(243, 198, 79, 0.1);
+  border: 1px solid rgba(243, 198, 79, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* Cards & Panels */
 .surface-panel {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
 }
 
 .event-card {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .event-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px);
   background-color: var(--bg-surface-hover);
-  border-color: rgba(243, 198, 79, 0.4);
+  border-color: rgba(243, 198, 79, 0.45);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
 }
 
 .service-code-pill {
   background-color: var(--bg-primary);
   border: 1px solid var(--border-subtle);
   color: var(--gold-accent);
-  letter-spacing: 1px;
 }
 
 /* Form Inputs & Validation */
@@ -875,20 +892,21 @@ watch(
   background-color: var(--bg-primary);
   border: 1px solid var(--border-subtle);
   color: var(--text-main);
-  padding: 0.65rem 0.9rem;
-  font-size: 0.9rem;
-  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  font-size: 0.92rem;
+  border-radius: 10px;
+  transition: all 0.2s ease;
 }
 
 .dark-input::placeholder {
-  color: rgba(156, 163, 175, 0.65);
+  color: rgba(156, 163, 175, 0.55);
 }
 
 .dark-input:focus {
   background-color: var(--bg-primary);
   border-color: var(--gold-accent);
   color: var(--text-main);
-  box-shadow: 0 0 0 2px rgba(243, 198, 79, 0.2);
+  box-shadow: 0 0 0 3px rgba(243, 198, 79, 0.2);
 }
 
 .is-invalid-dark {
@@ -896,13 +914,22 @@ watch(
 }
 
 .error-text {
-  color: #fda4af;
-  font-size: 0.76rem;
+  color: #f43f5e;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.alert-success-gold {
+  background-color: rgba(243, 198, 79, 0.08);
+  border: 1px solid rgba(243, 198, 79, 0.35);
 }
 
 .gold-checkbox {
+  width: 1.15rem;
+  height: 1.15rem;
   background-color: var(--bg-primary);
   border-color: var(--border-subtle);
+  cursor: pointer;
 }
 
 .gold-checkbox:checked {
@@ -910,78 +937,96 @@ watch(
   border-color: var(--gold-accent);
 }
 
-.alert-success-gold {
-  background-color: rgba(243, 198, 79, 0.12);
-  border: 1px solid rgba(243, 198, 79, 0.45);
-}
-
-/* Contact Rows & Social Cards */
+/* Contact Info Rows & Socials */
 .contact-info-row {
   background-color: var(--bg-primary);
   border: 1px solid var(--border-subtle);
+  transition: border-color 0.2s ease;
+}
+
+.contact-info-row:hover {
+  border-color: rgba(243, 198, 79, 0.35);
+}
+
+.contact-link {
+  transition: color 0.2s ease;
 }
 
 .contact-link:hover {
   color: var(--gold-accent) !important;
-  text-decoration: underline !important;
 }
 
 .social-card {
   background-color: var(--bg-primary);
   border: 1px solid var(--border-subtle);
-  transition: all 0.2s ease;
+  transition: all 0.25s ease;
 }
 
 .social-card:hover {
-  border-color: var(--gold-accent);
-  background-color: rgba(243, 198, 79, 0.08);
-  transform: translateY(-2px);
+  background-color: var(--bg-surface-hover);
+  border-color: rgba(243, 198, 79, 0.45);
+  transform: translateY(-3px);
 }
 
-/* Policy Link Cards */
+/* Policies & FAQ Cards */
 .policy-link-card {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  transition: all 0.25s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .policy-link-card:hover {
   background-color: var(--bg-surface-hover);
   border-color: rgba(243, 198, 79, 0.45);
-  transform: translateY(-4px);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
 }
 
-/* FAQ Accordion */
 .faq-card {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  transition: border-color 0.2s ease;
+  transition: border-color 0.25s ease;
 }
 
 .faq-card.active {
-  border-color: rgba(243, 198, 79, 0.4);
+  border-color: rgba(243, 198, 79, 0.45);
 }
 
 .faq-chevron {
-  transition: transform 0.25s ease;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .faq-chevron.rotated {
   transform: rotate(180deg);
 }
 
-/* Policy Modal Overlay */
+/* Policy Modal Backdrop */
 .policy-modal-backdrop {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.78);
-  backdrop-filter: blur(6px);
-  z-index: 1060;
+  background-color: rgba(11, 11, 12, 0.85);
+  backdrop-filter: blur(10px);
+  z-index: 1050;
 }
 
 .policy-modal-box {
   background-color: var(--bg-surface);
-  border: 1px solid rgba(243, 198, 79, 0.35);
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 </style>
