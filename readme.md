@@ -102,7 +102,6 @@ The G1 Event Booking System covers the development of a web-based platform for u
 - **Event Details & Booking**: Comprehensive event view (description, schedule, venue, and performers), ticket tier comparison, seat selection, temporary seat-hold timer, order summary, payment processing, and digital ticket issuance.
 - **Contact Us and About Us Page**: Organizational background, service overview, support contact details (email, phone, social media), terms/policies links, and an interactive inquiry/feedback submission form.
 - **Membership and Subscriptions**: Side-by-side comparison of Bronze, Silver, and Gold membership tiers, pricing, and perks (ticket discounts, priority booking, presale access, exclusive offers), plus enrollment, status tracking, and renewal/upgrade management.
-- **Email and Notifications**: Automated email alerts for booking confirmations, payment receipts, digital ticket availability, membership enrollments/renewals, event reminders, schedule changes, and cancellations.
 
 ## 7. Functional Requirements
 
@@ -138,7 +137,7 @@ The G1 Event Booking System covers the development of a web-based platform for u
   - **Main Flow**: 
     1. User opens the Event Listings page.
     2. System displays available events and summary details.
-    3. User searches or filters events by category, date, location, venue, price, or genre.
+    3. User searches or filters events by category, date, location, venue and price.
     4. System displays matching event results.
     5. User selects a specific event.
     6. System displays the event's description, schedule, venue, performers, rules, and available ticket categories.
@@ -230,27 +229,6 @@ The G1 Event Booking System covers the development of a web-based platform for u
     - *6a (Post-Payment Save Error)*: System notifies the user and flags the payment transaction for administrative review or refund.
     - *6b (Expired Plan Renewal)*: System extends or restarts the subscription window and updates the status to `active`.
 
-- **Use Case 6: Receive Email Notifications**
-  - **Title**: Email and Notifications
-  - **Description**: Dispatches automated email updates for bookings, payments, digital tickets, memberships, and event announcements.
-  - **Actors**: Registered Users, Notification Service
-  - **Preconditions**: A triggering system event occurs and valid notification details exist.
-  - **Postconditions**: The email is queued/sent and its delivery status is logged when supported.
-  - **Main Flow**: 
-    1. System detects a trigger event (e.g., confirmed booking or membership enrollment).
-    2. System prepares an email containing the relevant transaction or event details.
-    3. Notification service processes and dispatches the email.
-    4. System records the delivery status when supported.
-    5. User receives the email notification.
-  - **Alternate Flows**: 
-    - *1a (Notification Disabled)*: If the event does not require an email (or optional alerts are disabled), no email is sent.
-    - *2a (Missing Recipient Data)*: System aborts sending and logs the missing data for review.
-    - *3a (Service Unavailable)*: System places the message in an internal retry queue.
-    - *3b (Repeated Failure)*: After max retries, system marks the notification as failed for admin review without affecting the underlying booking, payment, or membership.
-    - *4a (Status Log Error)*: System still dispatches the email and logs the internal recording error.
-    - *5a (Invalid/Bounced Email)*: System marks the notification undelivered; user can still view tickets/bookings directly in "My Tickets".
-    - *5b (Spam/Not Received)*: User accesses their e-ticket in the portal and can trigger a confirmation resend where applicable.
-
 ### System Features
 - **Feature 1: Search and Navigation**
   - **Description**: Allows users to search for events and navigate the main website pages.
@@ -267,7 +245,7 @@ The G1 Event Booking System covers the development of a web-based platform for u
   - **Outputs**: Account confirmation, login session state, updated profile data, booking history, and password reset instructions.
   - **Error Handling**: Reject invalid inputs, prevent duplicate emails, block unauthorized access, and return descriptive error messages.
 - **Feature 3: Homepage and Featured Shows**
-  - **Description**: Displays featured events, upcoming shows, event highlights, and FAQs.
+  - **Description**: Displays featured events, upcoming shows or event highlights.
   - **Priority**: Medium
   - **Inputs**: Homepage content requests, featured event records, and user carousel/link interactions.
   - **Processing**: Retrieve and render active featured events and FAQ entries.
@@ -301,13 +279,6 @@ The G1 Event Booking System covers the development of a web-based platform for u
   - **Processing**: Validate plan availability, process required payment, and create/update `User_Subscriptions` status and validity dates.
   - **Outputs**: Membership plan details, enrollment confirmation, active status, and eligible perks.
   - **Error Handling**: Notify users of unavailable plans, failed payments, or duplicate active membership requests.
-- **Feature 8: Email and Notifications**
-  - **Description**: Sends automated email notifications for booking, payment, membership, and event updates.
-  - **Priority**: Medium
-  - **Inputs**: User email address, booking/ticket payload, transaction status, membership info, and event updates.
-  - **Processing**: Format notification messages, queue outbound emails, and dispatch via the configured email service.
-  - **Outputs**: Booking confirmations, payment receipts, digital ticket notices, membership updates, and event reminders.
-  - **Error Handling**: Queue and retry failed deliveries a limited number of times, log delivery status, and flag persistent failures for review without impacting core transactions.
 
 ## 8. Non-Functional Requirements
 - **Performance**: 
