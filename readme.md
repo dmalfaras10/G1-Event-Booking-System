@@ -22,12 +22,15 @@
 The G1 Event Booking System is a web-based application designed to provide users with a platform convenient for browsing upcoming events, viewing event information, and booking tickets for events online. The system also provides admin privileges that allows authorized individuals to add, update, delete, and manage event listings as well as monitor user/event bookings. Users can also avail for memberships/subscriptions to get exclusive offers and benefits depending on the tier. By centralizing event information and the booking process, the system aims to make event booking more accessible, organized, and efficient.
 
 **Purpose**
+
 The G1 Event Booking System is a centralized web-based ticketing platform designed to streamline event discovery, ticket purchasing, digital ticket access, and booking management for attendees, enhanced by tiered membership perks like discounts and presale access. For administrators, it provides tools to manage event listings, monitor bookings, and maintain user records—ultimately improving efficiency and organization for both attendees and platform managers.
 
 **Scope**
+
 The G1 Event Booking System covers the development of a web-based platform for user authentication, event discovery, ticket purchasing, booking management, and tiered membership perks (such as discounts and presale access), alongside administrative tools for managing events, tickets, plans, users, and bookings. Physical ticket delivery, travel or lodging bookings, venue management, and a standalone mobile app are excluded from the project's scope.
 
 **Definitions, Acronyms, and Abbreviations**: 
+
   | G1 Event Booking System | Refers to the web-based application that allows users to browse events, and create bookings |
   | :---- | :---- |
   | User | Refers to an individual visiting the website to browse events, create bookings, and update their profile |
@@ -37,6 +40,7 @@ The G1 Event Booking System covers the development of a web-based platform for u
   | Database | Refers to an organized collection of data used to store and manage user accounts, event information, and booking information (Silberschatz et al., 2020\)  |
   
 **References**: 
+
   - Coulouris, G., Dollimore, J., Kindberg, T., & Blair, G. (2011). *Distributed systems: Concepts and design* (5th ed.). Addison-Wesley.
   - Silberschatz, A., Korth, H. F., & Sudarshan, S. (2020). *Database system concepts* (7th ed.). McGraw-Hill Education.
   - Sommerville, I. (2016). *Software engineering* (10th ed.). Pearson.
