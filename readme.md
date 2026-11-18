@@ -373,8 +373,7 @@
      | `eventName` | String | None | Yes | Official event title |
      | `eventDescription` | String | None | No | Full event details |
      | `eventCategory` | String | None | Yes | Event genre/category classification |
-     | `eventStartDateTime` | DateTime | None | Yes | Event start timestamp |
-     | `eventEndDateTime` | DateTime | None | Yes | Event end timestamp |
+     | `eventDateTime` | DateTime | None | Yes | Event start timestamp |
      | `eventStatus` | String | None | Yes | `upcoming`, `ongoing`, `cancelled` |
      | `ticketType` | Array | Embedded Subdocuments | Yes | Available ticket tiers for the event |
      | `ticketType.ticketType_id` | ObjectId | PK (Subdocument) | Yes | Unique tier identifier |
@@ -384,6 +383,7 @@
      | `ticketType.ticketDescription` | String | None | No | Tier access details |
      | `ticketType.availableQuantity` | Number | None | Yes | Remaining unsold inventory |
      | `artistName` | String | None | Yes | Performing artist/act name |
+     | `artistDescription` | String | None | Yes | Artist description |
      | `createdAt` | DateTime | None | Yes | Record creation timestamp |
      | `updatedAt` | DateTime | None | Yes | Last update timestamp |
 
