@@ -46,17 +46,24 @@ The G1 Event Booking System covers the development of a web-based platform for u
   - Sommerville, I. (2016). *Software engineering* (10th ed.). Pearson.
 
 ## 4. Overall Description
-- **Product Perspective**: A standalone, client-server web application built on the MEVN stack (MongoDB, Express.js, Vue.js, Node.js) that replaces manual ticketing workflows with a centralized platform for attendees and system administrators.
-- **Product Functions**: 
+- **Product Perspective**:
+
+  The G1 Event Booking System is a centralized web-based application that simplifies online ticket booking by allowing attendees to browse events, check availability, purchase digital tickets, view booking history, and manage membership benefits. For administrators, it provides tools to manage events, ticket categories, bookings, transactions, and user records.
+  
+- **Product Functions**:
+
   1. **User Registration and Authentication**: Create accounts, log in, log out, and securely manage profile information.
   2. **Event Browsing and Search**: Browse upcoming events, search and filter listings, view event details, check availability, and explore Bronze, Silver, and Gold ticket options.
   3. **Administrative Management**: Manage user records, monitor ticket sales and booking transactions, track ticket availability, and oversee event operations.
   4. **Event Booking & Payment**: Select ticket tiers and seats, place temporary checkout holds, complete online bookings, and process payments through an integrated payment service.
   5. **Booking Management & Ticket Management**: Generate booking references (`bookingRef`) and digital tickets (`ticketCode`) for confirmed transactions; view booking history and ticket statuses.
   6. **Membership Subscription**: Explore and subscribe to Bronze, Silver, and Gold membership plans to unlock ticket discounts, presale access, and member-only offers; monitor subscription status and manage renewals.
-- **User Classes and Characteristics**: 
+
+- **User Classes and Characteristics**:
+
   - **Users / Attendees**: Individuals who browse events, view details, purchase tickets, manage bookings, access digital tickets, update profiles, and use membership benefits. Access is strictly limited to their personal account, bookings, and public event services.
   - **System Admins**: Authorized personnel responsible for creating, updating, and removing event listings, managing ticket categories and membership plans, maintaining booking records, and monitoring user transactions. Access includes all back-office administrative functions required to ensure data accuracy.
+
 - **Operating Environment**: 
   1. **Client Environment**: Desktop computers, laptops, tablets, and smartphones running modern web browsers (Google Chrome, Microsoft Edge, Mozilla Firefox, Safari) with responsive screen adaptation.
   2. **Application Environment**: Vue.js for the client-side user interface; Node.js and Express.js for backend REST API routing, business logic, and database communication.
