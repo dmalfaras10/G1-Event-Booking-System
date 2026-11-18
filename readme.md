@@ -485,18 +485,21 @@
 - **Page Inventory**:
   | Page | Client Route | Purpose | Auth Role |
   | :--- | :--- | :--- | :--- |
-  | **Homepage** | `/` | Hero carousel, featured events, upcoming shows, FAQ preview | Public |
-  | **Event Listings** | `/events` | Filterable, searchable catalogue with interactive calendar | Public |
-  | **Event Details** | `/events/:id` | Full event info, ticket tier table, rules, booking policy | Public |
-  | **Venue Details** | `/venues/:id` | Address, capacity, transit, layout | Public |
-  | **Memberships** | `/membership` | Bronze, Silver, and Gold plan comparison, perks checklist, pricing, enrollment | Public |
-  | **Checkout** | `/checkout/:bookingId` | Ticket checkout details, seat-hold countdown, payment form | Registered User |
-  | **Booking Confirmation** | `/checkout/:bookingId/confirmation` | Success state, e-ticket access, VIP timeline | Registered User |
-  | **Sign In / Register** | `/auth/:mode` | Credential entry and account creation | Public |
-  | **Profile** | `/account/profile` | View and update personal details and password | Registered User |
-  | **My Tickets** | `/account/tickets` | Booking history, ticket status, cancel, and PDF download | Registered User |
-  | **Contact / About** | `/contact` | Inquiry submission form and company information | Public |
-  | **Admin Dashboard** | `/admin` | Event CRUD, booking monitoring, user & inventory oversight | System Admin |
+  | **Homepage** | `/` | Hero carousel, featured events, partner banner | Public |
+  | **Event Listings** | `/events` | Searchable, filterable catalogue with dual-month date-range filter and grid/agenda views | Public |
+  | **Event Details** | `/events/:id` | Event info, ticket tier selection, seat selection, and checkout | Public |
+  | **Sign In** | `/login` | Credential entry | Public |
+  | **Register** | `/register` | Account creation | Public |
+  | **Forgot Password** | `/forgot-password` | Password recovery request | Public |
+  | **Profile** | `/profile` | Profile, booking history, and password change | Registered User |
+  | **Contact / About** | `/contact` (also `/about`) | Inquiry form and company information | Public |
+  | **Admin Event Listing** | `/AdminEventList` | Event CRUD and seat map management | System Admin |
+  | **Admin User Bookings** | `/AdminUserBookings` | Booking list, status override, and removal | System Admin |
+  | **Admin Subscriptions** | `/AdminSubscriptions` | Membership plan and subscriber management | System Admin |
+  | **Sign Out** | `/logout` | Clears the current session | Registered User |
+  | **Not Found** | `/:pathMatch(.*)*` | Fallback page for unmatched routes | Public |
+
+    *Auth roles above indicate the intended audience; route-level guards are a planned addition and are not yet enforced.*
 
 ### API Interfaces (Internal)
 - **Conventions**: JSON REST API consumed exclusively by the Vue.js frontend. `POST /api/v1/auth/login` returns a short-lived access token (sent via `Authorization: Bearer <token>`) and a server-persisted refresh token. Roles: `guest`, `user`, `admin`.
