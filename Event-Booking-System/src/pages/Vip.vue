@@ -66,38 +66,6 @@
 		};
 	};
 
-	// Four Pillars data
-	const pillarsData = [
-		{
-			id: 'pillar-1',
-			icon: 'bi-building-lock',
-			title: 'Private Salon Suites',
-			summary: 'Unrestricted access to personal sequestered parlors, white-glove cloakroom stewardship, and private discrete subterranean concierges.',
-			tag: 'Butler Service Included'
-		},
-		{
-			id: 'pillar-2',
-			icon: 'bi-cup-straw',
-			title: 'Curated Degustation',
-			summary: 'Chef-designed seasonal multi-course tastings matched seamlessly with bespoke Grand Cru vintages, rare champagnes, and artisanal digestifs.',
-			tag: 'Grand Cru Cellar Flights'
-		},
-		{
-			id: 'pillar-3',
-			icon: 'bi-eye',
-			title: 'Conductor Sightlines',
-			summary: 'Tier-1 acoustic elevation calibrated for pristine sound dispersion, commanding direct line-of-sight to the conductor’s baton and grand stage.',
-			tag: 'Calibrated Acoustics'
-		},
-		{
-			id: 'pillar-4',
-			icon: 'bi-stars',
-			title: 'Direct Artist Salons',
-			summary: 'Exclusive backstage parlance with headline soloists, post-ovation dialogues in the Velvet Green Room, and authenticated archival prints.',
-			tag: 'Signed Folio Archival Access'
-		}
-	];
-
 	// FAQ data
 	const openFaqId = ref(1);
 
@@ -146,21 +114,13 @@
 
 			<!-- 1. HERO SECTION -->
 			<section class="text-center mb-5 pb-3">
-				<div class="d-inline-flex align-items-center gap-2 mb-3">
-					<span class="pulse-dot"></span>
-					<span class="text-uppercase small fw-bold browse-lineup-title">
-						Patronage Tier Vault // VIP Lounge
-					</span>
-				</div>
 
 				<h1 class="display-4 fw-bold text-white lh-sm mb-3">
-					Unrivaled Access.<br />
-					<span class="text-warning">Curated Hospitality.</span>
+					<span class="text-warning">VIP</span> Memberships
 				</h1>
 
 				<p class="lead-text mx-auto mb-4" style="max-width: 650px;">
-					Step beyond standard admittance with bespoke, uncompromised guest care.
-					Luxurious keys managed with white-glove discretion across every G-ONE venue.
+					Enjoy various benefits and exclusive offers with G-ONE's tiered memberships!
 				</p>
 
 				<div class="d-flex flex-wrap justify-content-center gap-3">
@@ -169,7 +129,7 @@
 						class="btn btn-login px-4 py-2.5 d-inline-flex align-items-center gap-2"
 						@click="scrollToSection('tiers-section')"
 					>
-						<span>Explore Tiered Portfolios</span>
+						<span>Explore VIP Plans</span>
 						<i class="bi bi-arrow-down-right"></i>
 					</button>
 					<button
@@ -178,101 +138,8 @@
 						@click="scrollToSection('corporate-section')"
 					>
 						<i class="bi bi-key text-warning"></i>
-						<span>VIP Private Inquiry</span>
+						<span>Contact Us</span>
 					</button>
-				</div>
-			</section>
-
-			<!-- 2. SALON PHOTO GALLERY PREVIEW BAR -->
-			<section class="mb-5 pb-3">
-				<div class="row g-4">
-					<div class="col-12 col-md-4">
-						<div class="surface-panel rounded-4 overflow-hidden p-2 h-100">
-							<div class="rounded-3 overflow-hidden mb-2" style="height: 160px;">
-								<img
-									src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=600&q=80"
-									alt="The Riverwood Salon"
-									class="w-100 h-100 object-fit-cover gallery-img"
-								/>
-							</div>
-							<div class="text-center py-2">
-								<span class="extra-small text-warning text-uppercase fw-bold" style="letter-spacing: 1px;">
-									Exclusive Salon
-								</span>
-								<h6 class="text-white fw-bold mb-0 mt-1">The Riverwood Salon</h6>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-12 col-md-4">
-						<div class="surface-panel rounded-4 overflow-hidden p-2 h-100">
-							<div class="rounded-3 overflow-hidden mb-2" style="height: 160px;">
-								<img
-									src="https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=600&q=80"
-									alt="Private Sommelier Guild"
-									class="w-100 h-100 object-fit-cover gallery-img"
-								/>
-							</div>
-							<div class="text-center py-2">
-								<span class="extra-small text-warning text-uppercase fw-bold" style="letter-spacing: 1px;">
-									The Last Call Affair
-								</span>
-								<h6 class="text-white fw-bold mb-0 mt-1">Private Sommelier Guild</h6>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-12 col-md-4">
-						<div class="surface-panel rounded-4 overflow-hidden p-2 h-100">
-							<div class="rounded-3 overflow-hidden mb-2" style="height: 160px;">
-								<img
-									src="https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?auto=format&fit=crop&w=600&q=80"
-									alt="Virtuoso Chamber Salons"
-									class="w-100 h-100 object-fit-cover gallery-img"
-								/>
-							</div>
-							<div class="text-center py-2">
-								<span class="extra-small text-warning text-uppercase fw-bold" style="letter-spacing: 1px;">
-									Acoustic Reprieve
-								</span>
-								<h6 class="text-white fw-bold mb-0 mt-1">Virtuoso Chamber Salons</h6>
-							</div>
-						</div>
-					</div>
-				</div>
-			</section>
-
-			<!-- 3. FOUR PILLARS OF DISTINCTION -->
-			<section id="pillars-section" class="mb-5 pb-3">
-				<div class="mb-4">
-					<span class="text-uppercase small fw-bold browse-lineup-title">
-						<i class="bi bi-gem me-1"></i>The Architectural Standard
-					</span>
-					<h2 class="fw-bold text-white mb-1 mt-1">Four Pillars of Distinction</h2>
-					<p class="small text-secondary-light mb-0">
-						Every VIP tier is anchored by four signature hospitality standards across our partner venues.
-					</p>
-				</div>
-
-				<div class="row g-3">
-					<div
-						v-for="pillar in pillarsData"
-						:key="pillar.id"
-						class="col-sm-6 col-lg-3"
-					>
-						<div class="policy-link-card w-100 h-100 text-start rounded-4 p-4 d-flex flex-column">
-							<div class="d-flex align-items-center justify-content-between mb-3">
-								<i :class="['bi', pillar.icon, 'fs-4 text-warning']"></i>
-							</div>
-							<h6 class="fw-bold text-white mb-2">{{ pillar.title }}</h6>
-							<p class="extra-small text-secondary-light mb-3 flex-grow-1">
-								{{ pillar.summary }}
-							</p>
-							<span class="extra-small text-warning fw-semibold">
-								{{ pillar.tag }} <i class="bi bi-check2"></i>
-							</span>
-						</div>
-					</div>
 				</div>
 			</section>
 
@@ -281,13 +148,13 @@
 				<div class="row align-items-end g-3 mb-5">
 					<div class="col-lg-7">
 						<span class="text-uppercase small fw-bold browse-lineup-title">
-							<i class="bi bi-award me-1"></i>Patronage Portfolio
+							<i class="bi bi-award me-1"></i>Tiered Memberships
 						</span>
-						<h2 class="fw-bold text-white mb-0 mt-1">Hospitality Tier Portfolios</h2>
+						<h2 class="fw-bold text-white mb-0 mt-1">Explore VIP Plans</h2>
 					</div>
 					<div class="col-lg-5">
 						<p class="small text-secondary-light mb-0">
-							Lock in sovereign access with structured subscription privileges, priority seat holds, and private lounge entry.
+							Lock in VIP access with structured subscription privileges, priority seat holds, and private lounge entry.
 						</p>
 					</div>
 				</div>
@@ -313,21 +180,11 @@
 							</div>
 
 							<div>
-								<!-- Top Pill & Tier Icon -->
-								<div class="d-flex justify-content-between align-items-center mb-3 mt-2">
-									<span class="tier-pill px-3 py-1 rounded-2 extra-small fw-bold text-uppercase">
-										{{ getTierConfig(plan.subscriptionType).badgeLabel }}
-									</span>
-									<i :class="['bi fs-5 tier-icon', getTierConfig(plan.subscriptionType).icon]"></i>
-								</div>
 
 								<!-- Tier Title & Flavor Description -->
-								<h3 class="fw-bold text-white mb-2" style="font-family: Georgia, serif;">
-									{{ plan.subscriptionType }} Salon
+								<h3 class="fw-bold text-white mt-5 mb-2" style="font-family: Georgia, serif;">
+									{{ plan.subscriptionType }} Tier
 								</h3>
-								<p class="extra-small text-secondary-light mb-4" style="line-height: 1.6;">
-									{{ getTierConfig(plan.subscriptionType).description }}
-								</p>
 
 								<!-- Price Block -->
 								<div class="mb-4">
@@ -377,7 +234,7 @@
 							“The distinction between attending a performance and truly inhabiting it lives within the silence of the private salon.”
 						</h4>
 						<div class="extra-small text-warning text-uppercase fw-bold" style="letter-spacing: 1.5px;">
-							&mdash; G-ONE Patronage Guild
+							&mdash; G-ONE
 						</div>
 					</div>
 				</div>
@@ -388,14 +245,11 @@
 				<div class="row g-4 align-items-center">
 					<div class="col-12 col-lg-5">
 						<span class="text-uppercase small fw-bold browse-lineup-title">
-							<i class="bi bi-building me-1"></i>Institutional &amp; Monogram Affiliate
+							<i class="bi bi-building me-1"></i>INQUIRY OR CONCERNS
 						</span>
 						<h2 class="fw-bold text-white mb-3 mt-1" style="font-family: Georgia, serif;">
-							Corporate &amp; Private Suite Reservations
+							Send Us a Message!
 						</h2>
-						<p class="small text-secondary-light mb-4">
-							Institutional grand-tier provisions for sovereign family syndicates, symphony boards, and corporate hosts. Custom black-tie allocation with premier door guards and discreet hospitality protocols.
-						</p>
 
 						<div class="d-flex flex-column gap-2">
 							<div class="contact-info-row rounded-3 p-3 d-flex align-items-center gap-3">
@@ -418,11 +272,11 @@
 					<div class="col-12 col-lg-7">
 						<div class="surface-panel rounded-4 p-4 p-md-5">
 							<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-2">
-								<h4 class="fw-bold text-white mb-0">Institutional Suite Request Form</h4>
+								<h4 class="fw-bold text-white mb-0">VIP Inquiry Form</h4>
 								<span class="hero-badge px-3 py-1">Priority Desk</span>
 							</div>
 							<p class="small text-secondary-light mb-4">
-								Submit your syndicate or corporate hospitality requirements and a VIP liaison will respond within 24 hours.
+								Submit your inquiries and concerns and an agent will respond within 24 hours.
 							</p>
 
 							<!-- Success Confirmation Banner -->
@@ -434,10 +288,10 @@
 								<i class="bi bi-check-circle-fill text-warning fs-4 flex-shrink-0"></i>
 								<div>
 									<div class="fw-bold text-white small">
-										Suite Dossier Dispatched ({{ submittedRef }})
+										Message Sent ({{ submittedRef }})
 									</div>
 									<div class="extra-small text-secondary-light mt-1">
-										Your private suite inquiry has been logged with our concierge desk. Expect a direct confirmation shortly.
+										Your private suite inquiry has been logged with our concierge desk. Expect a reply shortly.
 									</div>
 								</div>
 							</div>
@@ -446,19 +300,7 @@
 								<div class="row g-3 mb-3">
 									<div class="col-md-6">
 										<label class="form-label small text-secondary-light fw-semibold">
-											Company / Syndicate Name <span class="text-warning">*</span>
-										</label>
-										<input
-											v-model="corpForm.companyName"
-											type="text"
-											class="form-control dark-input"
-											placeholder="e.g., Vance Holdings Ltd."
-											required
-										/>
-									</div>
-									<div class="col-md-6">
-										<label class="form-label small text-secondary-light fw-semibold">
-											Executive Liaison <span class="text-warning">*</span>
+											Name <span class="text-warning">*</span>
 										</label>
 										<input
 											v-model="corpForm.representative"
@@ -468,42 +310,28 @@
 											required
 										/>
 									</div>
-								</div>
-
-								<div class="row g-3 mb-3">
 									<div class="col-md-6">
 										<label class="form-label small text-secondary-light fw-semibold">
-											Primary Guild Sanctum
-										</label>
-										<select v-model="corpForm.suiteType" class="form-select dark-input">
-											<option>Executive Suite - 6 Persons</option>
-											<option>Grand Tier Box - 12 Persons</option>
-											<option>Crypt Speakeasy Annex - 4 Persons</option>
-										</select>
-									</div>
-									<div class="col-md-6">
-										<label class="form-label small text-secondary-light fw-semibold">
-											Direct Attaché Email <span class="text-warning">*</span>
+											Email <span class="text-warning">*</span>
 										</label>
 										<input
-											v-model="corpForm.email"
+											v-model="corpForm.companyName"
 											type="email"
 											class="form-control dark-input"
-											placeholder="liaison@residence.org"
+											placeholder="e.g., rafael.mendoza@g-one.com"
 											required
 										/>
 									</div>
 								</div>
-
 								<div class="mb-3">
 									<label class="form-label small text-secondary-light fw-semibold">
-										Special Courier &amp; Hospitality Instructions
+										Message
 									</label>
 									<textarea
 										v-model="corpForm.notes"
 										class="form-control dark-input"
 										rows="3"
-										placeholder="White-glove intake requirements, vintage preferences, or seating notes..."
+										placeholder="What would you like to ask regarding our VIP memberships..."
 									></textarea>
 								</div>
 
@@ -524,7 +352,7 @@
 
 								<div class="d-flex justify-content-end">
 									<button type="submit" class="btn btn-login px-4 py-2.5 d-inline-flex align-items-center gap-2">
-										<span>Dispatch Suite Dossier</span>
+										<span>Send</span>
 										<i class="bi bi-send-fill"></i>
 									</button>
 								</div>

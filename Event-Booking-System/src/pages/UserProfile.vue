@@ -17,8 +17,8 @@
 				<div class="d-flex flex-column min-vh-100 vh-md-100 sticky-sidebar py-4 px-3">
 					<!-- Logo / Header -->
 					<div class="mb-4 px-2">
-						<span class="text-uppercase tracking-wider fw-bold text-gold small">StagePass</span>
-						<h5 class="text-white mb-0 fw-bold">PATRON VAULT</h5>
+						<span class="text-uppercase tracking-wider fw-bold text-gold small">SETTINGS</span>
+						<h5 class="text-white mb-0 fw-bold">USER INFORMATION</h5>
 					</div>
 
 					<!-- Account Profile Card Widget -->
@@ -27,12 +27,12 @@
 							<i class="bi bi-shield-lock-fill">👑</i>
 						</div>
 						<div>
-							<h6 class="text-white mb-0 fs-6 fw-semibold">Lord Harrington</h6>
-							<small class="text-gold" style="font-size: 0.75rem;">FOUNDER PATRON</small>
+							<h6 class="text-white mb-0 fs-6 fw-semibold">Rafael Mendoza</h6>
+							<small class="text-gold" style="font-size: 0.75rem;">BRONZE PATRON</small>
 						</div>
 					</div>
 
-					<div class="text-uppercase text-main small fw-bold px-2 mt-4 mb-2" style="font-size: 0.7rem;">Account Sanctum</div>
+					<div class="text-uppercase text-main small fw-bold px-2 mt-4 mb-2" style="font-size: 0.7rem;">Account</div>
 					
 					<!-- Navigation Links -->
 					<div class="d-flex flex-column gap-1 text-vault-muted">
@@ -42,16 +42,7 @@
 							:class="{ 'active': profileState === 'details' }"
 							@click="profileState = 'details'"
 						>
-							Patron Profile
-						</button>
-							
-						<button 
-							type="button" 
-							class="btn profile-nav-btn w-100 py-2 px-3 rounded" 
-							:class="{ 'active': profileState === 'history' }"
-							@click="profileState = 'history'"
-						>
-							Passes & Ticket Vault
+							User Profile
 						</button>
 
 						<button 
@@ -60,7 +51,20 @@
 							:class="{ 'active': profileState === 'change-password' }"
 							@click="profileState = 'change-password'"
 						>
-							Preferences & Security
+							Security
+						</button>
+					</div>
+
+					<div class="text-uppercase text-main small fw-bold px-2 mt-4 mb-2" style="font-size: 0.7rem;">Tickets</div>
+
+					<div class="d-flex flex-column gap-1 text-vault-muted">
+						<button 
+							type="button" 
+							class="btn profile-nav-btn w-100 py-2 px-3 rounded" 
+							:class="{ 'active': profileState === 'history' }"
+							@click="profileState = 'history'"
+						>
+							Bookings & Tickets
 						</button>
 					</div>
 
