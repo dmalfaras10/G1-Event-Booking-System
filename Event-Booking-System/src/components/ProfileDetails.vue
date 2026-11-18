@@ -52,30 +52,20 @@
 					<span class="text-vault-muted small">🔒</span>
 				</div>
 
-				<div class="mb-3">
-					<label class="form-label text-vault-muted fw-bold" style="font-size: 0.68rem; letter-spacing: 0.05em;">PREFERRED FORMAL SALUTATION</label>
-					<select class="form-select">
-						<option selected>Lord (His Lordship)</option>
-						<option>Baron</option>
-						<option>Count</option>
-						<option>Sir / Dame</option>
-					</select>
-				</div>
-
 				<div class="row g-3 mb-3">
 					<div class="col-md-6">
-						<label class="form-label text-vault-muted fw-bold" style="font-size: 0.68rem; letter-spacing: 0.05em;">GIVEN NAME</label>
+						<label class="form-label text-vault-muted fw-bold" style="font-size: 0.68rem; letter-spacing: 0.05em;">FIRST NAME</label>
 						<input type="text" class="form-control" value="Alexander">
 					</div>
 					<div class="col-md-6">
-						<label class="form-label text-vault-muted fw-bold" style="font-size: 0.68rem; letter-spacing: 0.05em;">SURNAME &amp; LINEAGE</label>
+						<label class="form-label text-vault-muted fw-bold" style="font-size: 0.68rem; letter-spacing: 0.05em;">LAST NAME</label>
 						<input type="text" class="form-control" value="Vance-Hayes">
 					</div>
 				</div>
 
 				<div class="mb-3">
 					<div class="d-flex justify-content-between align-items-center mb-1">
-						<label class="form-label text-vault-muted fw-bold mb-0" style="font-size: 0.68rem; letter-spacing: 0.05em;">DIRECT VAULT COMMUNICATION EMAIL</label>
+						<label class="form-label text-vault-muted fw-bold mb-0" style="font-size: 0.68rem; letter-spacing: 0.05em;">EMAIL</label>
 						<span class="text-gold fw-bold" style="font-size: 0.65rem;">VERIFIED &amp; SEALED</span>
 					</div>
 					<input type="email" class="form-control" value="vance@residence.org">
@@ -83,12 +73,8 @@
 
 				<div class="row g-3 mb-4">
 					<div class="col-md-6">
-						<label class="form-label text-vault-muted fw-bold" style="font-size: 0.68rem; letter-spacing: 0.05em;">CONCIERGE TELEPHONE</label>
+						<label class="form-label text-vault-muted fw-bold" style="font-size: 0.68rem; letter-spacing: 0.05em;">MOBILE NUMBER</label>
 						<input type="text" class="form-control" value="+1 (555) 482-9012">
-					</div>
-					<div class="col-md-6">
-						<label class="form-label text-vault-muted fw-bold" style="font-size: 0.68rem; letter-spacing: 0.05em;">DATE OF NATIVITY</label>
-						<input type="text" class="form-control" value="August 14, 1988">
 					</div>
 				</div>
 
@@ -149,39 +135,6 @@
 						<span class="text-vault-muted fw-bold" style="font-size: 0.65rem;">DISCREET PROTOCOL</span>
 					</div>
 					<textarea class="form-control small" rows="3">White-glove private doorman intake only. Hand-waxed parchment delivery for physical invitations. Do not ring service vestibule after 21:00.</textarea>
-				</div>
-
-				<!-- Seasonal Salon Courier Dispatch Sub-card -->
-				<div class="mt-auto p-3 rounded bg-dark border border-subtle d-flex justify-content-between align-items-center gap-3">
-					<div class="d-flex align-items-center gap-3">
-						<div class="text-gold fs-5">✉️</div>
-						<div>
-							<div class="text-white fw-semibold small">Seasonal Salon Courier Dispatch</div>
-							<div class="text-vault-muted" style="font-size: 0.72rem;">Winter Gala Gold Foil Catalog scheduled for delivery Dec 18</div>
-						</div>
-					</div>
-					<span class="badge bg-surface border border-subtle text-gold px-2 py-1" style="font-size: 0.65rem;">EN ROUTE</span>
-				</div>
-			</div>
-		</div>
-
-		<!-- Bottom Security Banner: ISO 27001 Cryptographic Ledger Protection -->
-		<div class="col-12">
-			<div class="bg-surface border border-subtle rounded-3 p-3 px-4 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
-				<div class="d-flex align-items-center gap-3">
-					<div class="rounded bg-dark border border-subtle p-2 text-gold">🛡️</div>
-					<div>
-						<div class="d-flex align-items-center gap-2">
-							<span class="text-white fw-semibold small">ISO 27001 Cryptographic Ledger Protection</span>
-							<span class="badge bg-dark border border-subtle text-gold" style="font-size: 0.6rem;">HARDWARE SEALED</span>
-						</div>
-						<div class="text-vault-muted" style="font-size: 0.72rem;">
-							All biographical patron data, reservations, and private lounge allocations are encrypted end-to-end with decentralized quantum key pairs.
-						</div>
-					</div>
-				</div>
-				<div class="text-vault-muted font-monospace flex-shrink-0" style="font-size: 0.7rem;">
-					SYNC TOKEN: <span class="text-white">#HASH-9014-F2</span>
 				</div>
 			</div>
 		</div>

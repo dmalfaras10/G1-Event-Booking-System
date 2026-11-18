@@ -161,9 +161,9 @@ const handleSelectEvent = (event) => {
 						</router-link>
 					</li>
 					<li class="navbar-nav-item nav-item">
-						<a class="navbar-nav-link nav-link" href="#" v-if="!user.isAdmin">
+						<router-link class="navbar-nav-link nav-link" to="/vip" v-if="!user.isAdmin">
 							<i class="bi bi-gem navbar-text-gold me-1"></i>VIP
-						</a>
+						</router-link>
 					</li>
 					<li class="navbar-nav-item nav-item">
 						<router-link class="navbar-nav-link nav-link" to="/about" v-if="!user.isAdmin">

@@ -28,24 +28,24 @@
 
 					<form @submit.prevent>
 						<div class="mb-3">
-							<label class="form-label text-vault-muted small fw-bold">CURRENT VAULT PASSPHRASE</label>
+							<label class="form-label text-vault-muted small fw-bold">CURRENT PASSWORD</label>
 							<input type="password" class="form-control" placeholder="••••••••••••">
 						</div>
 
 						<hr class="border-subtle my-4">
 
 						<div class="mb-3">
-							<label class="form-label text-vault-muted small fw-bold">NEW SOVEREIGN PASSPHRASE</label>
+							<label class="form-label text-vault-muted small fw-bold">NEW PASSWORD</label>
 							<input type="password" class="form-control" placeholder="Minimum 14 characters">
 						</div>
 
 						<div class="mb-4">
-							<label class="form-label text-vault-muted small fw-bold">CONFIRM NEW PASSPHRASE</label>
+							<label class="form-label text-vault-muted small fw-bold">CONFIRM NEW PASSWORD</label>
 							<input type="password" class="form-control" placeholder="Re-enter new passphrase">
 						</div>
 
 						<!-- Password Strength / Requirements Box -->
-						<div class="p-3 rounded bg-dark border border-subtle mb-4">
+						<!-- <div class="p-3 rounded bg-dark border border-subtle mb-4">
 							<div class="text-gold small fw-bold mb-2" style="font-size: 0.7rem; letter-spacing: 0.05em;">
 								CRYPTOGRAPHIC ENTROPY REQUIREMENTS
 							</div>
@@ -54,7 +54,7 @@
 								<li><span class="text-gold me-2">&bull;</span> Must not match any of your previous 5 archived ciphers</li>
 								<li><span class="text-gold me-2">&bull;</span> Active lounge sessions on secondary devices will require re-verification</li>
 							</ul>
-						</div>
+						</div> -->
 
 						<div class="d-flex justify-content-end gap-2">
 							<button type="button" class="btn btn-outline-light btn-sm px-3 py-2 border-subtle">Discard</button>
