@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+  <style>
+    body { font: 13px Inter, Arial, sans-serif; color: #222; margin: 20px; }
+    h2 { margin: 0 0 8px; font-size: 18px; }
+    p { color: #666; line-height: 1.4; }
+    input { width: 100%; margin: 12px 0 18px; }
+    button { width: 100%; border: 0; border-radius: 6px; padding: 11px; background: #f3c64f; color: #111; font-weight: 700; cursor: pointer; }
+    button:disabled { opacity: .45; cursor: default; }
+    #status { margin-top: 12px; color: #666; }
+  </style>
+</head>
+<body>
+  <h2>Import G1 website captures</h2>
+  <p>Select all PNG files from <code>browser-captures</code>. Each image becomes a native Figma frame with an image layer.</p>
+  <input id="files" type="file" accept="image/png" multiple />
+  <button id="import" disabled>Import captures into Figma</button>
+  <div id="status">No files selected.</div>
+  <script>
+    const picker = document.getElementById('files');
+    const button = document.getElementById('import');
+    const status = document.getElementById('status');
+    picker.addEventListener('change', () => {
+      button.disabled = !picker.files.length;
+      status.textContent = picker.files.length ? `${picker.files.length} PNG files selected.` : 'No files selected.';
+    });
+    let files = [];
+    let index = 0;
+    const sendNext = async () => {
+      if (index >= files.length) {
+        parent.postMessage({ pluginMessage: { type: 'import-complete' } }, '*');
+        status.textContent = 'Finishing…';
+        return;
+      }
+      const file = files[index++];
+      status.textContent = `Importing ${index} of ${files.length}: ${file.name}`;
+      parent.postMessage({ pluginMessage: { type: 'import-file', file: { name: file.name, bytes: await file.arrayBuffer() } } }, '*');
+    };
+    window.onmessage = (event) => {
+      if (event.data.pluginMessage?.type === 'ready-for-file' || event.data.pluginMessage?.type === 'file-accepted') sendNext();
+    };
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      status.textContent = 'Reading captures…';
+      files = Array.from(picker.files);
+      index = 0;
+      parent.postMessage({ pluginMessage: { type: 'import-start' } }, '*');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+{
+  "name": "G1 Event Booking · Codebase UI Generator",
+  "id": "g1-event-booking-codebase-ui-generator",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figma"]
+}

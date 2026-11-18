@@ -1,0 +1,353 @@
+{
+  "baseUrl": "http://127.0.0.1:4173",
+  "viewports": [
+    {
+      "name": "desktop",
+      "width": 1440,
+      "height": 1200
+    },
+    {
+      "name": "mobile",
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "captures": [
+    {
+      "route": "/",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/",
+      "file": "home-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/register",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/register",
+      "file": "register-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/login",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/login",
+      "file": "login-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/profile",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/profile",
+      "file": "profile-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/forgot-password",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/forgot-password",
+      "file": "forgot-password-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/logout",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/logout",
+      "file": "logout-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/event/event-details1",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/event/event-details1",
+      "file": "event-event-details1-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/events",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/events",
+      "file": "events-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/events/evt-001",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/events/evt-001",
+      "file": "events-evt-001-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/events/evt-002",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/events/evt-002",
+      "file": "events-evt-002-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/events/evt-003",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/events/evt-003",
+      "file": "events-evt-003-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/events/evt-004",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/events/evt-004",
+      "file": "events-evt-004-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/events/evt-005",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/events/evt-005",
+      "file": "events-evt-005-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/events/evt-006",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/events/evt-006",
+      "file": "events-evt-006-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/vip",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/vip",
+      "file": "vip-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/about",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/about",
+      "file": "about-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/contact",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/contact",
+      "file": "contact-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/AdminEventList",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/AdminEventList",
+      "file": "admineventlist-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/AdminUserBookings",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/AdminUserBookings",
+      "file": "adminuserbookings-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/AdminSubscriptions",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/AdminSubscriptions",
+      "file": "adminsubscriptions-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/this-route-does-not-exist",
+      "viewport": "desktop",
+      "url": "http://127.0.0.1:4173/this-route-does-not-exist",
+      "file": "this-route-does-not-exist-desktop.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/",
+      "file": "home-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/register",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/register",
+      "file": "register-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/login",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/login",
+      "file": "login-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/profile",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/profile",
+      "file": "profile-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/forgot-password",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/forgot-password",
+      "file": "forgot-password-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/logout",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/logout",
+      "file": "logout-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/event/event-details1",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/event/event-details1",
+      "file": "event-event-details1-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/events",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/events",
+      "file": "events-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/events/evt-001",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/events/evt-001",
+      "file": "events-evt-001-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/events/evt-002",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/events/evt-002",
+      "file": "events-evt-002-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/events/evt-003",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/events/evt-003",
+      "file": "events-evt-003-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/events/evt-004",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/events/evt-004",
+      "file": "events-evt-004-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/events/evt-005",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/events/evt-005",
+      "file": "events-evt-005-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/events/evt-006",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/events/evt-006",
+      "file": "events-evt-006-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/vip",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/vip",
+      "file": "vip-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/about",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/about",
+      "file": "about-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/contact",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/contact",
+      "file": "contact-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/AdminEventList",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/AdminEventList",
+      "file": "admineventlist-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/AdminUserBookings",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/AdminUserBookings",
+      "file": "adminuserbookings-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/AdminSubscriptions",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/AdminSubscriptions",
+      "file": "adminsubscriptions-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    },
+    {
+      "route": "/this-route-does-not-exist",
+      "viewport": "mobile",
+      "url": "http://127.0.0.1:4173/this-route-does-not-exist",
+      "file": "this-route-does-not-exist-mobile.png",
+      "title": "event-booking-system",
+      "capturedAt": "2026-11-18T09:24:38.765Z"
+    }
+  ]
+}

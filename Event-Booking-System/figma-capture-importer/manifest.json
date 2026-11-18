@@ -1,0 +1,8 @@
+{
+  "name": "G1 · Import Website Captures",
+  "id": "g1-event-booking-capture-importer",
+  "api": "1.0.0",
+  "main": "code.js",
+  "ui": "ui.html",
+  "editorType": ["figma"]
+}
