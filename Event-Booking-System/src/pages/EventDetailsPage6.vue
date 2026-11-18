@@ -155,10 +155,6 @@
             <span class="order-line-name">Pass Allocation ({{ selectedTier.name }} × {{ qty }})</span>
             <span class="order-line-price">{{ peso(tiersSubtotal) }}</span>
           </div>
-          <div v-if="serviceFee > 0" class="order-line">
-            <span class="order-line-name">Concierge &amp; Facilities Surcharge (10%)</span>
-            <span class="order-line-price">{{ peso(serviceFee) }}</span>
-          </div>
           <div v-if="!selectedTier" class="order-empty">
             Select a seating tier to see your order summary.
           </div>
@@ -185,7 +181,7 @@
           <span class="accom-icon">🎟️</span>
           <div class="accom-text">
             <div class="accom-title">Special Patron Accommodations?</div>
-            <div class="accom-sub">Speak directly with Head Concierge Vivienne at ext. 408 for ADA seating or dietary requests.</div>
+            <div class="accom-sub">Contact our support team for ADA seating or dietary requests.</div>
           </div>
         </div>
       </div>
@@ -217,8 +213,7 @@
       :qty="qty"
       :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
-      :service-fee="serviceFee"
-      :total="orderTotal"
+       :total="orderTotal"
       :currency="'₱'"
       :code-prefix="'G1-GCN'"
       @close="step = 'seats'"
@@ -271,7 +266,7 @@ const buildSeats = (row, count, soldIndices = [], holdIndices = []) => {
 // Ticket tiers based on mockEvents.js structure (ALL SOLD OUT for this event)
 const tiers = ref([
   {
-    id: 'tier_gold_vip',
+    id: 'tier_1',
     ticketType: 'Gold VIP Dome Pass',
     name: 'Gold VIP Dome Pass',
     ticketDescription: 'Unlimited vintage bubbly and front-row pyrotechnics view.',
@@ -282,10 +277,10 @@ const tiers = ref([
     price: 12000.00,
     seatSection: 'Dome VIP',
     seatRow: 'Z',
-    capacity: 0, // All sold out
     quantity: 50,
-    seats: buildSeats('Z', 50, Array.from({length: 50}, (_, i) => i + 1), []), // All 50 seats sold
-    badge: 'Sold Out'
+    seats: buildSeats('Z', 50, Array.from({length: 50}, (_, i) => i + 1), []),
+    capacity: 0,
+    badge: null
   }
 ])
 
@@ -326,8 +321,7 @@ const MAX_SEATS_PER_ORDER = 6
 const maxQty = computed(() => Math.min(selectedTier.value?.capacity ?? MAX_SEATS_PER_ORDER, MAX_SEATS_PER_ORDER))
 
 const tiersSubtotal = computed(() => (selectedTier.value ? selectedTier.value.price * qty.value : 0))
-const serviceFee = computed(() => Math.round(tiersSubtotal.value * 0.10))
-const orderTotal = computed(() => tiersSubtotal.value + serviceFee.value)
+const orderTotal = computed(() => tiersSubtotal.value)
 
 // ---- Formatters ----
 const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')

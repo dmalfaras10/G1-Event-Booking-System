@@ -151,10 +151,6 @@
             <span class="order-line-name">Pass Allocation ({{ selectedTier.name }} × {{ qty }})</span>
             <span class="order-line-price">{{ peso(tiersSubtotal) }}</span>
           </div>
-          <div v-if="serviceFee > 0" class="order-line">
-            <span class="order-line-name">Concierge &amp; Facilities Surcharge (10%)</span>
-            <span class="order-line-price">{{ peso(serviceFee) }}</span>
-          </div>
           <div v-if="!selectedTier" class="order-empty">
             Select a seating tier to see your order summary.
           </div>
@@ -181,7 +177,7 @@
           <span class="accom-icon">🎟️</span>
           <div class="accom-text">
             <div class="accom-title">Special Patron Accommodations?</div>
-            <div class="accom-sub">Speak directly with Head Concierge Vivienne at ext. 408 for ADA seating or dietary requests.</div>
+            <div class="accom-sub">Contact our support team for ADA seating or dietary requests.</div>
           </div>
         </div>
       </div>
@@ -213,8 +209,7 @@
       :qty="qty"
       :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
-      :service-fee="serviceFee"
-      :total="orderTotal"
+       :total="orderTotal"
       :currency="'₱'"
       :code-prefix="'G1-MSA'"
       @close="step = 'seats'"
@@ -259,43 +254,15 @@ const mockEvent = {
   venueCapacity: 80,
   tickets: [
     {
-      ticketType: 'Bronze — Bar Stool',
-      ticketDescription:
-        'A backless stool at the long back bar with a clear sight line to the quartet and first call on the bartenders.',
-      ticketPerks: ['Back-Bar Seat', 'Late Jam Session Sign-Up'],
-      perksInput: 'Back-Bar Seat, Late Jam Session Sign-Up',
+      ticketType: 'Banquette Seating',
+      ticketDescription: 'Includes 1 rare single malt pairing and plush banquette seating.',
+      ticketPerks: ['1 Rare Single Malt Pairing', 'Dedicated Server'],
+      perksInput: '1 Rare Single Malt Pairing, Dedicated Server',
       price: 2800.00,
-      seatSection: 'Back Bar',
-      seatRow: 'B',
-      quantity: 24,
-      seats: buildSeats('B', 24, [1, 2, 3, 4, 5, 6, 7, 8], [9, 10]),
-      badge: null
-    },
-    {
-      ticketType: 'Silver — Banquette Seat',
-      ticketDescription:
-        'A cushioned seat at an east-wall banquette with full table service and one rare single malt pour from the back-bar reserve.',
-      ticketPerks: ['1 Rare Single Malt Pairing', 'Dedicated Table Service'],
-      perksInput: '1 Rare Single Malt Pairing, Dedicated Table Service',
-      price: 4500.00,
-      seatSection: 'East-Wall Banquette',
+      seatSection: 'Speakeasy Lounge',
       seatRow: 'S',
-      quantity: 20,
-      seats: buildSeats('S', 20, [1, 2, 3, 4, 5, 6], [7, 8]),
-      badge: 'Includes 1 Rare Single Malt Pairing'
-    },
-    {
-      ticketType: 'Gold — Private Booth',
-      ticketDescription:
-        'A velvet booth for four in the back reserve, with a dedicated pour from the owner’s shelf, coat check and a signed listening-room programme.',
-      ticketPerks: ['Private Booth for Four', 'Owner’s Reserve Pour', 'Coat Check'],
-      perksInput: 'Private Booth for Four, Owner’s Reserve Pour, Coat Check',
-      price: 6500.00,
-      seatSection: 'Back-Reserve Booth',
-      seatRow: 'G',
-      quantity: 8,
-      seats: buildSeats('G', 8, [1, 2, 3, 4], []),
-      badge: 'Most Requested'
+      quantity: 25,
+      seats: buildSeats('S', 25, [1, 2, 3, 4], [5, 6])
     }
   ]
 }
@@ -368,8 +335,7 @@ const MAX_SEATS_PER_ORDER = 6
 const maxQty = computed(() => Math.min(selectedTier.value?.capacity ?? MAX_SEATS_PER_ORDER, MAX_SEATS_PER_ORDER))
 
 const tiersSubtotal = computed(() => (selectedTier.value ? selectedTier.value.price * qty.value : 0))
-const serviceFee = computed(() => Math.round(tiersSubtotal.value * 0.10))
-const orderTotal = computed(() => tiersSubtotal.value + serviceFee.value)
+const orderTotal = computed(() => tiersSubtotal.value)
 
 // ---- Formatters ----
 const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')

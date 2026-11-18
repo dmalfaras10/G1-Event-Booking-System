@@ -154,10 +154,6 @@
             <span class="order-line-name">Pass Allocation ({{ selectedTier.name }} × {{ qty }})</span>
             <span class="order-line-price">{{ peso(tiersSubtotal) }}</span>
           </div>
-          <div v-if="serviceFee > 0" class="order-line">
-            <span class="order-line-name">Concierge &amp; Facilities Surcharge (10%)</span>
-            <span class="order-line-price">{{ peso(serviceFee) }}</span>
-          </div>
           <div v-if="!selectedTier" class="order-empty">
             Select a seating tier to see your order summary.
           </div>
@@ -184,7 +180,7 @@
           <span class="accom-icon">🎟️</span>
           <div class="accom-text">
             <div class="accom-title">Special Patron Accommodations?</div>
-            <div class="accom-sub">Speak directly with Head Concierge Vivienne at ext. 408 for ADA seating or dietary requests.</div>
+            <div class="accom-sub">Contact our support team for ADA seating or dietary requests.</div>
           </div>
         </div>
       </div>
@@ -216,8 +212,7 @@
       :qty="qty"
       :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
-      :service-fee="serviceFee"
-      :total="orderTotal"
+       :total="orderTotal"
       :currency="'₱'"
       :code-prefix="'G1-WMG'"
       @close="step = 'seats'"
@@ -268,40 +263,15 @@ const event = {
   venueCapacity: 100,
   tickets: [
     {
-      ticketType: 'Bronze — Ballroom Seat',
-      ticketDescription: 'A seat at a shared round table of ten, with the full four-course menu.',
-      ticketPerks: ['Four-course Dinner', 'Vintage Champagne Reception', 'Souvenir Mask'],
-      perksInput: 'Four-course Dinner, Vintage Champagne Reception, Souvenir Mask',
-      price: 8500,
-      seatSection: 'Grand Ballroom',
-      seatRow: 'B',
-      quantity: 60,
-      seats: [
-        ...buildSeats('B', 30, [1, 2, 3, 4, 5, 6, 7, 8, 9], [10, 11]),
-        ...buildSeats('C', 30, [4, 5, 6, 7], [8])
-      ]
-    },
-    {
-      ticketType: 'Silver — Private Table for Two',
-      ticketDescription: 'Your own table for two, with dedicated service and a candle centrepiece.',
-      ticketPerks: ['Table for Two', 'Dedicated Butler', 'Candle Centrepiece'],
-      perksInput: 'Table for Two, Dedicated Butler, Candle Centrepiece',
-      price: 14000,
+      ticketType: 'Black Tie VIP Table',
+      ticketDescription: 'Includes complimentary champagne and four-course dinner pairing.',
+      ticketPerks: ['Complimentary Champagne', 'Four-course Dinner', 'Mask Included'],
+      perksInput: 'Complimentary Champagne, Four-course Dinner, Mask Included',
+      price: 8500.00,
       seatSection: 'Grand Tier',
-      seatRow: 'D',
-      quantity: 24,
-      seats: buildSeats('D', 24, [1, 2, 3, 4, 5, 6], [7, 8])
-    },
-    {
-      ticketType: 'Gold — Grand Balcony Box',
-      ticketDescription: 'Private balcony box for four with a butler and a magnum of vintage Champagne.',
-      ticketPerks: ['Private Balcony Box', 'Magnum of Vintage Champagne', 'Private Butler'],
-      perksInput: 'Private Balcony Box, Magnum of Vintage Champagne, Private Butler',
-      price: 22000,
-      seatSection: 'Grand Balcony',
-      seatRow: 'E',
-      quantity: 16,
-      seats: buildSeats('E', 16, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], [13])
+      seatRow: 'VIP',
+      quantity: 30,
+      seats: buildSeats('VIP', 30, [1, 2, 3, 4, 5, 6, 7], [8, 9])
     }
   ]
 }
@@ -369,8 +339,7 @@ const MAX_SEATS_PER_ORDER = 6
 const maxQty = computed(() => Math.min(selectedTier.value?.capacity ?? MAX_SEATS_PER_ORDER, MAX_SEATS_PER_ORDER))
 
 const tiersSubtotal = computed(() => (selectedTier.value ? selectedTier.value.price * qty.value : 0))
-const serviceFee = computed(() => Math.round(tiersSubtotal.value * 0.10))
-const orderTotal = computed(() => tiersSubtotal.value + serviceFee.value)
+const orderTotal = computed(() => tiersSubtotal.value)
 
 // ---- Formatters ----
 const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')
