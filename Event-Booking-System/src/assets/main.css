@@ -582,3 +582,10 @@ body {
   color: #f87171;
 }
 
+@media (min-width: 768px) {
+  .sticky-sidebar {
+    position: sticky;
+    top: 73px;
+    z-index: 50;
+  }
+}

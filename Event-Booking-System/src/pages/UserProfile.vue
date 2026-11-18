@@ -14,7 +14,7 @@
 			<!-- Sidebar -->
 			<div class="col-12 col-md-3 col-xl-2 border-end border-subtle bg-surface">
 				<!-- Change min-vh-100 to vh-100 and add sticky-top (on md+ screens) -->
-				<div class="d-flex flex-column min-vh-100 vh-md-100 sticky-md-top py-4 px-3">
+				<div class="d-flex flex-column min-vh-100 vh-md-100 sticky-sidebar py-4 px-3">
 					<!-- Logo / Header -->
 					<div class="mb-4 px-2">
 						<span class="text-uppercase tracking-wider fw-bold text-gold small">StagePass</span>

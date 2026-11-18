@@ -22,6 +22,7 @@ import ForgotPassword from './pages/ForgotPassword.vue'
 import ErrorPage from './pages/ErrorPage.vue'
 import AboutContactPage from './pages/AboutContactPage.vue';
 import UserProfile from './pages/UserProfile.vue'
+import VipPage from './pages/Vip.vue';
 // Admin Side
 import AdminEventListing from './pages/AdminEventListing.vue';
 import AdminUserBookings from './pages/AdminUserBookings.vue';
@@ -51,6 +52,7 @@ const routes = [
     props: ['id'],
     setup: (props) => () => h(eventDetailsPages[props.id] || EventDetailsPage)
   }},
+  { path: '/vip', name: 'Vip', component: VipPage },
   { path: '/about', name: 'About', component: AboutContactPage},
   { path: '/contact', name: 'Contact', component: AboutContactPage},
   { path: '/AdminEventList', name: 'AdminEventListing', component: AdminEventListing},
