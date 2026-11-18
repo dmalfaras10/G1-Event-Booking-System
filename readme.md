@@ -29,7 +29,7 @@ The G1 Event Booking System is a centralized web-based ticketing platform design
 
 The G1 Event Booking System covers the development of a web-based platform for user authentication, event discovery, ticket purchasing, booking management, and tiered membership perks (such as discounts and presale access), alongside administrative tools for managing events, tickets, plans, users, and bookings. Physical ticket delivery, travel or lodging bookings, venue management, and a standalone mobile app are excluded from the project's scope.
 
-**Definitions, Acronyms, and Abbreviations**: 
+**Definitions, Acronyms, and Abbreviations** 
 
   | G1 Event Booking System | Refers to the web-based application that allows users to browse events, and create bookings |
   | :---- | :---- |
@@ -39,18 +39,18 @@ The G1 Event Booking System covers the development of a web-based platform for u
   | Booking | Refers to a record created when a user submits a request to reserve a ticket or more for an event |
   | Database | Refers to an organized collection of data used to store and manage user accounts, event information, and booking information (Silberschatz et al., 2020\)  |
   
-**References**: 
+**References** 
 
   - Coulouris, G., Dollimore, J., Kindberg, T., & Blair, G. (2011). *Distributed systems: Concepts and design* (5th ed.). Addison-Wesley.
   - Silberschatz, A., Korth, H. F., & Sudarshan, S. (2020). *Database system concepts* (7th ed.). McGraw-Hill Education.
   - Sommerville, I. (2016). *Software engineering* (10th ed.). Pearson.
 
 ## 4. Overall Description
-**Product Perspective**:
+**Product Perspective**
 
   The G1 Event Booking System is a centralized web-based application that simplifies online ticket booking by allowing attendees to browse events, check availability, purchase digital tickets, view booking history, and manage membership benefits. For administrators, it provides tools to manage events, ticket categories, bookings, transactions, and user records.
   
-**Product Functions**:
+**Product Functions**
 
   1. **User Registration and Authentication**: Create accounts, log in, log out, and securely manage profile information.
   2. **Event Browsing and Search**: Browse upcoming events, search and filter listings, view event details, check availability, and explore Bronze, Silver, and Gold ticket options.
@@ -59,12 +59,12 @@ The G1 Event Booking System covers the development of a web-based platform for u
   5. **Booking Management & Ticket Management**: Generate booking references (`bookingRef`) and digital tickets (`ticketCode`) for confirmed transactions; view booking history and ticket statuses.
   6. **Membership Subscription**: Explore and subscribe to Bronze, Silver, and Gold membership plans to unlock ticket discounts, presale access, and member-only offers; monitor subscription status and manage renewals.
 
-**User Classes and Characteristics**:
+**User Classes and Characteristics**
 
   - **Users / Attendees**: Individuals who browse events, view details, purchase tickets, manage bookings, access digital tickets, update profiles, and use membership benefits. Access is strictly limited to their personal account, bookings, and public event services.
   - **System Admins**: Authorized personnel responsible for creating, updating, and removing event listings, managing ticket categories and membership plans, maintaining booking records, and monitoring user transactions. Access includes all back-office administrative functions required to ensure data accuracy.
 
-**Operating Environment**: 
+**Operating Environment** 
 
   1. **Client Environment**: Desktop computers, laptops, tablets, and smartphones running modern web browsers (Google Chrome, Microsoft Edge, Mozilla Firefox, Safari) with responsive screen adaptation.
   2. **Application Environment**: Vue.js for the client-side user interface; Node.js and Express.js for backend REST API routing, business logic, and database communication.
@@ -74,13 +74,15 @@ The G1 Event Booking System covers the development of a web-based platform for u
   6. **Security Infrastructure**: JSON Web Token (JWT) authentication, Role-Based Access Control (RBAC), Bcrypt password hashing, and third-party payment gateway isolation.
   7. **Hardware Requirements**: Standard consumer devices capable of running a modern browser for clients; cloud server instances with sufficient CPU, memory, and storage to handle application logic and database queries.
 
-- **Assumptions and Dependencies**: 
+- **Assumptions and Dependencies**
+ 
   - **Assumptions**:
     - Users and administrators have access to an internet-connected device and compatible browser.
     - Users provide accurate registration details, and administrators maintain accurate event, pricing, and membership data.
     - Stakeholders will provide timely business rules, workflows, and feedback.
     - Users have appropriate permissions for their role, and the MEVN stack supports all target features.
     - Payment gateway integration and email/notification services will be implemented post-MVP once core MVP requirements are completed.
+
   - **Dependencies**:
     - **Database Service**: MongoDB Atlas for persistent storage.
     - **Application Technologies**: Vue.js, Node.js, Express.js, and Mongoose.
@@ -92,6 +94,7 @@ The G1 Event Booking System covers the development of a web-based platform for u
 - **Link or Screenshot**: [G1: Event Booking System Figma Visual Mockup](https://www.figma.com/design/GEkylbxWNNZ7c7XL5YBRtb/Event-Booking-Side-Project?node-id=0-1&t=MZUb4SSz7qulHcHh-1)
 
 ## 6. Features
+
 - **Search & Navigation**: Global search bar and top-level navigation linking the Homepage, Event Listings, About Us, Contact Us, and Membership pages.
 - **User Accounts & Profile Management**: Account registration, login/logout, personal profile editing, password change/recovery, upcoming event checks, and booking history access.
 - **Homepage & Featured Shows**: Hero carousel showcasing featured performances and popular shows, key event highlights (dates, venues, starting prices), and quick navigation links.
