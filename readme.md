@@ -19,7 +19,7 @@
 10. [Appendices](#12-appendices)
 
 ## 3. Introduction
-- **Overview**: The G1 Event Booking System is a centralized web-based application designed for browsing upcoming concerts and special events, viewing event details, booking tickets online, and enrolling in tiered memberships. It also equips administrators with tools to manage event listings, venues, ticket categories, membership plans, user records, and booking transactions. As a mock system and side project, it demonstrates core concepts of web development, database management, authentication, and booking management within the defined scope.
+- **Overview**: The G1 Event Booking System is a centralized web-based application designed for browsing upcoming concerts and special events, viewing event details, booking tickets online, and enrolling in tiered memberships. It also equips administrators with tools to manage event listings, venues, ticket categories, membership plans, user records, and booking transactions.
 - **Purpose**: 
   - Provide attendees with an organized platform to discover events, check schedules and real-time seat/ticket availability, secure digital tickets, and review booking history.
   - Enhance customer experience through Bronze, Silver, and Gold membership plans offering ticket discounts, presale access, and member-only perks.
