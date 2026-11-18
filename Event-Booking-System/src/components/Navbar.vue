@@ -190,24 +190,23 @@ const handleSelectEvent = (event) => {
 					<!-- Logged-in User Dropdown -->
 					<div class="dropdown" v-else>
 						<button
-							class="btn navbar-btn-login dropdown-toggle d-flex align-items-center justify-content-center gap-2 w-100"
+							class="btn navbar-user-icon-btn d-flex align-items-center justify-content-center p-0"
 							type="button"
 							id="userMenuDropdown"
 							data-bs-toggle="dropdown"
 							aria-expanded="false"
+							aria-label="User menu"
 						>
-							<i class="bi bi-person-circle"></i>
-							<span>{{ user.firstName || user.email }}</span>
+							<div class="user-avatar-inner d-flex align-items-center justify-content-center">
+								<i class="bi bi-person"></i>
+							</div>
+							<span class="user-status-ping"></span>
+							<span class="user-status-dot"></span>
 						</button>
 						<ul class="dropdown-menu dropdown-menu-end navbar-user-dropdown shadow-lg rounded-4 mt-2" aria-labelledby="userMenuDropdown">
 							<li>
 								<router-link class="dropdown-item d-flex align-items-center gap-2" to="/profile">
 									<i class="bi bi-person"></i>My Profile
-								</router-link>
-							</li>
-							<li>
-								<router-link class="dropdown-item d-flex align-items-center gap-2" to="/tickets" v-if="!user.isAdmin">
-									<i class="bi bi-ticket-perforated"></i>My Ticket
 								</router-link>
 							</li>
 							<li><hr class="dropdown-divider" /></li>
@@ -475,6 +474,73 @@ const handleSelectEvent = (event) => {
     color: var(--bg-primary);
     transform: translateY(-1px);
     box-shadow: 0 4px 16px rgba(243, 198, 79, 0.35);
+}
+
+/* Redesigned User Avatar Icon Button */
+.navbar-user-icon-btn {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold-accent), #c59b27);
+    border: none;
+    padding: 2px !important; /* Creates gradient border effect */
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.user-avatar-inner {
+    width: 100%;
+    height: 100%;
+    background-color: var(--bg-primary);
+    border-radius: 50%;
+    color: var(--gold-accent);
+    font-size: 1.2rem;
+    transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.user-status-dot {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 10px;
+    height: 10px;
+    background-color: #10b981;
+    border: 2px solid var(--bg-primary);
+    border-radius: 50%;
+    z-index: 3;
+}
+
+.user-status-ping {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    width: 10px;
+    height: 10px;
+    background-color: #10b981;
+    border-radius: 50%;
+    animation: status-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    z-index: 2;
+}
+
+@keyframes status-ping {
+    75%, 100% {
+        transform: scale(2.2);
+        opacity: 0;
+    }
+}
+
+.navbar-user-icon-btn:hover,
+.navbar-user-icon-btn:focus,
+.navbar-user-icon-btn[aria-expanded="true"] {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(243, 198, 79, 0.35);
+}
+
+.navbar-user-icon-btn:hover .user-avatar-inner,
+.navbar-user-icon-btn[aria-expanded="true"] .user-avatar-inner {
+    background-color: var(--gold-accent);
+    color: var(--bg-primary);
 }
 
 .navbar-user-dropdown {

@@ -143,7 +143,7 @@ const handleRouteScroll = async () => {
   if (route.path === '/contact') {
     const contactSection = document.getElementById('contact-section');
 
-    scrollToWithOffset(contactSection, 80);
+    scrollToWithOffset(contactSection, 110);
 
 
   } else {
