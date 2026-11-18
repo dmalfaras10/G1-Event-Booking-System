@@ -314,7 +314,7 @@
   - Distinguish ticket statuses clearly (valid, used, cancelled, refunded).
 - **Reliability**: 
   - Maintain data consistency across bookings, payments, tickets, and subscriptions using database transactions, ensuring failed transactions never generate confirmed tickets.
-  - Prevent duplicate bookings, ticket issuance, or order completion from repeated payment notifications or temporary external service failures, while properly tracking payment states * (pending, successful, failed, cancelled, refunded).
+  - Prevent duplicate bookings, ticket issuance, or order completion from repeated payment notifications or temporary external service failures, while properly tracking payment states * (pending, confimred, cancelled, refunded).
   - Ensure strict inventory and redemption accuracy by keeping ticket availability precise during simultaneous purchases and preventing single tickets from being redeemed more than once.
   - Restrict subscription perks exclusively to active, eligible statuses.
   - Maintain deployment-appropriate database backups, handle errors gracefully without leaking sensitive details, and log operational issues for effective debugging.
