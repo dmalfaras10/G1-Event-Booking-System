@@ -13,29 +13,15 @@
 						</div>
 					</div>
 					<div>
-						<div class="d-inline-block px-2 py-1 rounded bg-dark border border-subtle text-gold fw-bold mb-2" style="font-size: 0.65rem; letter-spacing: 0.06em;">
-							FOUNDER KEYHOLDER // TIER 0
-						</div>
 						<div class="text-vault-muted small mb-1" style="font-size: 0.75rem;">
 							Patron ID: <span class="text-white font-monospace">#SP-89240-NY</span>
 						</div>
-						<h2 class="text-white fw-bold mb-2" style="font-family: Georgia, serif;">Lord Alexander R. Vance-Hayes</h2>
+						<h2 class="text-white fw-bold mb-2" style="font-family: Georgia, serif;">Rafael Mendoza</h2>
 						<div class="d-flex flex-wrap gap-3 text-vault-muted small" style="font-size: 0.78rem;">
 							<span>Member since <strong class="text-white fw-normal">Oct 2021</strong></span>
 							<span>&bull;</span>
-							<span>Sovereign Status: <strong class="text-gold fw-semibold">Active &amp; Verified</strong></span>
-							<span>&bull;</span>
-							<span>Attache Assigned: <strong class="text-white fw-normal">M. Saint-Claire</strong></span>
+							<span>VIP Status: <strong class="text-gold fw-semibold">Bronze</strong></span>
 						</div>
-					</div>
-				</div>
-
-				<div class="text-md-end">
-					<button type="button" class="btn btn-outline-light btn-sm px-3 py-2 border-subtle text-gold mb-2">
-						Update Monogram &amp; Seal
-					</button>
-					<div class="text-vault-muted font-monospace" style="font-size: 0.65rem;">
-						LAST SYNCHRONIZED: TODAY, 19:42 EST
 					</div>
 				</div>
 			</div>
@@ -77,18 +63,6 @@
 						<input type="text" class="form-control" value="+1 (555) 482-9012">
 					</div>
 				</div>
-
-				<!-- Patron Lounge Standing & Accreditations -->
-				<div class="mt-auto pt-3 border-top border-subtle">
-					<div class="text-vault-muted fw-bold mb-2" style="font-size: 0.68rem; letter-spacing: 0.05em;">
-						PATRON LOUNGE STANDING &amp; ACCREDITATIONS
-					</div>
-					<div class="d-flex flex-wrap gap-2">
-						<span class="badge bg-dark border border-subtle text-gold fw-normal px-2 py-2">Metropolitan Opera Patron Circle</span>
-						<span class="badge bg-dark border border-subtle text-gold fw-normal px-2 py-2">Velvet Vault Tier 0 Council</span>
-						<span class="badge bg-dark border border-subtle text-gold fw-normal px-2 py-2">Philharmonic Gold Donor</span>
-					</div>
-				</div>
 			</div>
 		</div>
 
@@ -128,14 +102,6 @@
 						<option>Switzerland (Zürich)</option>
 					</select>
 				</div>
-
-				<div class="mb-4">
-					<div class="d-flex justify-content-between align-items-center mb-1">
-						<label class="form-label text-vault-muted fw-bold mb-0" style="font-size: 0.68rem; letter-spacing: 0.05em;">SPECIAL ATTACHE &amp; COURIER PROTOCOL</label>
-						<span class="text-vault-muted fw-bold" style="font-size: 0.65rem;">DISCREET PROTOCOL</span>
-					</div>
-					<textarea class="form-control small" rows="3">White-glove private doorman intake only. Hand-waxed parchment delivery for physical invitations. Do not ring service vestibule after 21:00.</textarea>
-				</div>
 			</div>
 		</div>
 
@@ -150,7 +116,7 @@
 						Discard Revisions
 					</button>
 					<button type="button" class="btn btn-gold px-4 py-2 small">
-						Save Dossier Changes
+						Save Changes
 					</button>
 				</div>
 			</div>
