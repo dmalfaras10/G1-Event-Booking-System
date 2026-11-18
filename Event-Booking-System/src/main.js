@@ -39,7 +39,6 @@ const eventDetailsPages = {
 }
 
 const routes = [
-
   { path: '/', name: 'home', component: HomePage },
   { path: '/register', name: 'Register', component: RegisterPage },
   { path: '/login', name: 'Login', component: LoginPage },
@@ -59,12 +58,20 @@ const routes = [
   { path: '/AdminUserBookings', name: 'AdminUserBookings', component: AdminUserBookings},
   { path: '/AdminSubscriptions', name: 'AdminSubscriptions', component: AdminSubscriptionsPage},
   { path: '/:pathMatch(.*)*', name: 'not-found', component: ErrorPage }
-
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (to.name === 'About' || to.name === 'Contact') {
+      return false
+    }
+    if (savedPosition) {
+      return savedPosition
+    }
+    return { top: 0, behavior: 'instant' }
+  },
 })
 
-createApp(App).use(router).use(createPinia()).mount('#app') 
+createApp(App).use(router).use(createPinia()).mount('#app')
