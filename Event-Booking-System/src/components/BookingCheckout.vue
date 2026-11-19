@@ -6,33 +6,47 @@
         :class="{ 'checkout-modal-wide': step === 'confirmation' }"
         role="dialog"
         aria-modal="true"
-        aria-label="Booking checkout"
-      >
-        <button type="button" class="modal-close" aria-label="Close checkout" @click="emit('close')">
+        aria-label="Booking checkout">
+        <button
+          type="button"
+          class="modal-close"
+          aria-label="Close checkout"
+          @click="emit('close')">
           <i class="bi bi-x-lg"></i>
         </button>
 
         <!-- ==================== STEP: PAYMENT ==================== -->
         <div v-if="step === 'payment'" class="modal-body">
-          <span class="modal-kicker"><i class="bi bi-shield-lock"></i> Secure Checkout</span>
+          <span class="modal-kicker"
+            ><i class="bi bi-shield-lock"></i> Secure Checkout</span
+          >
           <h2 class="modal-title">Complete Your Booking</h2>
-          <p class="modal-sub">Review your order, then enter your payment details to confirm.</p>
+          <p class="modal-sub">
+            Review your order, then enter your payment details to confirm.
+          </p>
 
           <div class="order-strip">
             <div class="order-strip-row">
               <span class="order-strip-label">{{ qty }} × {{ tierName }}</span>
               <span class="order-strip-value">{{ money(subtotal) }}</span>
             </div>
-            <div v-if="seats.length" class="order-strip-row order-strip-row-sub">
+            <div
+              v-if="seats.length"
+              class="order-strip-row order-strip-row-sub">
               <span class="order-strip-label">Seats</span>
-              <span class="order-strip-value">{{ seats.join(', ') }}</span>
+              <span class="order-strip-value">{{ seats.join(", ") }}</span>
             </div>
-            <div v-for="a in addOns" :key="a.name" class="order-strip-row order-strip-row-sub">
+            <div
+              v-for="a in addOns"
+              :key="a.name"
+              class="order-strip-row order-strip-row-sub">
               <span class="order-strip-label">{{ a.name }} (× {{ qty }})</span>
               <span class="order-strip-value">{{ money(a.price * qty) }}</span>
             </div>
             <div v-if="serviceFee > 0" class="order-strip-row">
-              <span class="order-strip-label">Concierge &amp; Facilities Surcharge (10%)</span>
+              <span class="order-strip-label"
+                >Concierge &amp; Facilities Surcharge (10%)</span
+              >
               <span class="order-strip-value">{{ money(serviceFee) }}</span>
             </div>
             <div class="order-strip-row order-strip-total">
@@ -44,26 +58,52 @@
           <form @submit.prevent="processPayment">
             <div class="field">
               <label for="co-cardholder">Cardholder Name</label>
-              <input id="co-cardholder" v-model="pay.cardholder" type="text" placeholder="Name on card" required>
+              <input
+                id="co-cardholder"
+                v-model="pay.cardholder"
+                type="text"
+                placeholder="Name on card"
+                required />
             </div>
             <div class="field">
               <label for="co-number">Card Number</label>
-              <input id="co-number" v-model="pay.number" type="text" placeholder="1234 5678 9012 3456" inputmode="numeric" required>
+              <input
+                id="co-number"
+                v-model="pay.number"
+                type="text"
+                placeholder="1234 5678 9012 3456"
+                inputmode="numeric"
+                required />
             </div>
             <div class="field-row">
               <div class="field">
                 <label for="co-expiry">Expiry</label>
-                <input id="co-expiry" v-model="pay.expiry" type="text" placeholder="MM/YY" required>
+                <input
+                  id="co-expiry"
+                  v-model="pay.expiry"
+                  type="text"
+                  placeholder="MM/YY"
+                  required />
               </div>
               <div class="field">
                 <label for="co-cvc">CVC</label>
-                <input id="co-cvc" v-model="pay.cvc" type="text" placeholder="123" maxlength="4" inputmode="numeric" required>
+                <input
+                  id="co-cvc"
+                  v-model="pay.cvc"
+                  type="text"
+                  placeholder="123"
+                  maxlength="4"
+                  inputmode="numeric"
+                  required />
               </div>
             </div>
 
             <label class="check-row">
-              <input v-model="pay.terms" type="checkbox" required>
-              <span>I agree to the <a href="#">Booking Rules &amp; Policies</a> and refund terms.</span>
+              <input v-model="pay.terms" type="checkbox" required />
+              <span
+                >I agree to the <a href="#">Booking Rules &amp; Policies</a> and
+                refund terms.</span
+              >
             </label>
 
             <div v-if="payError" class="pay-error">
@@ -71,23 +111,30 @@
             </div>
 
             <button class="btn-pay" type="submit" :disabled="payProcessing">
-              {{ payProcessing ? 'Processing Payment…' : 'Pay Now' }}
+              {{ payProcessing ? "Processing Payment…" : "Pay Now" }}
             </button>
           </form>
 
           <p class="secure-note">
-            <i class="bi bi-lock-fill"></i> 256-bit encrypted · card details are never stored
+            <i class="bi bi-lock-fill"></i> 256-bit encrypted · card details are
+            never stored
           </p>
         </div>
         <!-- ==================== STEP: CONFIRMATION ==================== -->
         <div v-else class="modal-body">
           <div class="confirm-head">
-            <h2 class="modal-title">Thank you, <span class="gold">{{ userName }}</span></h2>
-            <p class="modal-sub">Your booking is confirmed and your digital e-tickets are ready.</p>
+            <h2 class="modal-title">
+              Thank you, <span class="gold">{{ userName }}</span>
+            </h2>
+            <p class="modal-sub">
+              Your booking is confirmed and your digital e-tickets are ready.
+            </p>
           </div>
 
           <div class="block-head">
-            <span class="block-title"><i class="bi bi-receipt"></i> Booking Summary</span>
+            <span class="block-title"
+              ><i class="bi bi-receipt"></i> Booking Summary</span
+            >
           </div>
 
           <div class="order-strip">
@@ -113,7 +160,7 @@
             </div>
             <div v-if="seats.length" class="order-strip-row">
               <span class="order-strip-label">Seats</span>
-              <span class="order-strip-value">{{ seats.join(', ') }}</span>
+              <span class="order-strip-value">{{ seats.join(", ") }}</span>
             </div>
             <div class="order-strip-row order-strip-total">
               <span>Total Paid</span>
@@ -122,7 +169,9 @@
           </div>
 
           <div class="block-head">
-            <span class="block-title"><i class="bi bi-ticket-perforated"></i> Digital E-Tickets</span>
+            <span class="block-title"
+              ><i class="bi bi-ticket-perforated"></i> Digital E-Tickets</span
+            >
             <span class="block-count">{{ qty }} issued</span>
           </div>
 
@@ -147,7 +196,10 @@
                 <button type="button" class="btn-ticket" @click="dlTicket(n)">
                   <i class="bi bi-download"></i> PDF
                 </button>
-                <button type="button" class="btn-ticket" @click="walletTicket(n)">
+                <button
+                  type="button"
+                  class="btn-ticket"
+                  @click="walletTicket(n)">
                   <i class="bi bi-wallet2"></i> Add to Wallet
                 </button>
               </div>
@@ -155,12 +207,18 @@
           </div>
 
           <p class="ticket-note">
-            <i class="bi bi-info-circle"></i> Present the QR code at the venue entrance. Each code is single-use.
+            <i class="bi bi-info-circle"></i> Present the QR code at the venue
+            entrance. Each code is single-use.
           </p>
 
           <div class="modal-actions">
-            <button type="button" class="btn-ghost" @click="emit('reset')">Book Another Event</button>
-            <button type="button" class="btn-pay btn-pay-inline" @click="dlAllTickets">
+            <button type="button" class="btn-ghost" @click="emit('reset')">
+              Book Another Event
+            </button>
+            <button
+              type="button"
+              class="btn-pay btn-pay-inline"
+              @click="dlAllTickets">
               <i class="bi bi-download"></i> Download All Tickets
             </button>
           </div>
@@ -170,68 +228,88 @@
   </Teleport>
 </template>
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from "vue";
 
 const props = defineProps({
-  eventName: { type: String, default: '' },
-  venue: { type: String, default: '' },
-  when: { type: String, default: '' },
-  tierName: { type: String, default: '' },
-  tierId: { type: String, default: '' },
+  eventName: { type: String, default: "" },
+  venue: { type: String, default: "" },
+  when: { type: String, default: "" },
+  tierName: { type: String, default: "" },
+  tierId: { type: String, default: "" },
   qty: { type: Number, default: 1 },
   seats: { type: Array, default: () => [] },
   subtotal: { type: Number, default: 0 },
   addOns: { type: Array, default: () => [] },
   serviceFee: { type: Number, default: 0 },
   total: { type: Number, default: 0 },
-  currency: { type: String, default: '₱' },
-  codePrefix: { type: String, default: 'G1' },
-})
+  currency: { type: String, default: "₱" },
+  codePrefix: { type: String, default: "G1" },
+});
 
-const emit = defineEmits(['close', 'reset'])
+const emit = defineEmits(["close", "reset"]);
 
 // The modal owns both checkout steps; the page only decides whether to show it.
-const step = ref('payment')
-const payProcessing = ref(false)
-const payError = ref('')
-const userName = ref('Guest')
+const step = ref("payment");
+const payProcessing = ref(false);
+const payError = ref("");
+const userName = ref("Guest");
 
-const pay = ref({ cardholder: '', number: '', expiry: '', cvc: '', terms: false })
+const pay = ref({
+  cardholder: "",
+  number: "",
+  expiry: "",
+  cvc: "",
+  terms: false,
+});
 
-const money = (v) => props.currency + Number(v || 0).toLocaleString('en-PH')
+const money = (v) => props.currency + Number(v || 0).toLocaleString("en-PH");
 
 const ticketCode = (n) =>
-  `${props.codePrefix}-${String(props.tierId).slice(-4).toUpperCase()}-${String(n).padStart(3, '0')}`
+  `${props.codePrefix}-${String(props.tierId).slice(-4).toUpperCase()}-${String(n).padStart(3, "0")}`;
 const seatFor = (n) =>
-  props.seats[n - 1] || (String.fromCharCode(65 + (n - 1)) + (10 + (n - 1)))
+  props.seats[n - 1] || String.fromCharCode(65 + (n - 1)) + (10 + (n - 1));
 
 // Lock the page behind the overlay, and let Escape close it.
-const onKeydown = (e) => { if (e.key === 'Escape') emit('close') }
+const onKeydown = (e) => {
+  if (e.key === "Escape") emit("close");
+};
 onMounted(() => {
-  document.addEventListener('keydown', onKeydown)
-  document.body.style.overflow = 'hidden'
-})
+  document.addEventListener("keydown", onKeydown);
+  document.body.style.overflow = "hidden";
+});
 onUnmounted(() => {
-  document.removeEventListener('keydown', onKeydown)
-  document.body.style.overflow = ''
-})
+  document.removeEventListener("keydown", onKeydown);
+  document.body.style.overflow = "";
+});
 
 function processPayment() {
-  if (!pay.value.terms) { payError.value = 'Please accept the booking rules and refund terms.'; return }
-  payProcessing.value = true
-  payError.value = ''
+  if (!pay.value.terms) {
+    payError.value = "Please accept the booking rules and refund terms.";
+    return;
+  }
+  payProcessing.value = true;
+  payError.value = "";
   setTimeout(() => {
-    const ok = Math.random() > 0.1
-    payProcessing.value = false
-    if (!ok) { payError.value = 'Payment was declined. Please try a different card.'; return }
-    userName.value = 'Guest'
-    step.value = 'confirmation'
-  }, 1500)
+    const ok = Math.random() > 0.1;
+    payProcessing.value = false;
+    if (!ok) {
+      payError.value = "Payment was declined. Please try a different card.";
+      return;
+    }
+    userName.value = "Guest";
+    step.value = "confirmation";
+  }, 1500);
 }
 
-function dlTicket(n) { alert(`Downloading e‑ticket PDF: ${ticketCode(n)}`) }
-function walletTicket(n) { alert(`Added ${ticketCode(n)} to wallet.`) }
-function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a single PDF.`) }
+function dlTicket(n) {
+  alert(`Downloading e‑ticket PDF: ${ticketCode(n)}`);
+}
+function walletTicket(n) {
+  alert(`Added ${ticketCode(n)} to wallet.`);
+}
+function dlAllTickets() {
+  alert(`Downloading all ${props.qty} e‑tickets as a single PDF.`);
+}
 </script>
 <style scoped>
 /* ---------- Overlay: darkens and blurs the page behind ---------- */
@@ -247,7 +325,14 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   -webkit-backdrop-filter: blur(7px);
   animation: overlay-in 0.18s ease;
 }
-@keyframes overlay-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 
 /* ---------- Modal panel ---------- */
 .checkout-modal {
@@ -258,14 +343,24 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   background: var(--bg-surface);
   border: 1px solid rgba(243, 198, 79, 0.22);
   border-radius: 1rem;
-  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    0 28px 80px rgba(0, 0, 0, 0.8),
+    0 0 0 1px rgba(0, 0, 0, 0.5);
   animation: modal-in 0.22s cubic-bezier(0.2, 0.8, 0.3, 1);
   overflow: hidden;
 }
-.checkout-modal-wide { max-width: 880px; }
+.checkout-modal-wide {
+  max-width: 880px;
+}
 @keyframes modal-in {
-  from { opacity: 0; transform: translateY(14px) scale(0.985); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .modal-close {
@@ -292,7 +387,9 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   border-color: var(--gold-accent);
 }
 
-.modal-body { padding: 1.9rem 1.9rem 1.7rem; }
+.modal-body {
+  padding: 1.9rem 1.9rem 1.7rem;
+}
 
 /* ---------- Headings ---------- */
 .modal-kicker {
@@ -320,7 +417,9 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   margin: 0 0 1.25rem;
   max-width: 50ch;
 }
-.gold { color: var(--gold-accent); }
+.gold {
+  color: var(--gold-accent);
+}
 
 /* ---------- Order strip ---------- */
 .order-strip {
@@ -339,11 +438,21 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   color: var(--text-main);
   margin-bottom: 0.4rem;
 }
-.order-strip-label { color: var(--text-muted); }
-.order-strip-value { font-weight: 700; text-align: right; }
+.order-strip-label {
+  color: var(--text-muted);
+}
+.order-strip-value {
+  font-weight: 700;
+  text-align: right;
+}
 /* Add-on lines sit under the tier line */
-.order-strip-row-sub { padding-left: 0.9rem; font-size: 0.8rem; }
-.order-strip-row-sub .order-strip-label { color: #8a8a93; }
+.order-strip-row-sub {
+  padding-left: 0.9rem;
+  font-size: 0.8rem;
+}
+.order-strip-row-sub .order-strip-label {
+  color: #8a8a93;
+}
 .order-strip-total {
   border-top: 1px solid var(--border-subtle);
   padding-top: 0.55rem;
@@ -351,9 +460,14 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   font-size: 0.95rem;
   font-weight: 700;
 }
-.order-strip-total .order-strip-value { font-size: 1.15rem; font-weight: 800; }
+.order-strip-total .order-strip-value {
+  font-size: 1.15rem;
+  font-weight: 800;
+}
 /* ---------- Form fields ---------- */
-.field { margin-bottom: 0.85rem; }
+.field {
+  margin-bottom: 0.85rem;
+}
 .field label {
   display: block;
   font-size: 0.66rem;
@@ -371,15 +485,23 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   color: var(--text-main);
   font-size: 0.88rem;
   padding: 0.62rem 0.75rem;
-  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
 }
-.field input::placeholder { color: #6b6b73; }
+.field input::placeholder {
+  color: #6b6b73;
+}
 .field input:focus {
   outline: none;
   border-color: var(--gold-accent);
   box-shadow: 0 0 0 3px rgba(243, 198, 79, 0.16);
 }
-.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
 
 .check-row {
   display: flex;
@@ -396,8 +518,13 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   accent-color: var(--gold-accent);
   flex-shrink: 0;
 }
-.check-row a { color: var(--gold-accent); text-decoration: none; }
-.check-row a:hover { text-decoration: underline; }
+.check-row a {
+  color: var(--gold-accent);
+  text-decoration: none;
+}
+.check-row a:hover {
+  text-decoration: underline;
+}
 
 /* ---------- Buttons ---------- */
 .btn-pay {
@@ -416,12 +543,23 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   text-transform: uppercase;
   letter-spacing: 0.6px;
   cursor: pointer;
-  transition: background 0.18s ease, transform 0.12s ease;
+  transition:
+    background 0.18s ease,
+    transform 0.12s ease;
 }
-.btn-pay:hover:not(:disabled) { background: var(--gold-accent-hover); }
-.btn-pay:active:not(:disabled) { transform: translateY(1px); }
-.btn-pay:disabled { opacity: 0.55; cursor: progress; }
-.btn-pay-inline { width: auto; }
+.btn-pay:hover:not(:disabled) {
+  background: var(--gold-accent-hover);
+}
+.btn-pay:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.btn-pay:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+.btn-pay-inline {
+  width: auto;
+}
 
 .btn-ghost {
   display: inline-flex;
@@ -469,8 +607,14 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   letter-spacing: 0.2px;
 }
 /* ---------- Confirmation ---------- */
-.confirm-head { text-align: center; margin-bottom: 1.4rem; }
-.confirm-head .modal-sub { margin-left: auto; margin-right: auto; }
+.confirm-head {
+  text-align: center;
+  margin-bottom: 1.4rem;
+}
+.confirm-head .modal-sub {
+  margin-left: auto;
+  margin-right: auto;
+}
 .confirm-badge {
   display: inline-flex;
   align-items: center;
@@ -505,10 +649,19 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   letter-spacing: 0.6px;
   color: var(--text-main);
 }
-.block-title i { color: var(--gold-accent); }
-.block-count { font-size: 0.7rem; color: var(--text-muted); }
+.block-title i {
+  color: var(--gold-accent);
+}
+.block-count {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
 
-.tickets { max-height: 38vh; overflow-y: auto; padding-right: 0.25rem; }
+.tickets {
+  max-height: 38vh;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
 
 .ticket {
   background: var(--bg-primary);
@@ -525,11 +678,29 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   padding-bottom: 0.6rem;
   border-bottom: 1px dashed var(--border-subtle);
 }
-.ticket-event { font-size: 0.82rem; font-weight: 700; color: var(--gold-accent); }
-.ticket-meta { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.1rem; }
-.ticket-side { text-align: right; flex-shrink: 0; }
-.ticket-tier { font-size: 0.78rem; font-weight: 700; color: var(--text-main); }
-.ticket-seat { font-size: 0.68rem; color: var(--text-muted); }
+.ticket-event {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--gold-accent);
+}
+.ticket-meta {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 0.1rem;
+}
+.ticket-side {
+  text-align: right;
+  flex-shrink: 0;
+}
+.ticket-tier {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+.ticket-seat {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
 
 .ticket-code {
   display: flex;
@@ -550,9 +721,16 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   letter-spacing: 0.8px;
   color: var(--text-main);
 }
-.ticket-qr { margin-left: auto; font-size: 1.35rem; color: var(--gold-muted, var(--text-muted)); }
+.ticket-qr {
+  margin-left: auto;
+  font-size: 1.35rem;
+  color: var(--gold-muted, var(--text-muted));
+}
 
-.ticket-actions { display: flex; gap: 0.5rem; }
+.ticket-actions {
+  display: flex;
+  gap: 0.5rem;
+}
 .btn-ticket {
   flex: 1;
   display: inline-flex;
@@ -569,7 +747,10 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   cursor: pointer;
   transition: all 0.18s ease;
 }
-.btn-ticket:hover { background: var(--gold-accent); color: #0b0b0c; }
+.btn-ticket:hover {
+  background: var(--gold-accent);
+  color: #0b0b0c;
+}
 
 .ticket-note {
   display: flex;
@@ -579,19 +760,42 @@ function dlAllTickets() { alert(`Downloading all ${props.qty} e‑tickets as a s
   color: var(--text-muted);
   margin: 0.7rem 0 1.15rem;
 }
-.ticket-note i { color: var(--gold-accent); flex-shrink: 0; }
+.ticket-note i {
+  color: var(--gold-accent);
+  flex-shrink: 0;
+}
 
-.modal-actions { display: flex; gap: 0.6rem; justify-content: flex-end; }
-.modal-actions .btn-pay-inline { flex: 0 0 auto; }
+.modal-actions {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: flex-end;
+}
+.modal-actions .btn-pay-inline {
+  flex: 0 0 auto;
+}
 
 /* ---------- Narrow screens ---------- */
 @media (max-width: 640px) {
-  .checkout-overlay { padding: 2vh 0.6rem; }
-  .modal-body { padding: 1.5rem 1.15rem 1.3rem; }
-  .modal-title { font-size: 1.35rem; padding-right: 2rem; }
-  .field-row { grid-template-columns: 1fr; gap: 0; }
-  .modal-actions { flex-direction: column-reverse; }
+  .checkout-overlay {
+    padding: 2vh 0.6rem;
+  }
+  .modal-body {
+    padding: 1.5rem 1.15rem 1.3rem;
+  }
+  .modal-title {
+    font-size: 1.35rem;
+    padding-right: 2rem;
+  }
+  .field-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
   .modal-actions .btn-pay-inline,
-  .modal-actions .btn-ghost { width: 100%; }
+  .modal-actions .btn-ghost {
+    width: 100%;
+  }
 }
 </style>

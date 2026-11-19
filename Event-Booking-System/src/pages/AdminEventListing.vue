@@ -1,51 +1,51 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
-import { mockEvents, eventCategories } from '../data/mockEvents';
+import { ref, computed, watch } from "vue";
+import { mockEvents, eventCategories } from "../data/mockEvents";
 
 // Import child components
-import EventTable from '../components/EventTable.vue';
-import EventModal from '../components/EventModal.vue';
-import SeatMapModal from '../components/SeatMapModal.vue';
-import DeleteConfirmModal from '../components/DeleteConfirmModal.vue';
+import EventTable from "../components/EventTable.vue";
+import EventModal from "../components/EventModal.vue";
+import SeatMapModal from "../components/SeatMapModal.vue";
+import DeleteConfirmModal from "../components/DeleteConfirmModal.vue";
 
 const getDefaultForm = () => ({
   id: null,
-  image: '',
-  name: '',
-  artist: '',
-  artistDescription: '',
-  category: '',
-  description: '',
-  date: '',
-  status: 'Upcoming',
-  venueName: '',
-  address: '',
+  image: "",
+  name: "",
+  artist: "",
+  artistDescription: "",
+  category: "",
+  description: "",
+  date: "",
+  status: "Upcoming",
+  venueName: "",
+  address: "",
   venueCapacity: 100,
   tickets: [
     {
-      ticketType: 'General Admission',
-      ticketDescription: 'Standard admission ticket',
-      ticketPerks: ['Standard Entry'],
-      perksInput: 'Standard Entry',
+      ticketType: "General Admission",
+      ticketDescription: "Standard admission ticket",
+      ticketPerks: ["Standard Entry"],
+      perksInput: "Standard Entry",
       price: 1500,
-      seatSection: 'Main Hall',
-      seatRow: 'A',
+      seatSection: "Main Hall",
+      seatRow: "A",
       quantity: 16,
       seats: Array.from({ length: 16 }, (_, i) => ({
-        seatRow: 'A',
+        seatRow: "A",
         seatNumber: i + 1,
         code: `A-${i + 1}`,
-        status: 'available'
-      }))
-    }
-  ]
+        status: "available",
+      })),
+    },
+  ],
 });
 
 const categories = ref(eventCategories);
 const events = ref(mockEvents);
 
-const searchQuery = ref('');
-const selectedCategory = ref('');
+const searchQuery = ref("");
+const selectedCategory = ref("");
 const isModalOpen = ref(false);
 const isEditing = ref(false);
 const eventToDelete = ref(null);
@@ -56,7 +56,7 @@ const itemsPerPage = 5;
 const form = ref(getDefaultForm());
 
 const scrollToTop = () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
 watch(currentPage, () => {
@@ -74,15 +74,20 @@ const filteredEvents = computed(() => {
     const matchesSearch =
       event.name.toLowerCase().includes(query) ||
       event.artist.toLowerCase().includes(query) ||
-      (event.artistDescription && event.artistDescription.toLowerCase().includes(query)) ||
+      (event.artistDescription &&
+        event.artistDescription.toLowerCase().includes(query)) ||
       event.venueName.toLowerCase().includes(query) ||
       event.address.toLowerCase().includes(query);
-    const matchesCategory = selectedCategory.value ? event.category === selectedCategory.value : true;
+    const matchesCategory = selectedCategory.value
+      ? event.category === selectedCategory.value
+      : true;
     return matchesSearch && matchesCategory;
   });
 });
 
-const totalPages = computed(() => Math.ceil(filteredEvents.value.length / itemsPerPage) || 1);
+const totalPages = computed(
+  () => Math.ceil(filteredEvents.value.length / itemsPerPage) || 1,
+);
 
 const paginatedEvents = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
@@ -133,11 +138,11 @@ const deleteEvent = () => {
 const addTicketTier = () => {
   const rowName = String.fromCharCode(65 + form.value.tickets.length);
   form.value.tickets.push({
-    ticketType: '',
-    ticketDescription: '',
+    ticketType: "",
+    ticketDescription: "",
     ticketPerks: [],
-    perksInput: '',
-    seatSection: 'Section ' + rowName,
+    perksInput: "",
+    seatSection: "Section " + rowName,
     seatRow: rowName,
     price: 0,
     quantity: 12,
@@ -145,8 +150,8 @@ const addTicketTier = () => {
       seatRow: rowName,
       seatNumber: i + 1,
       code: `${rowName}-${i + 1}`,
-      status: 'available'
-    }))
+      status: "available",
+    })),
   });
 };
 
@@ -156,17 +161,17 @@ const removeTicketTier = (index) => {
 
 const generateSeatsForTier = (ticket) => {
   const count = Math.max(1, Math.min(500, Number(ticket.quantity) || 1));
-  const row = (ticket.seatRow || 'A').trim().toUpperCase();
+  const row = (ticket.seatRow || "A").trim().toUpperCase();
   ticket.seats = Array.from({ length: count }, (_, i) => ({
     seatRow: row,
     seatNumber: i + 1,
     code: `${row}-${i + 1}`,
-    status: 'available'
+    status: "available",
   }));
 };
 
 const cycleSeatStatus = (seat) => {
-  const order = ['available', 'hold', 'sold', 'blocked'];
+  const order = ["available", "hold", "sold", "blocked"];
   seat.status = order[(order.indexOf(seat.status) + 1) % order.length];
 };
 
@@ -184,7 +189,7 @@ const handleImageUpload = (e) => {
 const updatePerks = (ticket) => {
   if (ticket.perksInput) {
     ticket.ticketPerks = ticket.perksInput
-      .split(',')
+      .split(",")
       .map((p) => p.trim())
       .filter((p) => p.length > 0);
   } else {
@@ -192,19 +197,30 @@ const updatePerks = (ticket) => {
   }
 };
 
-const getTotalSeatsCount = (tickets) => tickets ? tickets.reduce((sum, t) => sum + (t.seats ? t.seats.length : 0), 0) : 0;
+const getTotalSeatsCount = (tickets) =>
+  tickets
+    ? tickets.reduce((sum, t) => sum + (t.seats ? t.seats.length : 0), 0)
+    : 0;
 </script>
 
 <template>
-  <div class="admin-event-dashboard container-fluid py-5 px-3 px-md-4 d-flex flex-column justify-content-between">
+  <div
+    class="admin-event-dashboard container-fluid py-5 px-3 px-md-4 d-flex flex-column justify-content-between">
     <div>
       <!-- Header -->
-      <header class="admin-event-dashboard-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 pb-3 gap-3">
+      <header
+        class="admin-event-dashboard-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 pb-3 gap-3">
         <div>
-          <h1 class="h3 fw-bold mb-1 admin-event-dashboard-title">Event Ticketing & Seat Allocation</h1>
-          <p class="small mb-0 admin-event-dashboard-subtitle">Manage events, venues, ticket tiers, and real-time seat statuses</p>
+          <h1 class="h3 fw-bold mb-1 admin-event-dashboard-title">
+            Event Ticketing & Seat Allocation
+          </h1>
+          <p class="small mb-0 admin-event-dashboard-subtitle">
+            Manage events, venues, ticket tiers, and real-time seat statuses
+          </p>
         </div>
-        <button class="btn fw-semibold px-4 py-2 d-inline-flex align-items-center gap-2 shadow-sm border-0 admin-event-create-btn" @click="openModal()">
+        <button
+          class="btn fw-semibold px-4 py-2 d-inline-flex align-items-center gap-2 shadow-sm border-0 admin-event-create-btn"
+          @click="openModal()">
           <span class="fs-5 lh-1">+</span> Create Event
         </button>
       </header>
@@ -212,21 +228,29 @@ const getTotalSeatsCount = (tickets) => tickets ? tickets.reduce((sum, t) => sum
       <!-- Filters & Search -->
       <div class="row g-3 mb-4">
         <div class="col-12 col-md-8">
-          <div class="input-group admin-event-search-group rounded-3 overflow-hidden">
-            <span class="input-group-text bg-transparent border-0 ps-3 admin-event-search-icon-wrap">🔍</span>
+          <div
+            class="input-group admin-event-search-group rounded-3 overflow-hidden">
+            <span
+              class="input-group-text bg-transparent border-0 ps-3 admin-event-search-icon-wrap"
+              >🔍</span
+            >
             <input
               v-model="searchQuery"
               @input="handleSearchOrFilterChange"
               type="text"
               placeholder="Search by event name, artist, venue..."
-              class="form-control bg-transparent border-0 shadow-none py-2 px-2 admin-event-search-input"
-            />
+              class="form-control bg-transparent border-0 shadow-none py-2 px-2 admin-event-search-input" />
           </div>
         </div>
         <div class="col-12 col-md-4">
-          <select v-model="selectedCategory" @change="handleSearchOrFilterChange" class="form-select py-2 shadow-none admin-event-category-select">
+          <select
+            v-model="selectedCategory"
+            @change="handleSearchOrFilterChange"
+            class="form-select py-2 shadow-none admin-event-category-select">
             <option value="">All Categories</option>
-            <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
+            <option v-for="cat in categories" :key="cat" :value="cat">
+              {{ cat }}
+            </option>
           </select>
         </div>
       </div>
@@ -238,17 +262,28 @@ const getTotalSeatsCount = (tickets) => tickets ? tickets.reduce((sum, t) => sum
         :current-page="currentPage"
         :total-pages="totalPages"
         :filtered-events-length="filteredEvents.length"
-        @page-change="(p) => currentPage = p"
-        @open-seat-map="(ev) => activeSeatMapEvent = ev"
+        @page-change="(p) => (currentPage = p)"
+        @open-seat-map="(ev) => (activeSeatMapEvent = ev)"
         @edit-event="(ev) => openModal(ev)"
-        @confirm-delete="(ev) => eventToDelete = ev"
-      />
+        @confirm-delete="(ev) => (eventToDelete = ev)" />
 
       <!-- Empty State -->
-      <div v-else class="card rounded-4 p-5 text-center admin-event-empty-state-box">
+      <div
+        v-else
+        class="card rounded-4 p-5 text-center admin-event-empty-state-box">
         <div class="fs-1 mb-2">🎟️</div>
-        <p class="mb-3 admin-event-dashboard-subtitle">No events found matching your criteria.</p>
-        <button class="btn btn-sm admin-event-reset-filter-btn" @click="searchQuery = ''; selectedCategory = ''; currentPage = 1;">Reset Filters</button>
+        <p class="mb-3 admin-event-dashboard-subtitle">
+          No events found matching your criteria.
+        </p>
+        <button
+          class="btn btn-sm admin-event-reset-filter-btn"
+          @click="
+            searchQuery = '';
+            selectedCategory = '';
+            currentPage = 1;
+          ">
+          Reset Filters
+        </button>
       </div>
     </div>
 
@@ -266,19 +301,16 @@ const getTotalSeatsCount = (tickets) => tickets ? tickets.reduce((sum, t) => sum
       @remove-tier="removeTicketTier"
       @update-perks="updatePerks"
       @generate-seats="generateSeatsForTier"
-      @cycle-seat="cycleSeatStatus"
-    />
+      @cycle-seat="cycleSeatStatus" />
 
     <SeatMapModal
       :event="activeSeatMapEvent"
       @close="activeSeatMapEvent = null"
-      @cycle-seat="cycleSeatStatus"
-    />
+      @cycle-seat="cycleSeatStatus" />
 
     <DeleteConfirmModal
       :event="eventToDelete"
       @close="eventToDelete = null"
-      @confirm="deleteEvent"
-    />
+      @confirm="deleteEvent" />
   </div>
 </template>

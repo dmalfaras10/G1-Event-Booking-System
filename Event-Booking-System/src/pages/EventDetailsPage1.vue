@@ -2,11 +2,15 @@
   <div class="event-page">
     <!-- ============ LEFT COLUMN: EVENT CONTENT ============ -->
     <div class="event-content">
-
       <!-- Hero banner (switches when a thumbnail below is clicked) -->
       <div class="banner">
         <div class="banner-media">
-          <img v-if="heroImages[activeImage]?.src" :key="activeImage" :src="heroImages[activeImage].src" :alt="heroImages[activeImage].alt || event.name" class="banner-img">
+          <img
+            v-if="heroImages[activeImage]?.src"
+            :key="activeImage"
+            :src="heroImages[activeImage].src"
+            :alt="heroImages[activeImage].alt || event.name"
+            class="banner-img" />
         </div>
         <div class="badge-row">
           <span class="badge badge-magenta">15% Off with Gold VIP</span>
@@ -16,40 +20,55 @@
           <div class="strip-left">
             <i class="bi bi-water"></i> Palace Pool Deck — Open Air
             <span class="strip-sep">|</span>
-            <span class="strip-detail">Line-array delay towers · 103 dB(A)</span>
+            <span class="strip-detail"
+              >Line-array delay towers · 103 dB(A)</span
+            >
           </div>
           <div class="strip-right">
-            <i class="bi bi-ticket-perforated"></i> {{ totalSeatsLeft }} {{ totalSeatsLeft === 1 ? 'Seat' : 'Seats' }} Left
+            <i class="bi bi-ticket-perforated"></i> {{ totalSeatsLeft }}
+            {{ totalSeatsLeft === 1 ? "Seat" : "Seats" }} Left
           </div>
         </div>
       </div>
 
       <!-- Gallery thumbnails (click to switch the hero banner) -->
       <div class="thumb-row">
-        <div v-for="(img, i) in heroImages" :key="i"
-             :class="['thumb', { active: activeImage === i }]"
-             @click="activeImage = i">
-        </div>
+        <div
+          v-for="(img, i) in heroImages"
+          :key="i"
+          :class="['thumb', { active: activeImage === i }]"
+          @click="activeImage = i"></div>
       </div>
 
-      <span class="event-kicker"><i class="bi bi-moon-stars-fill"></i> Manila After Dark Series // Volume I</span>
+      <span class="event-kicker"
+        ><i class="bi bi-moon-stars-fill"></i> Manila After Dark Series //
+        Volume I</span
+      >
       <h1 class="event-title">{{ event.name }}</h1>
 
       <!-- Meta row: 4 quick facts in a single panel -->
       <div class="meta-grid">
         <div class="meta-card">
           <div class="meta-label">Date &amp; Evening</div>
-          <div class="meta-value"><i class="bi bi-calendar-event"></i> {{ dateLong }}</div>
-          <div class="meta-sub">Gates &amp; pool deck open at {{ doorsOpen }}</div>
+          <div class="meta-value">
+            <i class="bi bi-calendar-event"></i> {{ dateLong }}
+          </div>
+          <div class="meta-sub">
+            Gates &amp; pool deck open at {{ doorsOpen }}
+          </div>
         </div>
         <div class="meta-card">
           <div class="meta-label">Show Start</div>
-          <div class="meta-value"><i class="bi bi-clock"></i> {{ time24 }} Sharp</div>
+          <div class="meta-value">
+            <i class="bi bi-clock"></i> {{ time24 }} Sharp
+          </div>
           <div class="meta-sub">DJ Kaito warm-up from {{ warmUpTime }}</div>
         </div>
         <div class="meta-card">
           <div class="meta-label">Venue</div>
-          <div class="meta-value"><i class="bi bi-geo-alt"></i> {{ event.venueName }}</div>
+          <div class="meta-value">
+            <i class="bi bi-geo-alt"></i> {{ event.venueName }}
+          </div>
           <div class="meta-sub">{{ event.address }}</div>
         </div>
       </div>
@@ -61,7 +80,10 @@
         </div>
         <p class="lead">{{ event.description }}</p>
         <p class="lead">
-          Headlining the night is DJ Kaito, whose live modular patches are answered in real time by the Nocturne Philharmonic — a single continuous set with no interval, built to move from ambient strings to peak-time house without a break.
+          Headlining the night is DJ Kaito, whose live modular patches are
+          answered in real time by the Nocturne Philharmonic — a single
+          continuous set with no interval, built to move from ambient strings to
+          peak-time house without a break.
         </p>
       </div>
 
@@ -75,17 +97,17 @@
           <p class="lead">{{ event.artistDescription }}</p>
         </div>
       </div>
-
     </div>
 
     <!-- ============ RIGHT COLUMN: BOOKING PANEL ============ -->
     <div class="booking-panel">
       <div class="booking-card">
-
         <!-- Allocation header -->
         <div class="allocation">
           <span class="alloc-badge">Patron Allocation</span>
-          <span class="alloc-badge alloc-active">Founder Allocation Active</span>
+          <span class="alloc-badge alloc-active"
+            >Founder Allocation Active</span
+          >
         </div>
 
         <!-- Price range -->
@@ -93,7 +115,10 @@
           <span class="price-big">{{ priceRange }}</span>
           <span class="price-sub">/ attendee</span>
         </div>
-        <p class="price-note">All admissions include one Sky-Deck drink voucher and a commemorative wristband.</p>
+        <p class="price-note">
+          All admissions include one Sky-Deck drink voucher and a commemorative
+          wristband.
+        </p>
 
         <!-- Tier selector title -->
         <div class="tier-title">
@@ -102,11 +127,18 @@
 
         <!-- Ticket tiers -->
         <div class="tiers">
-          <div v-for="tier in tiers" :key="tier.id"
-               :class="['tier-card', { selected: selectedTierId === tier.id }]"
-               @click="selectTier(tier)">
-            <input type="radio" :name="eventId" :id="tier.id"
-                   :checked="selectedTierId === tier.id" @change="selectTier(tier)" class="tier-radio">
+          <div
+            v-for="tier in tiers"
+            :key="tier.id"
+            :class="['tier-card', { selected: selectedTierId === tier.id }]"
+            @click="selectTier(tier)">
+            <input
+              type="radio"
+              :name="eventId"
+              :id="tier.id"
+              :checked="selectedTierId === tier.id"
+              @change="selectTier(tier)"
+              class="tier-radio" />
             <div class="tier-body">
               <div class="tier-name-row">
                 <span class="tier-name">{{ tier.name }}</span>
@@ -122,31 +154,51 @@
         <div class="attendees">
           <label class="att-label">Attendees</label>
           <div class="att-control">
-            <button class="att-btn" :disabled="!selectedTier || qty <= 1" @click="changeQty(-1)">−</button>
+            <button
+              class="att-btn"
+              :disabled="!selectedTier || qty <= 1"
+              @click="changeQty(-1)">
+              −
+            </button>
             <span class="att-qty">{{ qty }}</span>
-            <button class="att-btn" :disabled="!selectedTier || qty >= maxQty" @click="changeQty(1)">+</button>
+            <button
+              class="att-btn"
+              :disabled="!selectedTier || qty >= maxQty"
+              @click="changeQty(1)">
+              +
+            </button>
           </div>
           <span class="att-note">Max 6 seats per patron order</span>
         </div>
 
         <!-- Sold-out guard -->
         <div v-if="allSoldOut" class="alert alert-danger mt-3">
-          <i class="bi bi-exclamation-triangle-fill"></i> All seating tiers are currently sold out.
+          <i class="bi bi-exclamation-triangle-fill"></i> All seating tiers are
+          currently sold out.
         </div>
 
         <!-- Perks included with the selected seating tier -->
         <div class="addons-section">
           <h4 class="addons-title">Included With Your Seating</h4>
           <ul v-if="selectedTier" class="perks-list">
-            <li v-for="perk in selectedTier.perks" :key="perk" class="perk-item">{{ perk }}</li>
+            <li
+              v-for="perk in selectedTier.perks"
+              :key="perk"
+              class="perk-item">
+              {{ perk }}
+            </li>
           </ul>
-          <p v-else class="perks-empty">Select a seating tier to see what is included.</p>
+          <p v-else class="perks-empty">
+            Select a seating tier to see what is included.
+          </p>
         </div>
 
         <!-- Order summary: dynamic line items derived from user selection -->
         <div class="order-summary">
           <div v-if="selectedTier" class="order-line">
-            <span class="order-line-name">Pass Allocation ({{ selectedTier.name }} × {{ qty }})</span>
+            <span class="order-line-name"
+              >Pass Allocation ({{ selectedTier.name }} × {{ qty }})</span
+            >
             <span class="order-line-price">{{ peso(tiersSubtotal) }}</span>
           </div>
           <div v-if="!selectedTier" class="order-empty">
@@ -162,11 +214,19 @@
         </div>
 
         <!-- Checkout -->
-        <button class="btn btn-gold w-100 checkout-btn" :disabled="!canCheckout" @click="goToPayment">
-          {{ canCheckout ? 'Proceed to Secure Checkout' : 'Select seating to continue' }}
+        <button
+          class="btn btn-gold w-100 checkout-btn"
+          :disabled="!canCheckout"
+          @click="goToPayment">
+          {{
+            canCheckout
+              ? "Proceed to Secure Checkout"
+              : "Select seating to continue"
+          }}
         </button>
-        <p class="secure-note">256-Bit Encrypted Concession Handoff · 100% Verified</p>
-
+        <p class="secure-note">
+          256-Bit Encrypted Concession Handoff · 100% Verified
+        </p>
       </div>
 
       <!-- Special Patron Accommodations (completely separate from booking card) -->
@@ -175,11 +235,12 @@
           <span class="accom-icon">🎟️</span>
           <div class="accom-text">
             <div class="accom-title">Special Patron Accommodations?</div>
-            <div class="accom-sub">Contact our support team for ADA seating or dietary requests.</div>
+            <div class="accom-sub">
+              Contact our support team for ADA seating or dietary requests.
+            </div>
           </div>
         </div>
       </div>
-
     </div>
 
     <!-- Seat selection sits between tier choice and checkout -->
@@ -193,8 +254,7 @@
       :qty="qty"
       :initial-seats="selectedSeats"
       @close="closeSeats"
-      @confirm="onSeatsConfirmed"
-    />
+      @confirm="onSeatsConfirmed" />
 
     <!-- Checkout steps live in components/BookingCheckout.vue -->
     <BookingCheckout
@@ -207,19 +267,18 @@
       :qty="qty"
       :seats="selectedSeats"
       :subtotal="(selectedTier?.price || 0) * qty"
-       :total="orderTotal"
+      :total="orderTotal"
       :currency="'₱'"
       :code-prefix="'G1-NNS'"
       @close="step = 'seats'"
-      @reset="resetFlow"
-    />
+      @reset="resetFlow" />
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onUnmounted } from 'vue'
-import BookingCheckout from '../components/BookingCheckout.vue'
-import SeatSelection from '../components/SeatSelection.vue'
+import { ref, computed, onUnmounted } from "vue";
+import BookingCheckout from "../components/BookingCheckout.vue";
+import SeatSelection from "../components/SeatSelection.vue";
 
 // ---------------------------------------------------------------------------
 // Mock payload — same shape as the documents in src/data/mockEvents.js (the
@@ -233,85 +292,107 @@ import SeatSelection from '../components/SeatSelection.vue'
 // ---------------------------------------------------------------------------
 const buildSeats = (row, count, soldIndices = [], holdIndices = []) =>
   Array.from({ length: count }, (_, i) => {
-    const num = i + 1
-    let status = 'available'
-    if (soldIndices.includes(num)) status = 'sold'
-    else if (holdIndices.includes(num)) status = 'hold'
-    return { seatRow: row, seatNumber: num, code: `${row}-${num}`, status }
-  })
+    const num = i + 1;
+    let status = "available";
+    if (soldIndices.includes(num)) status = "sold";
+    else if (holdIndices.includes(num)) status = "hold";
+    return { seatRow: row, seatNumber: num, code: `${row}-${num}`, status };
+  });
 
-const POSTER_IMAGE = 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=80'
+const POSTER_IMAGE =
+  "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=900&q=80";
 
 const event = {
   id: 1,
   image: POSTER_IMAGE,
-  name: 'Neon Noir Symphony: Manila Edition',
-  artist: 'Nocturne Philharmonic & DJ Kaito',
+  name: "Neon Noir Symphony: Manila Edition",
+  artist: "Nocturne Philharmonic & DJ Kaito",
   artistDescription:
-    'A collaborative powerhouse pairing Manila’s progressive 24-piece chamber orchestra with Tokyo-based electronic producer DJ Kaito — one continuous bill that moves from ambient strings to peak-time house without a break.',
-  category: 'Live Concert',
+    "A collaborative powerhouse pairing Manila’s progressive 24-piece chamber orchestra with Tokyo-based electronic producer DJ Kaito — one continuous bill that moves from ambient strings to peak-time house without a break.",
+  category: "Live Concert",
   description:
-    'An immersive nocturnal audiovisual takeover on the Palace pool deck, where a 24-piece string ensemble and deep melodic synth sets trade the same stage from dusk until the last light leaves the water.',
-  date: '2026-11-21T20:00:00',
-  status: 'Upcoming',
-  venueName: 'The Palace Pool Club',
-  address: 'BGC, Taguig',
+    "An immersive nocturnal audiovisual takeover on the Palace pool deck, where a 24-piece string ensemble and deep melodic synth sets trade the same stage from dusk until the last light leaves the water.",
+  date: "2026-11-21T20:00:00",
+  status: "Upcoming",
+  venueName: "The Palace Pool Club",
+  address: "BGC, Taguig",
   venueCapacity: 120,
   tickets: [
     {
-      ticketType: 'Sky-Deck VIP',
-      ticketDescription: 'Includes Sky-Deck Lounge Access and priority bar service.',
-      ticketPerks: ['Sky-Deck Lounge Access', 'Priority Bar Lane'],
-      perksInput: 'Sky-Deck Lounge Access, Priority Bar Lane',
-      price: 4800.00,
-      seatSection: 'VIP Deck',
-      seatRow: 'A',
+      ticketType: "Sky-Deck VIP",
+      ticketDescription:
+        "Includes Sky-Deck Lounge Access and priority bar service.",
+      ticketPerks: ["Sky-Deck Lounge Access", "Priority Bar Lane"],
+      perksInput: "Sky-Deck Lounge Access, Priority Bar Lane",
+      price: 4800.0,
+      seatSection: "VIP Deck",
+      seatRow: "A",
       quantity: 20,
-      seats: buildSeats('A', 20, [1, 2, 3], [4, 5])
+      seats: buildSeats("A", 20, [1, 2, 3], [4, 5]),
     },
     {
-      ticketType: 'General Admission',
-      ticketDescription: 'Standard floor access to the audiovisual zone.',
-      ticketPerks: ['Standard Entry'],
-      perksInput: 'Standard Entry',
-      price: 2500.00,
-      seatSection: 'Poolside GA',
-      seatRow: 'B',
+      ticketType: "General Admission",
+      ticketDescription: "Standard floor access to the audiovisual zone.",
+      ticketPerks: ["Standard Entry"],
+      perksInput: "Standard Entry",
+      price: 2500.0,
+      seatSection: "Poolside GA",
+      seatRow: "B",
       quantity: 50,
-      seats: buildSeats('B', 50, [1, 2, 6, 7, 8, 9, 10], [11, 12, 13])
-    }
-  ]
-}
+      seats: buildSeats("B", 50, [1, 2, 6, 7, 8, 9, 10], [11, 12, 13]),
+    },
+  ],
+};
 
 // ---- Hero gallery (first slide is the event poster) ----
 const heroImages = ref([
-  { src: POSTER_IMAGE, alt: 'Palace pool deck at night' },
-  { src: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=900&q=80', alt: 'Crowd under the neon rig' },
-  { src: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80', alt: 'Light rig over the pool deck' },
-  { src: 'https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80', alt: 'String section on stage' },
-])
-const activeImage = ref(0)
+  { src: POSTER_IMAGE, alt: "Palace pool deck at night" },
+  {
+    src: "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=900&q=80",
+    alt: "Crowd under the neon rig",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80",
+    alt: "Light rig over the pool deck",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1511192336575-5a79af67a629?auto=format&fit=crop&w=900&q=80",
+    alt: "String section on stage",
+  },
+]);
+const activeImage = ref(0);
 
 // ---- Derived event facts (everything below reads from `event`) ----
-const hhmm = (d) => `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
+const hhmm = (d) =>
+  `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
 
-const eventId = 'evt-' + String(event.id).padStart(3, '0')
-const eventName = event.name
-const venueName = event.venueName
+const eventId = "evt-" + String(event.id).padStart(3, "0");
+const eventName = event.name;
+const venueName = event.venueName;
 
-const eventDate = new Date(event.date)
-const dateLong = eventDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
-const dateShort = eventDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
-const time24 = hhmm(eventDate)
-const doorsOpen = hhmm(new Date(eventDate.getTime() - 60 * 60 * 1000))
-const warmUpTime = hhmm(new Date(eventDate.getTime() - 45 * 60 * 1000))
+const eventDate = new Date(event.date);
+const dateLong = eventDate.toLocaleDateString("en-US", {
+  weekday: "short",
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+});
+const dateShort = eventDate.toLocaleDateString("en-US", {
+  weekday: "short",
+  month: "short",
+  day: "numeric",
+});
+const time24 = hhmm(eventDate);
+const doorsOpen = hhmm(new Date(eventDate.getTime() - 60 * 60 * 1000));
+const warmUpTime = hhmm(new Date(eventDate.getTime() - 45 * 60 * 1000));
 
 // ---- Ticket tiers --------------------------------------------------------
 // The booking UI (and SeatSelection) speak in "tiers" with id/name/price/
 // capacity, while the payload speaks in "tickets" with seats[]. `capacity` is
 // the number of seats still on sale, derived from the seat statuses so sold or
 // held seats in the mock data immediately shrink the allocation.
-const seatsAvailable = (ticket) => (ticket.seats || []).filter(s => s.status === 'available').length
+const seatsAvailable = (ticket) =>
+  (ticket.seats || []).filter((s) => s.status === "available").length;
 
 const tiers = computed(() =>
   event.tickets.map((ticket, i) => ({
@@ -323,78 +404,95 @@ const tiers = computed(() =>
     badge: (ticket.ticketPerks && ticket.ticketPerks[0]) || null,
     seatSection: ticket.seatSection,
     seatRow: ticket.seatRow,
-    perks: ticket.ticketPerks || []
-  }))
-)
+    perks: ticket.ticketPerks || [],
+  })),
+);
 
 // ---- Booking state ----
-const step = ref('select')
-const selectedTierId = ref(null)
-const qty = ref(1)
-const selectedSeats = ref([])
-const holdExpired = ref(false)
+const step = ref("select");
+const selectedTierId = ref(null);
+const qty = ref(1);
+const selectedSeats = ref([]);
+const holdExpired = ref(false);
 
 // ---- Computed ----
-const selectedTier = computed(() => tiers.value.find(t => t.id === selectedTierId.value))
-const allSoldOut = computed(() => tiers.value.every(t => t.capacity === 0))
-const canCheckout = computed(() => !!selectedTier.value && qty.value > 0 && selectedTier.value.capacity > 0 && !holdExpired.value)
+const selectedTier = computed(() =>
+  tiers.value.find((t) => t.id === selectedTierId.value),
+);
+const allSoldOut = computed(() => tiers.value.every((t) => t.capacity === 0));
+const canCheckout = computed(
+  () =>
+    !!selectedTier.value &&
+    qty.value > 0 &&
+    selectedTier.value.capacity > 0 &&
+    !holdExpired.value,
+);
 
 // ---- Attendees ----
 // Per-order cap from the UI note. The effective max is the smaller of the tier's
 // remaining capacity and this per-order cap, so the note and the +/- buttons agree.
-const MAX_SEATS_PER_ORDER = 6
-const maxQty = computed(() => Math.min(selectedTier.value?.capacity ?? MAX_SEATS_PER_ORDER, MAX_SEATS_PER_ORDER))
+const MAX_SEATS_PER_ORDER = 6;
+const maxQty = computed(() =>
+  Math.min(
+    selectedTier.value?.capacity ?? MAX_SEATS_PER_ORDER,
+    MAX_SEATS_PER_ORDER,
+  ),
+);
 
-const tiersSubtotal = computed(() => (selectedTier.value ? selectedTier.value.price * qty.value : 0))
-const orderTotal = computed(() => tiersSubtotal.value)
+const tiersSubtotal = computed(() =>
+  selectedTier.value ? selectedTier.value.price * qty.value : 0,
+);
+const orderTotal = computed(() => tiersSubtotal.value);
 
 // ---- Formatters ----
-const peso = (v) => '₱' + Number(v).toLocaleString('en-PH')
+const peso = (v) => "₱" + Number(v).toLocaleString("en-PH");
 
 // ---- Derived pricing & availability (all read from the ticket tiers) ----
 const priceRange = computed(() => {
-  const prices = tiers.value.map(t => t.price).filter(p => p > 0)
-  if (!prices.length) return '—'
-  const low = Math.min(...prices)
-  const high = Math.max(...prices)
-  return low === high ? peso(low) : `${peso(low)} — ${peso(high)}`
-})
-const totalSeatsLeft = computed(() => tiers.value.reduce((sum, t) => sum + t.capacity, 0))
+  const prices = tiers.value.map((t) => t.price).filter((p) => p > 0);
+  if (!prices.length) return "—";
+  const low = Math.min(...prices);
+  const high = Math.max(...prices);
+  return low === high ? peso(low) : `${peso(low)} — ${peso(high)}`;
+});
+const totalSeatsLeft = computed(() =>
+  tiers.value.reduce((sum, t) => sum + t.capacity, 0),
+);
 
 // ---- Actions ----
 function selectTier(t) {
-  if (t.capacity === 0) return
-  selectedTierId.value = t.id
-  qty.value = Math.min(qty.value, maxQty.value)
+  if (t.capacity === 0) return;
+  selectedTierId.value = t.id;
+  qty.value = Math.min(qty.value, maxQty.value);
 }
 function changeQty(d) {
-  if (!selectedTier.value) return
-  const next = qty.value + d
-  if (next < 1 || next > maxQty.value) return
-  qty.value = next
+  if (!selectedTier.value) return;
+  const next = qty.value + d;
+  if (next < 1 || next > maxQty.value) return;
+  qty.value = next;
 }
 
 function goToPayment() {
-  if (!canCheckout.value) return
-  step.value = 'seats'
+  if (!canCheckout.value) return;
+  step.value = "seats";
 }
 
 function onSeatsConfirmed(seats) {
-  selectedSeats.value = seats
-  step.value = 'payment'
+  selectedSeats.value = seats;
+  step.value = "payment";
 }
 
 function closeSeats() {
-  step.value = 'select'
-  selectedSeats.value = []
+  step.value = "select";
+  selectedSeats.value = [];
 }
 
 function resetFlow() {
-  step.value = 'select'
-  selectedSeats.value = []
-  selectedTierId.value = null
-  qty.value = 1
-  holdExpired.value = false
+  step.value = "select";
+  selectedSeats.value = [];
+  selectedTierId.value = null;
+  qty.value = 1;
+  holdExpired.value = false;
 }
 </script>
 

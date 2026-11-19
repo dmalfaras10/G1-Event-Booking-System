@@ -1,8 +1,8 @@
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch } from "vue";
 import { useGlobalStore } from "../stores/global.js";
 import { useRouter } from "vue-router";
-import { Notyf } from 'notyf';
+import { Notyf } from "notyf";
 
 const router = useRouter();
 const notyf = new Notyf();
@@ -11,36 +11,35 @@ const isEnabled = ref(false);
 const email = ref("");
 
 watch(email, (currentValue) => {
-    if(currentValue.trim() !== ""){
-        isEnabled.value = true;
-    }
-    else
-    {
-        isEnabled.value = false;
-    }
+  if (currentValue.trim() !== "") {
+    isEnabled.value = true;
+  } else {
+    isEnabled.value = false;
+  }
 });
 
-function handleSubmit (event){
-    event.preventDefault();
-    localStorage.setItem("email", email.value);
-    getUserDetails (email.value);
+function handleSubmit(event) {
+  event.preventDefault();
+  localStorage.setItem("email", email.value);
+  getUserDetails(email.value);
 
-    notyf.success("Recovery Instructions Sent");
+  notyf.success("Recovery Instructions Sent");
 
-    email.value = "";
-    router.push({ path : '/login'});    
+  email.value = "";
+  router.push({ path: "/login" });
 }
 </script>
 
 <template>
   <div
     data-bs-theme="dark"
-    class="forgot-page container-fluid min-vh-100 d-flex justify-content-center align-items-start pt-5 pb-5 px-3"
-  >
-    <div class="card forgot-card w-100 mt-3 mt-md-4 rounded-4 shadow-lg overflow-hidden">
+    class="forgot-page container-fluid min-vh-100 d-flex justify-content-center align-items-start pt-5 pb-5 px-3">
+    <div
+      class="card forgot-card w-100 mt-3 mt-md-4 rounded-4 shadow-lg overflow-hidden">
       <div class="forgot-card-accent"></div>
 
-      <div class="card-body p-4 p-md-5 d-flex flex-column justify-content-between">
+      <div
+        class="card-body p-4 p-md-5 d-flex flex-column justify-content-between">
         <!-- Header with Centered Bootstrap Icon -->
         <div class="text-center mb-4 pb-3 border-bottom forgot-border-subtle">
           <div class="forgot-icon-container mb-3 mx-auto">
@@ -58,7 +57,9 @@ function handleSubmit (event){
         <form @submit="handleSubmit" class="d-flex flex-column gap-3">
           <!-- Email Address -->
           <div>
-            <label for="email" class="form-label fw-semibold small forgot-form-label">
+            <label
+              for="email"
+              class="form-label fw-semibold small forgot-form-label">
               Email Address
             </label>
             <input
@@ -67,23 +68,23 @@ function handleSubmit (event){
               type="email"
               class="form-control form-control-lg forgot-custom-input"
               placeholder="name@example.com"
-              required
-            />
+              required />
           </div>
           <!-- Submit Button -->
           <div class="d-grid mt-2">
             <button
               type="submit"
               class="btn btn-lg forgot-submit-btn fw-bold py-3"
-              :disabled="!isEnabled"
-            >
+              :disabled="!isEnabled">
               Send Reset Instructions <span class="ms-1">→</span>
             </button>
           </div>
           <!-- Footer Link -->
           <p class="text-center forgot-text-muted small mb-0 mt-1">
             Remembered your password?
-            <router-link to="/login" class="forgot-gold-link fw-semibold ms-1">Sign in</router-link>
+            <router-link to="/login" class="forgot-gold-link fw-semibold ms-1"
+              >Sign in</router-link
+            >
           </p>
         </form>
       </div>
@@ -164,7 +165,8 @@ function handleSubmit (event){
 
 .forgot-custom-input:focus {
   border-color: var(--gold-accent);
-  box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--gold-accent) 22%, transparent);
+  box-shadow: 0 0 0 0.2rem
+    color-mix(in srgb, var(--gold-accent) 22%, transparent);
 }
 
 .forgot-submit-btn {
@@ -173,7 +175,9 @@ function handleSubmit (event){
   border: none;
   border-radius: 0.65rem;
   font-size: 1rem;
-  transition: background-color 0.2s ease, transform 0.15s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease;
 }
 
 .forgot-submit-btn:hover:not(:disabled),

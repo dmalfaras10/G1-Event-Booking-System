@@ -1,6 +1,6 @@
 <script setup>
-import { ref, reactive, onMounted, watch, nextTick } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref, reactive, onMounted, watch, nextTick } from "vue";
+import { useRoute } from "vue-router";
 import {
   companyStats,
   servicesData,
@@ -8,215 +8,224 @@ import {
   socialLinks,
   inquiryTypes,
   policiesData,
-  faqsData
-} from '../data/aboutData.js'
+  faqsData,
+} from "../data/aboutData.js";
 
-const route = useRoute()
+const route = useRoute();
 
 // --- CONTACT FORM STATE & VALIDATION ---
 const form = reactive({
-  fullName: '',
-  email: '',
-  inquiryType: 'general',
-  subject: '',
-  message: '',
-  agreeToPolicies: false
-})
+  fullName: "",
+  email: "",
+  inquiryType: "general",
+  subject: "",
+  message: "",
+  agreeToPolicies: false,
+});
 
 const errors = reactive({
-  fullName: '',
-  email: '',
-  subject: '',
-  message: '',
-  agreeToPolicies: ''
-})
+  fullName: "",
+  email: "",
+  subject: "",
+  message: "",
+  agreeToPolicies: "",
+});
 
-const submittedSuccess = ref(false)
-const submittedRef = ref('')
+const submittedSuccess = ref(false);
+const submittedRef = ref("");
 
 // --- FAQ ACCORDION STATE ---
-const openFaqId = ref(1)
+const openFaqId = ref(1);
 
 const toggleFaq = (id) => {
-  openFaqId.value = openFaqId.value === id ? null : id
-}
+  openFaqId.value = openFaqId.value === id ? null : id;
+};
 
 // --- POLICY MODAL STATE ---
-const activePolicy = ref(null)
+const activePolicy = ref(null);
 
 const openPolicyModal = (policy) => {
-  activePolicy.value = policy
-}
+  activePolicy.value = policy;
+};
 
 const closePolicyModal = () => {
-  activePolicy.value = null
-}
+  activePolicy.value = null;
+};
 
 // --- FORM VALIDATION & SUBMIT HANDLER ---
 const clearErrors = () => {
-  errors.fullName = ''
-  errors.email = ''
-  errors.subject = ''
-  errors.message = ''
-  errors.agreeToPolicies = ''
-}
+  errors.fullName = "";
+  errors.email = "";
+  errors.subject = "";
+  errors.message = "";
+  errors.agreeToPolicies = "";
+};
 
 const validateForm = () => {
-  clearErrors()
-  let isValid = true
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  clearErrors();
+  let isValid = true;
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   if (!form.fullName.trim()) {
-    errors.fullName = 'Please enter your full name.'
-    isValid = false
+    errors.fullName = "Please enter your full name.";
+    isValid = false;
   }
 
   if (!form.email.trim()) {
-    errors.email = 'Please enter your email address.'
-    isValid = false
+    errors.email = "Please enter your email address.";
+    isValid = false;
   } else if (!emailPattern.test(form.email.trim())) {
-    errors.email = 'Please enter a valid email address.'
-    isValid = false
+    errors.email = "Please enter a valid email address.";
+    isValid = false;
   }
 
   if (!form.subject.trim()) {
-    errors.subject = 'Please provide a brief subject for your inquiry.'
-    isValid = false
+    errors.subject = "Please provide a brief subject for your inquiry.";
+    isValid = false;
   }
 
   if (!form.message.trim() || form.message.trim().length < 10) {
-    errors.message = 'Please enter a message of at least 10 characters.'
-    isValid = false
+    errors.message = "Please enter a message of at least 10 characters.";
+    isValid = false;
   }
 
   if (!form.agreeToPolicies) {
-    errors.agreeToPolicies = 'You must agree to the Terms of Service and Privacy Policy.'
-    isValid = false
+    errors.agreeToPolicies =
+      "You must agree to the Terms of Service and Privacy Policy.";
+    isValid = false;
   }
 
-  return isValid
-}
+  return isValid;
+};
 
 const handleSubmit = () => {
-  submittedSuccess.value = false
+  submittedSuccess.value = false;
 
-  if (!validateForm()) return
+  if (!validateForm()) return;
 
-  const randomCode = Math.floor(100000 + Math.random() * 900000)
-  submittedRef.value = `G1-INQ-${randomCode}`
-  submittedSuccess.value = true
+  const randomCode = Math.floor(100000 + Math.random() * 900000);
+  submittedRef.value = `G1-INQ-${randomCode}`;
+  submittedSuccess.value = true;
 
-  form.fullName = ''
-  form.email = ''
-  form.inquiryType = 'general'
-  form.subject = ''
-  form.message = ''
-  form.agreeToPolicies = false
-}
+  form.fullName = "";
+  form.email = "";
+  form.inquiryType = "general";
+  form.subject = "";
+  form.message = "";
+  form.agreeToPolicies = false;
+};
 
 const scrollToSection = (sectionId) => {
-  const el = document.getElementById(sectionId)
+  const el = document.getElementById(sectionId);
   if (el) {
-    scrollToWithOffset(el, 110)
+    scrollToWithOffset(el, 110);
   }
-}
+};
 
 function scrollToWithOffset(element, offset = 110) {
-  const elementPosition = element.getBoundingClientRect().top
-  const offsetPosition = elementPosition + window.scrollY - offset
+  const elementPosition = element.getBoundingClientRect().top;
+  const offsetPosition = elementPosition + window.scrollY - offset;
 
   window.scrollTo({
     top: offsetPosition,
-    behavior: 'smooth'
-  })
+    behavior: "smooth",
+  });
 }
 
 const handleRouteScroll = async () => {
-  await nextTick()
+  await nextTick();
 
-  if (route.path === '/contact') {
-    const contactSection = document.getElementById('contact-section')
+  if (route.path === "/contact") {
+    const contactSection = document.getElementById("contact-section");
     if (contactSection) {
-      scrollToWithOffset(contactSection, 110)
+      scrollToWithOffset(contactSection, 110);
     }
   } else {
     window.scrollTo({
       top: 0,
       left: 0,
-      behavior: 'smooth'
-    })
+      behavior: "smooth",
+    });
   }
-}
+};
 
 onMounted(() => {
-  handleRouteScroll()
-})
+  handleRouteScroll();
+});
 
 watch(
   () => route.path,
   () => {
-    handleRouteScroll()
-  }
-)
+    handleRouteScroll();
+  },
+);
 </script>
 
 <template>
   <div class="container py-5">
-
     <!-- SECTION 1: HERO / ABOUT BACKGROUND -->
     <section id="about-section" class="mb-5 pb-4">
-      <div class="hero-bento-card p-4 p-lg-5 rounded-5 position-relative overflow-hidden">
+      <div
+        class="hero-bento-card p-4 p-lg-5 rounded-5 position-relative overflow-hidden">
         <div class="hero-glow-accent"></div>
 
         <div class="row g-5 align-items-center position-relative z-1">
           <div class="col-lg-7">
-            <div class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-4 hero-tag-pill">
+            <div
+              class="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-4 hero-tag-pill">
               <span class="pulse-dot"></span>
-              <span class="text-uppercase extra-small fw-bold text-warning tracking-wider">
+              <span
+                class="text-uppercase extra-small fw-bold text-warning tracking-wider">
                 G-ONE Ecosystem // Est. 2026
               </span>
             </div>
 
-            <span class="text-uppercase small fw-bold browse-lineup-title d-block mb-2">
-              <i class="bi bi-award me-1"></i>Tiered Memberships &amp; Subscriptions
+            <span
+              class="text-uppercase small fw-bold browse-lineup-title d-block mb-2">
+              <i class="bi bi-award me-1"></i>Tiered Memberships &amp;
+              Subscriptions
             </span>
 
             <h1 class="display-4 fw-extrabold text-white lh-tight mb-4">
-              Redefining Live Event Discovery &amp; <span class="text-gradient-gold">Seamless Ticketing</span>
+              Redefining Live Event Discovery &amp;
+              <span class="text-gradient-gold">Seamless Ticketing</span>
             </h1>
 
             <p class="lead-text mb-4">
-              <strong>G-ONE</strong> is a next-generation event booking platform connecting audiences with world-class concerts, gala performances, and exclusive live experiences through a lightning-fast digital portal. Lock in member privileges with up to 25% ticket discounts, 24- to 72-hour presale access, priority seat holds, and complimentary lounge vouchers.
+              <strong>G-ONE</strong> is a next-generation event booking platform
+              connecting audiences with world-class concerts, gala performances,
+              and exclusive live experiences through a lightning-fast digital
+              portal. Lock in member privileges with up to 25% ticket discounts,
+              24- to 72-hour presale access, priority seat holds, and
+              complimentary lounge vouchers.
             </p>
 
             <div class="d-flex flex-wrap gap-3 mb-5">
               <button
                 type="button"
                 class="btn btn-login px-4 py-3 d-inline-flex align-items-center gap-2 shadow-gold"
-                @click="scrollToSection('contact-section')"
-              >
+                @click="scrollToSection('contact-section')">
                 <span>Connect With Support</span>
                 <i class="bi bi-arrow-down-right"></i>
               </button>
               <button
                 type="button"
                 class="btn btn-register px-4 py-3 d-inline-flex align-items-center gap-2"
-                @click="scrollToSection('policies-section')"
-              >
+                @click="scrollToSection('policies-section')">
                 <i class="bi bi-shield-check text-warning"></i>
                 <span>Platform Policies</span>
               </button>
             </div>
 
             <!-- Metric Grid -->
-            <div class="row g-4 pt-4 border-top border-secondary border-opacity-25">
-              <div
-                v-for="stat in companyStats"
-                :key="stat.label"
-                class="col-4"
-              >
-                <div class="fs-3 fw-black text-warning lh-1 mb-1">{{ stat.value }}</div>
-                <div class="extra-small text-uppercase text-secondary-light tracking-wide fw-semibold">
+            <div
+              class="row g-4 pt-4 border-top border-secondary border-opacity-25">
+              <div v-for="stat in companyStats" :key="stat.label" class="col-4">
+                <div class="fs-3 fw-black text-warning lh-1 mb-1">
+                  {{ stat.value }}
+                </div>
+                <div
+                  class="extra-small text-uppercase text-secondary-light tracking-wide fw-semibold">
                   {{ stat.label }}
                 </div>
               </div>
@@ -225,22 +234,29 @@ watch(
 
           <!-- Hero Visual Frame -->
           <div class="col-lg-5">
-            <div class="hero-image-frame position-relative rounded-4 overflow-hidden shadow-2xl">
+            <div
+              class="hero-image-frame position-relative rounded-4 overflow-hidden shadow-2xl">
               <img
                 src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=85"
                 alt="G-ONE Live Event Experience"
-                class="w-100 h-100 object-fit-cover about-hero-img"
-              />
+                class="w-100 h-100 object-fit-cover about-hero-img" />
               <div class="hero-img-gradient"></div>
 
-              <div class="floating-badge-card position-absolute bottom-0 start-0 end-0 m-3 p-3 rounded-3 d-flex align-items-center justify-content-between gap-2">
+              <div
+                class="floating-badge-card position-absolute bottom-0 start-0 end-0 m-3 p-3 rounded-3 d-flex align-items-center justify-content-between gap-2">
                 <div class="d-flex align-items-center gap-3">
-                  <div class="icon-circle d-flex align-items-center justify-content-center flex-shrink-0">
-                    <i class="bi bi-ticket-perforated-fill text-warning fs-5"></i>
+                  <div
+                    class="icon-circle d-flex align-items-center justify-content-center flex-shrink-0">
+                    <i
+                      class="bi bi-ticket-perforated-fill text-warning fs-5"></i>
                   </div>
                   <div>
-                    <div class="fw-bold text-white small">Verified Live Hub</div>
-                    <div class="extra-small text-secondary-light">Real-Time Secure Allocations</div>
+                    <div class="fw-bold text-white small">
+                      Verified Live Hub
+                    </div>
+                    <div class="extra-small text-secondary-light">
+                      Real-Time Secure Allocations
+                    </div>
                   </div>
                 </div>
                 <span class="hero-badge px-2 py-1 flex-shrink-0">Manila</span>
@@ -256,34 +272,45 @@ watch(
       <div class="row g-4 justify-content-center">
         <div class="col-12 col-md-4">
           <div class="feature-highlight-card p-4 rounded-4 h-100">
-            <div class="icon-box mb-3 d-inline-flex p-3 rounded-3 bg-warning bg-opacity-10 text-warning">
+            <div
+              class="icon-box mb-3 d-inline-flex p-3 rounded-3 bg-warning bg-opacity-10 text-warning">
               <i class="bi bi-stopwatch fs-4"></i>
             </div>
             <h4 class="h5 fw-bold text-white mb-2">Tiered Presale Access</h4>
             <p class="small text-secondary-light mb-0">
-              Enjoy 24-hour, 48-hour, or 72-hour VIP presale queue placement to secure high-demand concert, theater, and festival ticket drops early.
+              Enjoy 24-hour, 48-hour, or 72-hour VIP presale queue placement to
+              secure high-demand concert, theater, and festival ticket drops
+              early.
             </p>
           </div>
         </div>
         <div class="col-12 col-md-4">
           <div class="feature-highlight-card p-4 rounded-4 h-100">
-            <div class="icon-box mb-3 d-inline-flex p-3 rounded-3 bg-warning bg-opacity-10 text-warning">
+            <div
+              class="icon-box mb-3 d-inline-flex p-3 rounded-3 bg-warning bg-opacity-10 text-warning">
               <i class="bi bi-tag fs-4"></i>
             </div>
-            <h4 class="h5 fw-bold text-white mb-2">Exclusive Ticket Discounts</h4>
+            <h4 class="h5 fw-bold text-white mb-2">
+              Exclusive Ticket Discounts
+            </h4>
             <p class="small text-secondary-light mb-0">
-              Save across every booking with automatic tier-based price reductions ranging from 5% up to 25% on gala and event passes.
+              Save across every booking with automatic tier-based price
+              reductions ranging from 5% up to 25% on gala and event passes.
             </p>
           </div>
         </div>
         <div class="col-12 col-md-4">
           <div class="feature-highlight-card p-4 rounded-4 h-100">
-            <div class="icon-box mb-3 d-inline-flex p-3 rounded-3 bg-warning bg-opacity-10 text-warning">
+            <div
+              class="icon-box mb-3 d-inline-flex p-3 rounded-3 bg-warning bg-opacity-10 text-warning">
               <i class="bi bi-star fs-4"></i>
             </div>
-            <h4 class="h5 fw-bold text-white mb-2">VIP Perks &amp; Concierge</h4>
+            <h4 class="h5 fw-bold text-white mb-2">
+              VIP Perks &amp; Concierge
+            </h4>
             <p class="small text-secondary-light mb-0">
-              Unlock priority seat holds, complimentary lounge drink vouchers, waived booking fees, and dedicated concierge support.
+              Unlock priority seat holds, complimentary lounge drink vouchers,
+              waived booking fees, and dedicated concierge support.
             </p>
           </div>
         </div>
@@ -293,12 +320,16 @@ watch(
     <!-- SECTION 2: CORE PLATFORM SERVICES -->
     <section id="services-section" class="mb-5 pb-4">
       <div class="text-center mx-auto mb-5 section-heading-narrow">
-        <span class="text-uppercase small fw-bold browse-lineup-title tracking-wider">
+        <span
+          class="text-uppercase small fw-bold browse-lineup-title tracking-wider">
           <i class="bi bi-layers me-1"></i> What We Offer
         </span>
-        <h2 class="fw-bold text-white mt-1 mb-2 display-6">Core Platform Services</h2>
+        <h2 class="fw-bold text-white mt-1 mb-2 display-6">
+          Core Platform Services
+        </h2>
         <p class="small text-secondary-light">
-          Engineered for high concurrency, transparency, and effortless navigation from discovery to check-in.
+          Engineered for high concurrency, transparency, and effortless
+          navigation from discovery to check-in.
         </p>
       </div>
 
@@ -306,11 +337,11 @@ watch(
         <div
           v-for="service in servicesData"
           :key="service.code"
-          class="col-md-6 col-lg-3"
-        >
+          class="col-md-6 col-lg-3">
           <div class="card event-card h-100 rounded-4 p-4 d-flex flex-column">
             <div class="d-flex align-items-center justify-content-between mb-4">
-              <span class="service-code-pill px-2 py-1 rounded-2 extra-small fw-bold font-monospace">
+              <span
+                class="service-code-pill px-2 py-1 rounded-2 extra-small fw-bold font-monospace">
                 {{ service.code }}
               </span>
               <div class="service-icon-box">
@@ -323,7 +354,8 @@ watch(
               {{ service.description }}
             </p>
 
-            <div class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center extra-small text-uppercase">
+            <div
+              class="pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center extra-small text-uppercase">
               <span class="text-secondary-light">{{ service.meta }}</span>
               <span class="text-warning fw-bold">G-ONE Ready</span>
             </div>
@@ -335,40 +367,51 @@ watch(
     <!-- SECTION 3: CONTACT FORM & DIRECT CHANNELS -->
     <section id="contact-section" class="mb-5 pb-4">
       <div class="mb-5">
-        <span class="text-uppercase small fw-bold browse-lineup-title tracking-wider">
+        <span
+          class="text-uppercase small fw-bold browse-lineup-title tracking-wider">
           <i class="bi bi-chat-dots me-1"></i> Get In Touch
         </span>
-        <h2 class="fw-bold text-white mb-1 mt-1 display-6">Contact G-ONE Support</h2>
+        <h2 class="fw-bold text-white mb-1 mt-1 display-6">
+          Contact G-ONE Support
+        </h2>
         <p class="small text-secondary-light">
-          Have questions regarding an upcoming show, ticket transfer, or VIP benefits? Our support desk is here for you.
+          Have questions regarding an upcoming show, ticket transfer, or VIP
+          benefits? Our support desk is here for you.
         </p>
       </div>
 
       <div class="row g-4">
         <!-- Left Column: Modern Form Box -->
         <div class="col-lg-7">
-          <div class="surface-panel rounded-5 p-4 p-md-5 h-auto position-relative">
-            <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+          <div
+            class="surface-panel rounded-5 p-4 p-md-5 h-auto position-relative">
+            <div
+              class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
               <h4 class="fw-bold text-white mb-0">Send an Inquiry</h4>
               <span class="hero-badge px-3 py-1">24h Response Window</span>
             </div>
             <p class="small text-secondary-light mb-4">
-              Fill out the secure dispatch form below and our response team will get back to your inbox promptly.
+              Fill out the secure dispatch form below and our response team will
+              get back to your inbox promptly.
             </p>
 
             <!-- Success Alert -->
             <div
               v-if="submittedSuccess"
               class="alert-success-gold rounded-4 p-4 mb-4 d-flex align-items-start gap-3 animate-fade-in"
-              role="alert"
-            >
-              <i class="bi bi-check-circle-fill text-warning fs-3 flex-shrink-0"></i>
+              role="alert">
+              <i
+                class="bi bi-check-circle-fill text-warning fs-3 flex-shrink-0"></i>
               <div>
                 <div class="fw-bold text-white mb-1">
-                  Inquiry Dispatched Successfully! Reference: <span class="text-warning font-monospace">{{ submittedRef }}</span>
+                  Inquiry Dispatched Successfully! Reference:
+                  <span class="text-warning font-monospace">{{
+                    submittedRef
+                  }}</span>
                 </div>
                 <div class="extra-small text-secondary-light">
-                  Thank you for reaching out. A confirmation has been registered in our system and an agent will email you shortly.
+                  Thank you for reaching out. A confirmation has been registered
+                  in our system and an agent will email you shortly.
                 </div>
               </div>
             </div>
@@ -377,7 +420,9 @@ watch(
               <div class="row g-3">
                 <!-- Full Name -->
                 <div class="col-md-6">
-                  <label for="contactName" class="form-label extra-small text-secondary-light fw-bold text-uppercase tracking-wider">
+                  <label
+                    for="contactName"
+                    class="form-label extra-small text-secondary-light fw-bold text-uppercase tracking-wider">
                     Full Name <span class="text-warning">*</span>
                   </label>
                   <input
@@ -386,16 +431,18 @@ watch(
                     type="text"
                     class="form-control dark-input"
                     :class="{ 'is-invalid-dark': errors.fullName }"
-                    placeholder="e.g., Juan Dela Cruz"
-                  />
+                    placeholder="e.g., Juan Dela Cruz" />
                   <div v-if="errors.fullName" class="error-text mt-1">
-                    <i class="bi bi-exclamation-circle me-1"></i>{{ errors.fullName }}
+                    <i class="bi bi-exclamation-circle me-1"></i
+                    >{{ errors.fullName }}
                   </div>
                 </div>
 
                 <!-- Email -->
                 <div class="col-md-6">
-                  <label for="contactEmail" class="form-label extra-small text-secondary-light fw-bold text-uppercase tracking-wider">
+                  <label
+                    for="contactEmail"
+                    class="form-label extra-small text-secondary-light fw-bold text-uppercase tracking-wider">
                     Email Address <span class="text-warning">*</span>
                   </label>
                   <input
@@ -404,28 +451,28 @@ watch(
                     type="email"
                     class="form-control dark-input"
                     :class="{ 'is-invalid-dark': errors.email }"
-                    placeholder="you@example.com"
-                  />
+                    placeholder="you@example.com" />
                   <div v-if="errors.email" class="error-text mt-1">
-                    <i class="bi bi-exclamation-circle me-1"></i>{{ errors.email }}
+                    <i class="bi bi-exclamation-circle me-1"></i
+                    >{{ errors.email }}
                   </div>
                 </div>
 
                 <!-- Inquiry Type -->
                 <div class="col-md-6">
-                  <label for="inquiryType" class="form-label extra-small text-secondary-light fw-bold text-uppercase tracking-wider">
+                  <label
+                    for="inquiryType"
+                    class="form-label extra-small text-secondary-light fw-bold text-uppercase tracking-wider">
                     Inquiry Category
                   </label>
                   <select
                     id="inquiryType"
                     v-model="form.inquiryType"
-                    class="form-select dark-input"
-                  >
+                    class="form-select dark-input">
                     <option
                       v-for="item in inquiryTypes"
                       :key="item.value"
-                      :value="item.value"
-                    >
+                      :value="item.value">
                       {{ item.label }}
                     </option>
                   </select>
@@ -433,7 +480,9 @@ watch(
 
                 <!-- Subject -->
                 <div class="col-md-6">
-                  <label for="contactSubject" class="form-label extra-small text-secondary-light fw-bold text-uppercase tracking-wider">
+                  <label
+                    for="contactSubject"
+                    class="form-label extra-small text-secondary-light fw-bold text-uppercase tracking-wider">
                     Subject <span class="text-warning">*</span>
                   </label>
                   <input
@@ -442,16 +491,18 @@ watch(
                     type="text"
                     class="form-control dark-input"
                     :class="{ 'is-invalid-dark': errors.subject }"
-                    placeholder="Booking ID or Topic"
-                  />
+                    placeholder="Booking ID or Topic" />
                   <div v-if="errors.subject" class="error-text mt-1">
-                    <i class="bi bi-exclamation-circle me-1"></i>{{ errors.subject }}
+                    <i class="bi bi-exclamation-circle me-1"></i
+                    >{{ errors.subject }}
                   </div>
                 </div>
 
                 <!-- Message -->
                 <div class="col-12">
-                  <label for="contactMessage" class="form-label extra-small text-secondary-light fw-bold text-uppercase tracking-wider">
+                  <label
+                    for="contactMessage"
+                    class="form-label extra-small text-secondary-light fw-bold text-uppercase tracking-wider">
                     Message / Concern <span class="text-warning">*</span>
                   </label>
                   <textarea
@@ -460,10 +511,10 @@ watch(
                     rows="4"
                     class="form-control dark-input"
                     :class="{ 'is-invalid-dark': errors.message }"
-                    placeholder="Provide details regarding your booking, membership, or feedback..."
-                  ></textarea>
+                    placeholder="Provide details regarding your booking, membership, or feedback..."></textarea>
                   <div v-if="errors.message" class="error-text mt-1">
-                    <i class="bi bi-exclamation-circle me-1"></i>{{ errors.message }}
+                    <i class="bi bi-exclamation-circle me-1"></i
+                    >{{ errors.message }}
                   </div>
                 </div>
 
@@ -474,22 +525,37 @@ watch(
                       id="agreePolicies"
                       v-model="form.agreeToPolicies"
                       type="checkbox"
-                      class="form-check-input gold-checkbox mt-0"
-                    />
-                    <label for="agreePolicies" class="form-check-label extra-small text-secondary-light">
+                      class="form-check-input gold-checkbox mt-0" />
+                    <label
+                      for="agreePolicies"
+                      class="form-check-label extra-small text-secondary-light">
                       I agree to G-ONE's
-                      <a href="#policies-section" class="text-warning text-decoration-none fw-semibold" @click.prevent="openPolicyModal(policiesData[0])">Terms</a> &amp;
-                      <a href="#policies-section" class="text-warning text-decoration-none fw-semibold" @click.prevent="openPolicyModal(policiesData[1])">Privacy Policy</a>.
+                      <a
+                        href="#policies-section"
+                        class="text-warning text-decoration-none fw-semibold"
+                        @click.prevent="openPolicyModal(policiesData[0])"
+                        >Terms</a
+                      >
+                      &amp;
+                      <a
+                        href="#policies-section"
+                        class="text-warning text-decoration-none fw-semibold"
+                        @click.prevent="openPolicyModal(policiesData[1])"
+                        >Privacy Policy</a
+                      >.
                     </label>
                   </div>
                   <div v-if="errors.agreeToPolicies" class="error-text mt-1">
-                    <i class="bi bi-exclamation-circle me-1"></i>{{ errors.agreeToPolicies }}
+                    <i class="bi bi-exclamation-circle me-1"></i
+                    >{{ errors.agreeToPolicies }}
                   </div>
                 </div>
 
                 <!-- Submit Action -->
                 <div class="col-12 pt-4 d-flex justify-content-end">
-                  <button type="submit" class="btn btn-login px-5 py-3 d-inline-flex align-items-center gap-2 shadow-gold">
+                  <button
+                    type="submit"
+                    class="btn btn-login px-5 py-3 d-inline-flex align-items-center gap-2 shadow-gold">
                     <span>Send Inquiry</span>
                     <i class="bi bi-send-fill"></i>
                   </button>
@@ -504,61 +570,82 @@ watch(
           <!-- Info Card -->
           <div class="surface-panel rounded-5 p-4">
             <div class="d-flex align-items-center justify-content-between mb-3">
-              <span class="service-code-pill px-2 py-1 rounded-2 extra-small fw-bold font-monospace">
+              <span
+                class="service-code-pill px-2 py-1 rounded-2 extra-small fw-bold font-monospace">
                 DIRECT CHANNELS
               </span>
               <i class="bi bi-headset text-warning fs-5"></i>
             </div>
 
-            <h5 class="fw-bold text-white mb-1">{{ contactDetails.officeName }}</h5>
+            <h5 class="fw-bold text-white mb-1">
+              {{ contactDetails.officeName }}
+            </h5>
             <p class="small text-secondary-light mb-4">
               {{ contactDetails.addressLine1 }}<br />
               {{ contactDetails.addressLine2 }}
             </p>
 
             <div class="d-flex flex-column gap-2">
-              <div class="contact-info-row rounded-3 p-3 d-flex align-items-center justify-content-between gap-2">
-                <div class="d-flex align-items-center gap-2 small text-secondary-light">
+              <div
+                class="contact-info-row rounded-3 p-3 d-flex align-items-center justify-content-between gap-2">
+                <div
+                  class="d-flex align-items-center gap-2 small text-secondary-light">
                   <i class="bi bi-telephone-fill text-warning"></i>
                   <span>Hotline</span>
                 </div>
-                <a :href="'tel:' + contactDetails.phonePrimary" class="small fw-semibold text-white text-decoration-none contact-link">
+                <a
+                  :href="'tel:' + contactDetails.phonePrimary"
+                  class="small fw-semibold text-white text-decoration-none contact-link">
                   {{ contactDetails.phonePrimary }}
                 </a>
               </div>
 
-              <div class="contact-info-row rounded-3 p-3 d-flex align-items-center justify-content-between gap-2">
-                <div class="d-flex align-items-center gap-2 small text-secondary-light">
+              <div
+                class="contact-info-row rounded-3 p-3 d-flex align-items-center justify-content-between gap-2">
+                <div
+                  class="d-flex align-items-center gap-2 small text-secondary-light">
                   <i class="bi bi-phone-fill text-warning"></i>
                   <span>Mobile Desk</span>
                 </div>
-                <a :href="'tel:' + contactDetails.phoneMobile" class="small fw-semibold text-white text-decoration-none contact-link">
+                <a
+                  :href="'tel:' + contactDetails.phoneMobile"
+                  class="small fw-semibold text-white text-decoration-none contact-link">
                   {{ contactDetails.phoneMobile }}
                 </a>
               </div>
 
-              <div class="contact-info-row rounded-3 p-3 d-flex align-items-center justify-content-between gap-2">
-                <div class="d-flex align-items-center gap-2 small text-secondary-light">
+              <div
+                class="contact-info-row rounded-3 p-3 d-flex align-items-center justify-content-between gap-2">
+                <div
+                  class="d-flex align-items-center gap-2 small text-secondary-light">
                   <i class="bi bi-envelope-fill text-warning"></i>
                   <span>Support Desk</span>
                 </div>
-                <a :href="'mailto:' + contactDetails.emailSupport" class="small fw-semibold text-warning text-decoration-none contact-link">
+                <a
+                  :href="'mailto:' + contactDetails.emailSupport"
+                  class="small fw-semibold text-warning text-decoration-none contact-link">
                   {{ contactDetails.emailSupport }}
                 </a>
               </div>
 
-              <div class="contact-info-row rounded-3 p-3 d-flex align-items-center justify-content-between gap-2">
-                <div class="d-flex align-items-center gap-2 small text-secondary-light">
+              <div
+                class="contact-info-row rounded-3 p-3 d-flex align-items-center justify-content-between gap-2">
+                <div
+                  class="d-flex align-items-center gap-2 small text-secondary-light">
                   <i class="bi bi-briefcase-fill text-warning"></i>
                   <span>Partnerships</span>
                 </div>
-                <a :href="'mailto:' + contactDetails.emailPartnerships" class="small fw-semibold text-white text-decoration-none contact-link">
+                <a
+                  :href="'mailto:' + contactDetails.emailPartnerships"
+                  class="small fw-semibold text-white text-decoration-none contact-link">
                   {{ contactDetails.emailPartnerships }}
                 </a>
               </div>
 
-              <div class="contact-info-row rounded-3 p-3 d-flex align-items-center justify-content-between gap-2">
-                <div class="d-flex align-items-center gap-2 small text-secondary-light">
+              <div
+                class="contact-info-row rounded-3 p-3 d-flex align-items-center justify-content-between gap-2">
+                <div
+                  class="d-flex align-items-center gap-2 small text-secondary-light">
                   <i class="bi bi-clock-fill text-warning"></i>
                   <span>Support Hours</span>
                 </div>
@@ -573,27 +660,36 @@ watch(
           <div class="surface-panel rounded-5 p-4">
             <div class="d-flex align-items-center justify-content-between mb-3">
               <h6 class="fw-bold text-white mb-0">Follow G-ONE Socials</h6>
-              <span class="extra-small text-warning text-uppercase fw-bold tracking-wider">Live Feeds</span>
+              <span
+                class="extra-small text-warning text-uppercase fw-bold tracking-wider"
+                >Live Feeds</span
+              >
             </div>
             <p class="extra-small text-secondary-light mb-3">
-              Get instant notifications on priority presales, lineup announcements, and exclusive community drops.
+              Get instant notifications on priority presales, lineup
+              announcements, and exclusive community drops.
             </p>
 
             <div class="row g-3">
               <div
                 v-for="social in socialLinks"
                 :key="social.name"
-                class="col-6"
-              >
+                class="col-6">
                 <a
                   :href="social.url"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="social-card rounded-3 p-3 d-flex align-items-center gap-3 text-decoration-none h-100"
-                >
-                  <i :class="['bi', social.icon, 'fs-4 text-warning flex-shrink-0']"></i>
+                  class="social-card rounded-3 p-3 d-flex align-items-center gap-3 text-decoration-none h-100">
+                  <i
+                    :class="[
+                      'bi',
+                      social.icon,
+                      'fs-4 text-warning flex-shrink-0',
+                    ]"></i>
                   <div class="overflow-hidden">
-                    <div class="extra-small fw-bold text-white lh-1 mb-1">{{ social.name }}</div>
+                    <div class="extra-small fw-bold text-white lh-1 mb-1">
+                      {{ social.name }}
+                    </div>
                     <div class="extra-small text-secondary-light text-truncate">
                       {{ social.handle }}
                     </div>
@@ -609,12 +705,16 @@ watch(
     <!-- SECTION 4: TERMS & POLICIES -->
     <section id="policies-section" class="mb-5 pb-4">
       <div class="mb-4">
-        <span class="text-uppercase small fw-bold browse-lineup-title tracking-wider">
+        <span
+          class="text-uppercase small fw-bold browse-lineup-title tracking-wider">
           <i class="bi bi-shield-lock me-1"></i> Transparency &amp; Trust
         </span>
-        <h2 class="fw-bold text-white mb-1 mt-1 display-6">Platform Policies &amp; Terms</h2>
+        <h2 class="fw-bold text-white mb-1 mt-1 display-6">
+          Platform Policies &amp; Terms
+        </h2>
         <p class="small text-secondary-light">
-          Review official guidelines regarding seat expirations, data safeguards, and ticket protection rules.
+          Review official guidelines regarding seat expirations, data
+          safeguards, and ticket protection rules.
         </p>
       </div>
 
@@ -622,13 +722,11 @@ watch(
         <div
           v-for="policy in policiesData"
           :key="policy.id"
-          class="col-sm-6 col-lg-3"
-        >
+          class="col-sm-6 col-lg-3">
           <button
             type="button"
             class="policy-link-card w-100 h-100 text-start rounded-4 p-4 d-flex flex-column border-0"
-            @click="openPolicyModal(policy)"
-          >
+            @click="openPolicyModal(policy)">
             <div class="d-flex align-items-center justify-content-between mb-3">
               <div class="service-icon-box">
                 <i :class="['bi', policy.icon, 'fs-4 text-warning']"></i>
@@ -639,7 +737,8 @@ watch(
             <p class="extra-small text-secondary-light mb-4 flex-grow-1">
               {{ policy.summary }}
             </p>
-            <span class="extra-small text-warning fw-semibold d-inline-flex align-items-center gap-1">
+            <span
+              class="extra-small text-warning fw-semibold d-inline-flex align-items-center gap-1">
               Read Policy <i class="bi bi-arrow-right"></i>
             </span>
           </button>
@@ -650,12 +749,16 @@ watch(
     <!-- SECTION 5: FREQUENTLY ASKED QUESTIONS -->
     <section id="faq-section" class="mb-4">
       <div class="text-center mx-auto mb-5 section-heading-narrow">
-        <span class="text-uppercase small fw-bold browse-lineup-title tracking-wider">
+        <span
+          class="text-uppercase small fw-bold browse-lineup-title tracking-wider">
           Quick Answers
         </span>
-        <h2 class="fw-bold text-white mt-1 mb-2 display-6">Frequently Asked Questions</h2>
+        <h2 class="fw-bold text-white mt-1 mb-2 display-6">
+          Frequently Asked Questions
+        </h2>
         <p class="small text-secondary-light">
-          Everything you need to know about transactional locks, seat reservations, and digital passes.
+          Everything you need to know about transactional locks, seat
+          reservations, and digital passes.
         </p>
       </div>
 
@@ -664,26 +767,27 @@ watch(
           v-for="faq in faqsData"
           :key="faq.id"
           class="faq-card rounded-4 overflow-hidden"
-          :class="{ active: openFaqId === faq.id }"
-        >
+          :class="{ active: openFaqId === faq.id }">
           <button
             type="button"
             class="w-100 p-4 bg-transparent border-0 d-flex align-items-center justify-content-between text-start gap-3"
-            @click="toggleFaq(faq.id)"
-          >
-            <span class="fw-semibold text-white d-flex align-items-center gap-3">
-              <span class="text-warning small font-monospace px-2 py-1 rounded bg-dark border border-secondary border-opacity-25">
+            @click="toggleFaq(faq.id)">
+            <span
+              class="fw-semibold text-white d-flex align-items-center gap-3">
+              <span
+                class="text-warning small font-monospace px-2 py-1 rounded bg-dark border border-secondary border-opacity-25">
                 {{ faq.number }}
               </span>
               <span class="fs-6">{{ faq.question }}</span>
             </span>
             <i
               class="bi bi-chevron-down text-warning faq-chevron fs-5"
-              :class="{ rotated: openFaqId === faq.id }"
-            ></i>
+              :class="{ rotated: openFaqId === faq.id }"></i>
           </button>
 
-          <div v-if="openFaqId === faq.id" class="px-4 pb-4 pt-0 animate-fade-in">
+          <div
+            v-if="openFaqId === faq.id"
+            class="px-4 pb-4 pt-0 animate-fade-in">
             <p class="small text-secondary-light mb-0 ps-md-4 lh-lg">
               {{ faq.answer }}
             </p>
@@ -691,16 +795,15 @@ watch(
         </div>
       </div>
     </section>
-
   </div>
 
   <!-- POLICY READER MODAL -->
   <div
     v-if="activePolicy"
     class="policy-modal-backdrop d-flex align-items-center justify-content-center p-3 animate-fade-in"
-    @click.self="closePolicyModal"
-  >
-    <div class="policy-modal-box rounded-5 p-4 p-md-5 w-100 position-relative shadow-2xl modal-box-custom">
+    @click.self="closePolicyModal">
+    <div
+      class="policy-modal-box rounded-5 p-4 p-md-5 w-100 position-relative shadow-2xl modal-box-custom">
       <div class="d-flex align-items-center justify-content-between mb-3">
         <div class="d-flex align-items-center gap-3">
           <div class="service-icon-box">
@@ -712,13 +815,13 @@ watch(
           type="button"
           class="btn btn-sm btn-register px-2 py-1"
           aria-label="Close modal"
-          @click="closePolicyModal"
-        >
+          @click="closePolicyModal">
           <i class="bi bi-x-lg"></i>
         </button>
       </div>
 
-      <div class="extra-small text-warning text-uppercase fw-bold mb-4 tracking-wider font-monospace">
+      <div
+        class="extra-small text-warning text-uppercase fw-bold mb-4 tracking-wider font-monospace">
         Last Updated: {{ activePolicy.updated }}
       </div>
 
@@ -727,7 +830,10 @@ watch(
       </p>
 
       <div class="d-flex justify-content-end">
-        <button type="button" class="btn btn-login px-4 py-2" @click="closePolicyModal">
+        <button
+          type="button"
+          class="btn btn-login px-4 py-2"
+          @click="closePolicyModal">
           Acknowledge &amp; Close
         </button>
       </div>
@@ -790,7 +896,11 @@ watch(
 
 /* Hero Card */
 .hero-bento-card {
-  background: linear-gradient(145deg, rgba(24, 24, 28, 0.88) 0%, rgba(14, 14, 16, 0.96) 100%);
+  background: linear-gradient(
+    145deg,
+    rgba(24, 24, 28, 0.88) 0%,
+    rgba(14, 14, 16, 0.96) 100%
+  );
   border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7);
 }
@@ -801,7 +911,11 @@ watch(
   right: -50px;
   width: 260px;
   height: 260px;
-  background: radial-gradient(circle, rgba(243, 198, 79, 0.16) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(243, 198, 79, 0.16) 0%,
+    transparent 70%
+  );
   pointer-events: none;
 }
 
@@ -878,7 +992,12 @@ watch(
 .hero-img-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(11, 11, 12, 0.88) 0%, rgba(11, 11, 12, 0.15) 60%, transparent 100%);
+  background: linear-gradient(
+    to top,
+    rgba(11, 11, 12, 0.88) 0%,
+    rgba(11, 11, 12, 0.15) 60%,
+    transparent 100%
+  );
   pointer-events: none;
 }
 
@@ -898,9 +1017,16 @@ watch(
 
 /* Ticketing Privileges Cards */
 .feature-highlight-card {
-  background: linear-gradient(160deg, rgba(24, 24, 28, 0.85) 0%, rgba(14, 14, 16, 0.95) 100%);
+  background: linear-gradient(
+    160deg,
+    rgba(24, 24, 28, 0.85) 0%,
+    rgba(14, 14, 16, 0.95) 100%
+  );
   border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .feature-highlight-card:hover {
@@ -911,9 +1037,16 @@ watch(
 
 /* Services Cards */
 .event-card {
-  background: linear-gradient(160deg, rgba(24, 24, 28, 0.85) 0%, rgba(14, 14, 16, 0.95) 100%);
+  background: linear-gradient(
+    160deg,
+    rgba(24, 24, 28, 0.85) 0%,
+    rgba(14, 14, 16, 0.95) 100%
+  );
   border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .event-card:hover {
@@ -941,7 +1074,11 @@ watch(
 
 /* Surface Panels & Contact Form */
 .surface-panel {
-  background: linear-gradient(155deg, rgba(24, 24, 28, 0.88) 0%, rgba(14, 14, 16, 0.96) 100%);
+  background: linear-gradient(
+    155deg,
+    rgba(24, 24, 28, 0.88) 0%,
+    rgba(14, 14, 16, 0.96) 100%
+  );
   border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
 }
@@ -958,7 +1095,9 @@ watch(
   border-radius: 10px;
   padding: 0.7rem 0.95rem;
   font-size: 0.9rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .dark-input::placeholder {
@@ -1021,9 +1160,16 @@ watch(
 
 /* Policies Cards */
 .policy-link-card {
-  background: linear-gradient(160deg, rgba(24, 24, 28, 0.85) 0%, rgba(14, 14, 16, 0.95) 100%);
+  background: linear-gradient(
+    160deg,
+    rgba(24, 24, 28, 0.85) 0%,
+    rgba(14, 14, 16, 0.95) 100%
+  );
   border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
 }
 
 .policy-link-card:hover {
@@ -1044,7 +1190,9 @@ watch(
 .faq-card {
   background: rgba(20, 20, 24, 0.85);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: border-color 0.25s ease, background-color 0.25s ease;
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease;
 }
 
 .faq-card.active {

@@ -1,242 +1,267 @@
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-import { useRouter } from 'vue-router'
-import { categoriesData, announcementsData, eventsData } from '../data/eventsData.js'
+import { ref, computed, onMounted, onBeforeUnmount } from "vue";
+import { useRouter } from "vue-router";
+import {
+  categoriesData,
+  announcementsData,
+  eventsData,
+} from "../data/eventsData.js";
 
-const router = useRouter()
+const router = useRouter();
 
 // --- DATA STATE ---
-const categories = categoriesData
-const announcements = ref(announcementsData)
-const events = ref(eventsData)
+const categories = categoriesData;
+const announcements = ref(announcementsData);
+const events = ref(eventsData);
 
 // --- SEARCH, FILTER & VIEW STATE ---
-const searchQuery = ref('')
-const selectedCategory = ref('All')
-const selectedLocation = ref('All')
-const selectedVenue = ref('All')
-const selectedGenre = ref('All')
-const maxPrice = ref(15000)
-const sortBy = ref('date-asc')
-const viewMode = ref('grid') // 'grid' or 'agenda'
-const activeAnnouncementIndex = ref(0)
+const searchQuery = ref("");
+const selectedCategory = ref("All");
+const selectedLocation = ref("All");
+const selectedVenue = ref("All");
+const selectedGenre = ref("All");
+const maxPrice = ref(15000);
+const sortBy = ref("date-asc");
+const viewMode = ref("grid"); // 'grid' or 'agenda'
+const activeAnnouncementIndex = ref(0);
 
 // --- DATE RANGE PICKER STATE ---
-const isDatePickerOpen = ref(false)
-const datePickerRef = ref(null)
-const minSelectableIso = '2026-11-13' // Dates before this show strikethrough
-const baseCalendarDate = ref(new Date(2026, 10, 1)) // Nov 2026 (0-indexed month)
+const isDatePickerOpen = ref(false);
+const datePickerRef = ref(null);
+const minSelectableIso = "2026-11-13"; // Dates before this show strikethrough
+const baseCalendarDate = ref(new Date(2026, 10, 1)); // Nov 2026 (0-indexed month)
 
 // Committed range used for filtering
-const appliedStartDate = ref('')
-const appliedEndDate = ref('')
+const appliedStartDate = ref("");
+const appliedEndDate = ref("");
 
 // Draft range inside the open popover
-const tempStartDate = ref('')
-const tempEndDate = ref('')
-const isSelectingEnd = ref(false)
+const tempStartDate = ref("");
+const tempEndDate = ref("");
+const isSelectingEnd = ref(false);
 
-const weekDays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
-const monthNamesShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const weekDays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+const monthNamesShort = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
+];
 
 // --- CALENDAR GENERATION HELPERS ---
 const toIsoDate = (year, month, day) => {
-  const m = String(month + 1).padStart(2, '0')
-  const d = String(day).padStart(2, '0')
-  return `${year}-${m}-${d}`
-}
+  const m = String(month + 1).padStart(2, "0");
+  const d = String(day).padStart(2, "0");
+  return `${year}-${m}-${d}`;
+};
 
 const formatToDDMMYYYY = (isoStr) => {
-  if (!isoStr) return ''
-  const [y, m, d] = isoStr.split('-')
-  return `${m}-${d}-${y}`
-}
+  if (!isoStr) return "";
+  const [y, m, d] = isoStr.split("-");
+  return `${m}-${d}-${y}`;
+};
 
 const buildCalendarMonth = (year, month) => {
-  const firstDayWeekIdx = new Date(year, month, 1).getDay()
-  const daysInMonth = new Date(year, month + 1, 0).getDate()
-  const daysInPrevMonth = new Date(year, month, 0).getDate()
+  const firstDayWeekIdx = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const daysInPrevMonth = new Date(year, month, 0).getDate();
 
-  const cells = []
+  const cells = [];
 
   // Leading days from previous month
   for (let i = firstDayWeekIdx - 1; i >= 0; i--) {
-    const dayNum = daysInPrevMonth - i
-    const prevDate = new Date(year, month - 1, dayNum)
+    const dayNum = daysInPrevMonth - i;
+    const prevDate = new Date(year, month - 1, dayNum);
     cells.push({
       key: `prev-${dayNum}`,
       dayNumber: dayNum,
       iso: toIsoDate(prevDate.getFullYear(), prevDate.getMonth(), dayNum),
       isCurrentMonth: false,
-      isPast: true
-    })
+      isPast: true,
+    });
   }
 
   // Current month days
   for (let d = 1; d <= daysInMonth; d++) {
-    const iso = toIsoDate(year, month, d)
+    const iso = toIsoDate(year, month, d);
     cells.push({
       key: `curr-${iso}`,
       dayNumber: d,
       iso,
       isCurrentMonth: true,
-      isPast: iso < minSelectableIso
-    })
+      isPast: iso < minSelectableIso,
+    });
   }
 
   // Trailing days from next month to fill 42 cells (6 rows)
-  const remaining = 42 - cells.length
+  const remaining = 42 - cells.length;
   for (let n = 1; n <= remaining; n++) {
-    const nextDate = new Date(year, month + 1, n)
+    const nextDate = new Date(year, month + 1, n);
     cells.push({
       key: `next-${n}`,
       dayNumber: n,
       iso: toIsoDate(nextDate.getFullYear(), nextDate.getMonth(), n),
       isCurrentMonth: false,
-      isPast: false
-    })
+      isPast: false,
+    });
   }
 
   return {
     title: `${monthNamesShort[month]} ${year}`,
-    cells
-  }
-}
+    cells,
+  };
+};
 
 const displayedCalendars = computed(() => {
-  const y1 = baseCalendarDate.value.getFullYear()
-  const m1 = baseCalendarDate.value.getMonth()
-  const rightDate = new Date(y1, m1 + 1, 1)
+  const y1 = baseCalendarDate.value.getFullYear();
+  const m1 = baseCalendarDate.value.getMonth();
+  const rightDate = new Date(y1, m1 + 1, 1);
   return [
     buildCalendarMonth(y1, m1),
-    buildCalendarMonth(rightDate.getFullYear(), rightDate.getMonth())
-  ]
-})
+    buildCalendarMonth(rightDate.getFullYear(), rightDate.getMonth()),
+  ];
+});
 
 const shiftCalendarMonths = (delta) => {
   baseCalendarDate.value = new Date(
     baseCalendarDate.value.getFullYear(),
     baseCalendarDate.value.getMonth() + delta,
-    1
-  )
-}
+    1,
+  );
+};
 
 const openDatePicker = () => {
-  tempStartDate.value = appliedStartDate.value || minSelectableIso
-  tempEndDate.value = appliedEndDate.value || tempStartDate.value
-  isSelectingEnd.value = false
-  isDatePickerOpen.value = !isDatePickerOpen.value
-}
+  tempStartDate.value = appliedStartDate.value || minSelectableIso;
+  tempEndDate.value = appliedEndDate.value || tempStartDate.value;
+  isSelectingEnd.value = false;
+  isDatePickerOpen.value = !isDatePickerOpen.value;
+};
 
 const selectCalendarDay = (cell) => {
-  if (!cell.isCurrentMonth || cell.isPast) return
+  if (!cell.isCurrentMonth || cell.isPast) return;
 
   if (!isSelectingEnd.value) {
-    tempStartDate.value = cell.iso
-    tempEndDate.value = cell.iso
-    isSelectingEnd.value = true
+    tempStartDate.value = cell.iso;
+    tempEndDate.value = cell.iso;
+    isSelectingEnd.value = true;
   } else {
     if (cell.iso < tempStartDate.value) {
-      tempEndDate.value = tempStartDate.value
-      tempStartDate.value = cell.iso
+      tempEndDate.value = tempStartDate.value;
+      tempStartDate.value = cell.iso;
     } else {
-      tempEndDate.value = cell.iso
+      tempEndDate.value = cell.iso;
     }
-    isSelectingEnd.value = false
+    isSelectingEnd.value = false;
   }
-}
+};
 
 const isDaySelectedEndpoint = (cell) => {
-  if (!cell.isCurrentMonth) return false
-  return cell.iso === tempStartDate.value || cell.iso === tempEndDate.value
-}
+  if (!cell.isCurrentMonth) return false;
+  return cell.iso === tempStartDate.value || cell.iso === tempEndDate.value;
+};
 
 const isDayInRange = (cell) => {
-  if (!cell.isCurrentMonth || !tempStartDate.value || !tempEndDate.value) return false
-  return cell.iso > tempStartDate.value && cell.iso < tempEndDate.value
-}
+  if (!cell.isCurrentMonth || !tempStartDate.value || !tempEndDate.value)
+    return false;
+  return cell.iso > tempStartDate.value && cell.iso < tempEndDate.value;
+};
 
 const tempRangeFooterText = computed(() => {
-  if (!tempStartDate.value) return 'No date range selected'
-  const start = formatToDDMMYYYY(tempStartDate.value)
-  const end = formatToDDMMYYYY(tempEndDate.value || tempStartDate.value)
-  return `${start} ~ ${end}`
-})
+  if (!tempStartDate.value) return "No date range selected";
+  const start = formatToDDMMYYYY(tempStartDate.value);
+  const end = formatToDDMMYYYY(tempEndDate.value || tempStartDate.value);
+  return `${start} ~ ${end}`;
+});
 
 const appliedRangeInputText = computed(() => {
-  if (!appliedStartDate.value) return ''
-  const start = formatToDDMMYYYY(appliedStartDate.value)
-  const end = formatToDDMMYYYY(appliedEndDate.value || appliedStartDate.value)
-  return `${start} ~ ${end}`
-})
+  if (!appliedStartDate.value) return "";
+  const start = formatToDDMMYYYY(appliedStartDate.value);
+  const end = formatToDDMMYYYY(appliedEndDate.value || appliedStartDate.value);
+  return `${start} ~ ${end}`;
+});
 
 const clearDateRange = () => {
-  tempStartDate.value = ''
-  tempEndDate.value = ''
-  appliedStartDate.value = ''
-  appliedEndDate.value = ''
-  isSelectingEnd.value = false
-}
+  tempStartDate.value = "";
+  tempEndDate.value = "";
+  appliedStartDate.value = "";
+  appliedEndDate.value = "";
+  isSelectingEnd.value = false;
+};
 
 const cancelDateRange = () => {
-  tempStartDate.value = appliedStartDate.value
-  tempEndDate.value = appliedEndDate.value
-  isSelectingEnd.value = false
-  isDatePickerOpen.value = false
-}
+  tempStartDate.value = appliedStartDate.value;
+  tempEndDate.value = appliedEndDate.value;
+  isSelectingEnd.value = false;
+  isDatePickerOpen.value = false;
+};
 
 const applyDateRange = () => {
-  appliedStartDate.value = tempStartDate.value
-  appliedEndDate.value = tempEndDate.value || tempStartDate.value
-  isSelectingEnd.value = false
-  isDatePickerOpen.value = false
-}
+  appliedStartDate.value = tempStartDate.value;
+  appliedEndDate.value = tempEndDate.value || tempStartDate.value;
+  isSelectingEnd.value = false;
+  isDatePickerOpen.value = false;
+};
 
 // Close popover when clicking outside
 const handleClickOutside = (event) => {
   if (datePickerRef.value && !datePickerRef.value.contains(event.target)) {
-    isDatePickerOpen.value = false
+    isDatePickerOpen.value = false;
   }
-}
+};
 
 onMounted(() => {
-  document.addEventListener('mousedown', handleClickOutside)
-})
+  document.addEventListener("mousedown", handleClickOutside);
+});
 
 onBeforeUnmount(() => {
-  document.removeEventListener('mousedown', handleClickOutside)
-})
+  document.removeEventListener("mousedown", handleClickOutside);
+});
 
 // --- DROPDOWN FILTER OPTIONS ---
-const locations = computed(() => ['All', ...new Set(events.value.map(e => e.location))])
-const venues = computed(() => ['All', ...new Set(events.value.map(e => e.venueName))])
-
+const locations = computed(() => [
+  "All",
+  ...new Set(events.value.map((e) => e.location)),
+]);
+const venues = computed(() => [
+  "All",
+  ...new Set(events.value.map((e) => e.venueName)),
+]);
 
 // --- FILTERED & SORTED EVENTS ---
 const filteredEvents = computed(() => {
   return events.value
-    .filter(evt => {
-      const q = searchQuery.value.trim().toLowerCase()
+    .filter((evt) => {
+      const q = searchQuery.value.trim().toLowerCase();
       const matchesSearch =
         !q ||
         evt.eventName.toLowerCase().includes(q) ||
         evt.artistName.toLowerCase().includes(q) ||
         evt.venueName.toLowerCase().includes(q) ||
-        evt.location.toLowerCase().includes(q)
+        evt.location.toLowerCase().includes(q);
 
       const matchesCategory =
-        selectedCategory.value === 'All' || evt.eventCategory === selectedCategory.value
+        selectedCategory.value === "All" ||
+        evt.eventCategory === selectedCategory.value;
       const matchesLocation =
-        selectedLocation.value === 'All' || evt.location === selectedLocation.value
+        selectedLocation.value === "All" ||
+        evt.location === selectedLocation.value;
       const matchesVenue =
-        selectedVenue.value === 'All' || evt.venueName === selectedVenue.value
-      const matchesPrice = evt.startingPrice <= maxPrice.value
+        selectedVenue.value === "All" || evt.venueName === selectedVenue.value;
+      const matchesPrice = evt.startingPrice <= maxPrice.value;
 
-      const eventDateIso = evt.eventStartDateTime.split('T')[0]
+      const eventDateIso = evt.eventStartDateTime.split("T")[0];
       const matchesDateRange =
         !appliedStartDate.value ||
         (eventDateIso >= appliedStartDate.value &&
-          eventDateIso <= (appliedEndDate.value || appliedStartDate.value))
+          eventDateIso <= (appliedEndDate.value || appliedStartDate.value));
 
       return (
         matchesSearch &&
@@ -245,67 +270,76 @@ const filteredEvents = computed(() => {
         matchesVenue &&
         matchesPrice &&
         matchesDateRange
-      )
+      );
     })
     .sort((a, b) => {
-      if (sortBy.value === 'price-asc') return a.startingPrice - b.startingPrice
-      if (sortBy.value === 'price-desc') return b.startingPrice - a.startingPrice
-      if (sortBy.value === 'date-desc') {
-        return new Date(b.eventStartDateTime) - new Date(a.eventStartDateTime)
+      if (sortBy.value === "price-asc")
+        return a.startingPrice - b.startingPrice;
+      if (sortBy.value === "price-desc")
+        return b.startingPrice - a.startingPrice;
+      if (sortBy.value === "date-desc") {
+        return new Date(b.eventStartDateTime) - new Date(a.eventStartDateTime);
       }
-      return new Date(a.eventStartDateTime) - new Date(b.eventStartDateTime)
-    })
-})
+      return new Date(a.eventStartDateTime) - new Date(b.eventStartDateTime);
+    });
+});
 
 // --- OTHER HELPERS & NAVIGATION ---
-const formatPrice = (value) => '₱' + Number(value).toLocaleString('en-PH')
+const formatPrice = (value) => "₱" + Number(value).toLocaleString("en-PH");
 
 const getAvailabilityBadgeClass = (status) => {
   switch (status) {
-    case 'Available':
-      return 'badge-available'
-    case 'Selling Fast':
-      return 'badge-selling-fast'
-    case 'Low Stock':
-      return 'badge-low-stock'
-    case 'Sold Out':
-      return 'badge-sold-out'
+    case "Available":
+      return "badge-available";
+    case "Selling Fast":
+      return "badge-selling-fast";
+    case "Low Stock":
+      return "badge-low-stock";
+    case "Sold Out":
+      return "badge-sold-out";
     default:
-      return 'badge-available'
+      return "badge-available";
   }
-}
+};
 
 const resetFilters = () => {
-  searchQuery.value = ''
-  selectedCategory.value = 'All'
-  selectedLocation.value = 'All'
-  selectedVenue.value = 'All'
-  selectedGenre.value = 'All'
-  maxPrice.value = 15000
-  sortBy.value = 'date-asc'
-  clearDateRange()
-}
+  searchQuery.value = "";
+  selectedCategory.value = "All";
+  selectedLocation.value = "All";
+  selectedVenue.value = "All";
+  selectedGenre.value = "All";
+  maxPrice.value = 15000;
+  sortBy.value = "date-asc";
+  clearDateRange();
+};
 
 const cycleAnnouncement = (direction) => {
-  const total = announcements.value.length
-  activeAnnouncementIndex.value = (activeAnnouncementIndex.value + direction + total) % total
-}
+  const total = announcements.value.length;
+  activeAnnouncementIndex.value =
+    (activeAnnouncementIndex.value + direction + total) % total;
+};
 
 const goToEventDetails = (eventId) => {
-  router.push({ name: 'EventDetails', params: { id: eventId } })
-}
+  router.push({ name: "EventDetails", params: { id: eventId } });
+};
 </script>
 
 <template>
   <main class="main-wrapper py-4 py-md-5">
     <div class="container">
-
       <!-- 1. EVENT ANNOUNCEMENTS & SPECIAL PROMOTIONS BANNER -->
       <section class="mb-4">
-        <div class="promo-ticker-bar rounded-4 p-3 p-md-4 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
+        <div
+          class="promo-ticker-bar rounded-4 p-3 p-md-4 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
           <div class="d-flex align-items-start align-items-md-center gap-3">
-            <div class="promo-icon-box rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
-              <i :class="['bi', announcements[activeAnnouncementIndex].icon, 'fs-4']"></i>
+            <div
+              class="promo-icon-box rounded-3 d-flex align-items-center justify-content-center flex-shrink-0">
+              <i
+                :class="[
+                  'bi',
+                  announcements[activeAnnouncementIndex].icon,
+                  'fs-4',
+                ]"></i>
             </div>
             <div>
               <div class="d-flex align-items-center gap-2 mb-1">
@@ -325,21 +359,20 @@ const goToEventDetails = (eventId) => {
             </div>
           </div>
 
-          <div class="d-flex align-items-center justify-content-end gap-2 flex-shrink-0">
+          <div
+            class="d-flex align-items-center justify-content-end gap-2 flex-shrink-0">
             <button
               type="button"
               class="btn btn-slider-ctrl btn-sm"
               @click="cycleAnnouncement(-1)"
-              aria-label="Previous announcement"
-            >
+              aria-label="Previous announcement">
               <i class="bi bi-chevron-left"></i>
             </button>
             <button
               type="button"
               class="btn btn-slider-ctrl btn-sm"
               @click="cycleAnnouncement(1)"
-              aria-label="Next announcement"
-            >
+              aria-label="Next announcement">
               <i class="bi bi-chevron-right"></i>
             </button>
           </div>
@@ -350,29 +383,31 @@ const goToEventDetails = (eventId) => {
       <section class="mb-4">
         <div class="row align-items-end g-3">
           <div class="col-lg-6">
-            <h1 class="display-6 fw-bold mb-1 text-white">Explore Event Listings</h1>
+            <h1 class="display-6 fw-bold mb-1 text-white">
+              Explore Event Listings
+            </h1>
             <p class="text-secondary-light small mb-0">
-              Discover live concerts, orchestral galas, and intimate lounge sessions across Metro Manila.
+              Discover live concerts, orchestral galas, and intimate lounge
+              sessions across Metro Manila.
             </p>
           </div>
 
           <div class="col-lg-6">
             <div class="input-group search-input-group">
-              <span class="input-group-text bg-transparent border-0 text-warning ps-3">
+              <span
+                class="input-group-text bg-transparent border-0 text-warning ps-3">
                 <i class="bi bi-search"></i>
               </span>
               <input
                 v-model="searchQuery"
                 type="text"
                 class="form-control bg-transparent border-0 text-white shadow-none"
-                placeholder="Search by event, artist, venue, or city..."
-              />
+                placeholder="Search by event, artist, venue, or city..." />
               <button
                 v-if="searchQuery"
                 class="btn btn-link text-secondary-light text-decoration-none"
                 type="button"
-                @click="searchQuery = ''"
-              >
+                @click="searchQuery = ''">
                 <i class="bi bi-x-lg"></i>
               </button>
             </div>
@@ -382,7 +417,8 @@ const goToEventDetails = (eventId) => {
 
       <!-- 3. CATEGORY PILLS, TICKETMASTER-STYLE DATE RANGE PICKER & FILTERS -->
       <section class="filter-panel rounded-4 p-3 p-md-4 mb-4">
-        <div class="d-flex flex-column flex-xl-row align-items-xl-center justify-content-between gap-3 pb-3 border-bottom border-secondary border-opacity-25">
+        <div
+          class="d-flex flex-column flex-xl-row align-items-xl-center justify-content-between gap-3 pb-3 border-bottom border-secondary border-opacity-25">
           <!-- Category Taxonomy Pills -->
           <div class="d-flex flex-wrap gap-2">
             <button
@@ -391,20 +427,20 @@ const goToEventDetails = (eventId) => {
               type="button"
               class="btn btn-sm rounded-pill px-3 py-2 fw-semibold"
               :class="selectedCategory === cat ? 'btn-login' : 'btn-register'"
-              @click="selectedCategory = cat"
-            >
+              @click="selectedCategory = cat">
               {{ cat }}
             </button>
           </div>
 
           <!-- Ticketmaster-Style Date Range Picker + View Mode Icons -->
           <div class="d-flex align-items-center gap-2 flex-wrap">
-            <div ref="datePickerRef" class="position-relative date-range-wrapper">
+            <div
+              ref="datePickerRef"
+              class="position-relative date-range-wrapper">
               <div
                 class="input-group input-group-sm date-range-trigger"
                 :class="{ active: isDatePickerOpen || appliedStartDate }"
-                @click="openDatePicker"
-              >
+                @click="openDatePicker">
                 <span class="input-group-text date-trigger-icon">
                   <i class="bi bi-calendar3"></i>
                 </span>
@@ -413,27 +449,26 @@ const goToEventDetails = (eventId) => {
                   readonly
                   class="form-control date-trigger-input shadow-none"
                   placeholder="Select date range"
-                  :value="appliedRangeInputText"
-                />
+                  :value="appliedRangeInputText" />
               </div>
 
               <!-- Dual-Month Calendar Popover -->
-              <div v-if="isDatePickerOpen" class="date-range-popover rounded-3 shadow-lg p-3">
+              <div
+                v-if="isDatePickerOpen"
+                class="date-range-popover rounded-3 shadow-lg p-3">
                 <!-- Navigation Arrows -->
                 <button
                   type="button"
                   class="btn btn-sm cal-nav-btn cal-nav-prev"
                   @click.stop="shiftCalendarMonths(-1)"
-                  aria-label="Previous month"
-                >
+                  aria-label="Previous month">
                   <i class="bi bi-chevron-left"></i>
                 </button>
                 <button
                   type="button"
                   class="btn btn-sm cal-nav-btn cal-nav-next"
                   @click.stop="shiftCalendarMonths(1)"
-                  aria-label="Next month"
-                >
+                  aria-label="Next month">
                   <i class="bi bi-chevron-right"></i>
                 </button>
 
@@ -442,9 +477,9 @@ const goToEventDetails = (eventId) => {
                   <div
                     v-for="cal in displayedCalendars"
                     :key="cal.title"
-                    class="col-12 col-md-6"
-                  >
-                    <div class="text-center fw-bold text-white mb-2 cal-month-title">
+                    class="col-12 col-md-6">
+                    <div
+                      class="text-center fw-bold text-white mb-2 cal-month-title">
                       {{ cal.title }}
                     </div>
 
@@ -452,8 +487,7 @@ const goToEventDetails = (eventId) => {
                       <span
                         v-for="wd in weekDays"
                         :key="wd"
-                        class="text-center fw-bold small text-secondary-light"
-                      >
+                        class="text-center fw-bold small text-secondary-light">
                         {{ wd }}
                       </span>
                     </div>
@@ -468,11 +502,10 @@ const goToEventDetails = (eventId) => {
                           'cal-day-outside': !cell.isCurrentMonth,
                           'cal-day-past': cell.isCurrentMonth && cell.isPast,
                           'cal-day-selected': isDaySelectedEndpoint(cell),
-                          'cal-day-in-range': isDayInRange(cell)
+                          'cal-day-in-range': isDayInRange(cell),
                         }"
                         :disabled="!cell.isCurrentMonth || cell.isPast"
-                        @click.stop="selectCalendarDay(cell)"
-                      >
+                        @click.stop="selectCalendarDay(cell)">
                         {{ cell.dayNumber }}
                       </button>
                     </div>
@@ -480,31 +513,30 @@ const goToEventDetails = (eventId) => {
                 </div>
 
                 <!-- Popover Footer: Range Preview + Clear / Cancel / Apply -->
-                <div class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2 pt-3 mt-3 border-top border-secondary border-opacity-25">
+                <div
+                  class="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-2 pt-3 mt-3 border-top border-secondary border-opacity-25">
                   <span class="small fw-semibold text-warning">
                     {{ tempRangeFooterText }}
                   </span>
 
-                  <div class="d-flex align-items-center gap-2 justify-content-end">
+                  <div
+                    class="d-flex align-items-center gap-2 justify-content-end">
                     <button
                       type="button"
                       class="btn btn-sm btn-register px-3"
-                      @click.stop="clearDateRange"
-                    >
+                      @click.stop="clearDateRange">
                       Clear
                     </button>
                     <button
                       type="button"
                       class="btn btn-sm btn-cancel-range px-3"
-                      @click.stop="cancelDateRange"
-                    >
+                      @click.stop="cancelDateRange">
                       Cancel
                     </button>
                     <button
                       type="button"
                       class="btn btn-sm btn-login px-3"
-                      @click.stop="applyDateRange"
-                    >
+                      @click.stop="applyDateRange">
                       Apply
                     </button>
                   </div>
@@ -519,8 +551,7 @@ const goToEventDetails = (eventId) => {
                 class="btn btn-sm px-2.5"
                 :class="viewMode === 'grid' ? 'btn-login' : 'btn-register'"
                 @click="viewMode = 'grid'"
-                title="Grid View"
-              >
+                title="Grid View">
                 <i class="bi bi-grid-fill"></i>
               </button>
               <button
@@ -528,8 +559,7 @@ const goToEventDetails = (eventId) => {
                 class="btn btn-sm px-2.5"
                 :class="viewMode === 'agenda' ? 'btn-login' : 'btn-register'"
                 @click="viewMode = 'agenda'"
-                title="List View"
-              >
+                title="List View">
                 <i class="bi bi-list-ul"></i>
               </button>
             </div>
@@ -542,9 +572,11 @@ const goToEventDetails = (eventId) => {
             <label class="form-label small text-secondary-light mb-1">
               <i class="bi bi-geo-alt text-warning me-1"></i>Location
             </label>
-            <select v-model="selectedLocation" class="form-select form-select-sm dark-select">
+            <select
+              v-model="selectedLocation"
+              class="form-select form-select-sm dark-select">
               <option v-for="loc in locations" :key="loc" :value="loc">
-                {{ loc === 'All' ? 'All Cities' : loc }}
+                {{ loc === "All" ? "All Cities" : loc }}
               </option>
             </select>
           </div>
@@ -553,20 +585,23 @@ const goToEventDetails = (eventId) => {
             <label class="form-label small text-secondary-light mb-1">
               <i class="bi bi-building text-warning me-1"></i>Venue
             </label>
-            <select v-model="selectedVenue" class="form-select form-select-sm dark-select">
+            <select
+              v-model="selectedVenue"
+              class="form-select form-select-sm dark-select">
               <option v-for="v in venues" :key="v" :value="v">
-                {{ v === 'All' ? 'All Venues' : v }}
+                {{ v === "All" ? "All Venues" : v }}
               </option>
             </select>
           </div>
-
 
           <div class="col-6 col-md-6 col-lg-3">
             <div class="d-flex justify-content-between small mb-1">
               <span class="text-secondary-light">
                 <i class="bi bi-tag text-warning me-1"></i>Max Price
               </span>
-              <span class="fw-bold text-warning">{{ formatPrice(maxPrice) }}</span>
+              <span class="fw-bold text-warning">{{
+                formatPrice(maxPrice)
+              }}</span>
             </div>
             <input
               v-model.number="maxPrice"
@@ -574,15 +609,16 @@ const goToEventDetails = (eventId) => {
               class="form-range gold-range"
               min="2500"
               max="15000"
-              step="500"
-            />
+              step="500" />
           </div>
 
           <div class="col-12 col-md-6 col-lg-2">
             <label class="form-label small text-secondary-light mb-1">
               <i class="bi bi-sort-down text-warning me-1"></i>Sort By
             </label>
-            <select v-model="sortBy" class="form-select form-select-sm dark-select">
+            <select
+              v-model="sortBy"
+              class="form-select form-select-sm dark-select">
               <option value="date-asc">Date: Soonest</option>
               <option value="date-desc">Date: Latest</option>
               <option value="price-asc">Price: Low to High</option>
@@ -593,40 +629,40 @@ const goToEventDetails = (eventId) => {
       </section>
 
       <!-- RESULTS COUNT & RESET LINK -->
-      <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+      <div
+        class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
         <span class="small text-secondary-light">
-          Showing <strong class="text-white">{{ filteredEvents.length }}</strong> of
+          Showing
+          <strong class="text-white">{{ filteredEvents.length }}</strong> of
           {{ events.length }} curated events
         </span>
         <button
           type="button"
           class="btn btn-register btn-sm py-1 px-3"
-          @click="resetFilters"
-        >
+          @click="resetFilters">
           <i class="bi bi-arrow-counterclockwise me-1"></i>Reset All Filters
         </button>
       </div>
 
       <!-- 4A. EVENT LISTINGS: 3-COLUMN CARD GRID VIEW -->
-      <section v-if="viewMode === 'grid' && filteredEvents.length > 0" class="mb-5">
+      <section
+        v-if="viewMode === 'grid' && filteredEvents.length > 0"
+        class="mb-5">
         <div class="row g-4">
           <div
             v-for="event in filteredEvents"
             :key="event._id"
-            class="col-md-6 col-lg-4"
-          >
+            class="col-md-6 col-lg-4">
             <div class="card event-card h-100 rounded-4 overflow-hidden">
               <div class="position-relative">
                 <img
                   :src="event.eventImage"
                   class="card-img-top event-card-img"
-                  :alt="event.eventName"
-                />
+                  :alt="event.eventName" />
 
                 <span
                   class="availability-badge"
-                  :class="getAvailabilityBadgeClass(event.availabilityStatus)"
-                >
+                  :class="getAvailabilityBadgeClass(event.availabilityStatus)">
                   <i class="bi bi-circle-fill me-1 extra-small"></i>
                   {{ event.availabilityStatus }}
                 </span>
@@ -635,7 +671,8 @@ const goToEventDetails = (eventId) => {
                   <i class="bi bi-calendar3 me-1"></i>{{ event.dateBadge }}
                 </span>
 
-                <div class="card-promo-overlay px-3 py-1 d-flex justify-content-between align-items-center">
+                <div
+                  class="card-promo-overlay px-3 py-1 d-flex justify-content-between align-items-center">
                   <span class="extra-small text-white">
                     <i class="bi bi-clock me-1"></i>{{ event.timeFormatted }}
                   </span>
@@ -643,15 +680,15 @@ const goToEventDetails = (eventId) => {
               </div>
 
               <div class="card-body d-flex flex-column p-4">
-                <div class="d-flex justify-content-between align-items-center mb-1">
+                <div
+                  class="d-flex justify-content-between align-items-center mb-1">
                   <span class="event-category">{{ event.eventCategory }}</span>
                 </div>
 
                 <h5
                   class="card-title fw-bold mb-1"
-                  style="cursor: pointer;"
-                  @click="goToEventDetails(event._id)"
-                >
+                  style="cursor: pointer"
+                  @click="goToEventDetails(event._id)">
                   {{ event.eventName }}
                 </h5>
                 <p class="small text-warning mb-2 fw-medium">
@@ -674,7 +711,7 @@ const goToEventDetails = (eventId) => {
                       {{
                         event.remainingTickets > 0
                           ? `${event.remainingTickets} seats left (${event.allocatedPercent}%)`
-                          : '100% Claimed'
+                          : "100% Claimed"
                       }}
                     </span>
                   </div>
@@ -682,14 +719,16 @@ const goToEventDetails = (eventId) => {
                     <div
                       class="progress-bar gold-progress-bar"
                       role="progressbar"
-                      :style="{ width: event.allocatedPercent + '%' }"
-                    ></div>
+                      :style="{ width: event.allocatedPercent + '%' }"></div>
                   </div>
                 </div>
 
-                <div class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top border-secondary border-opacity-25">
+                <div
+                  class="mt-auto d-flex justify-content-between align-items-center pt-3 border-top border-secondary border-opacity-25">
                   <div>
-                    <small class="d-block card-starting-text">Starting at</small>
+                    <small class="d-block card-starting-text"
+                      >Starting at</small
+                    >
                     <span class="fw-bold card-price">
                       {{ formatPrice(event.startingPrice) }}
                     </span>
@@ -698,15 +737,25 @@ const goToEventDetails = (eventId) => {
                   <button
                     type="button"
                     class="btn btn-sm px-3 py-2"
-                    :class="event.availabilityStatus === 'Sold Out' ? 'btn-secondary disabled' : 'btn-login'"
+                    :class="
+                      event.availabilityStatus === 'Sold Out'
+                        ? 'btn-secondary disabled'
+                        : 'btn-login'
+                    "
                     :disabled="event.availabilityStatus === 'Sold Out'"
-                    @click="goToEventDetails(event._id)"
-                  >
+                    @click="goToEventDetails(event._id)">
                     <i
                       class="bi me-1"
-                      :class="event.availabilityStatus === 'Sold Out' ? 'bi-slash-circle' : 'bi-ticket-perforated'"
-                    ></i>
-                    {{ event.availabilityStatus === 'Sold Out' ? 'Sold Out' : 'Get Tickets' }}
+                      :class="
+                        event.availabilityStatus === 'Sold Out'
+                          ? 'bi-slash-circle'
+                          : 'bi-ticket-perforated'
+                      "></i>
+                    {{
+                      event.availabilityStatus === "Sold Out"
+                        ? "Sold Out"
+                        : "Get Tickets"
+                    }}
                   </button>
                 </div>
               </div>
@@ -716,74 +765,98 @@ const goToEventDetails = (eventId) => {
       </section>
 
       <!-- 4B. EVENT LISTINGS: CALENDAR AGENDA LIST VIEW -->
-      <section v-else-if="viewMode === 'agenda' && filteredEvents.length > 0" class="mb-5">
+      <section
+        v-else-if="viewMode === 'agenda' && filteredEvents.length > 0"
+        class="mb-5">
         <div class="d-flex flex-column gap-3">
           <div
             v-for="event in filteredEvents"
             :key="event._id"
-            class="agenda-row rounded-4 p-3 p-md-4 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3"
-          >
+            class="agenda-row rounded-4 p-3 p-md-4 d-flex flex-column flex-lg-row align-items-lg-center justify-content-between gap-3">
             <div class="d-flex align-items-center gap-3">
-              <div class="agenda-date-box rounded-3 text-center d-flex flex-column justify-content-center flex-shrink-0">
-                <span class="extra-small fw-bold text-warning text-uppercase">{{ event.dayOfWeek }}</span>
-                <span class="fs-4 fw-bold text-white lh-1 my-1">{{ event.dayNumber }}</span>
-                <span class="extra-small text-secondary-light">{{ event.monthShort }}</span>
+              <div
+                class="agenda-date-box rounded-3 text-center d-flex flex-column justify-content-center flex-shrink-0">
+                <span class="extra-small fw-bold text-warning text-uppercase">{{
+                  event.dayOfWeek
+                }}</span>
+                <span class="fs-4 fw-bold text-white lh-1 my-1">{{
+                  event.dayNumber
+                }}</span>
+                <span class="extra-small text-secondary-light">{{
+                  event.monthShort
+                }}</span>
               </div>
 
               <img
                 :src="event.eventImage"
                 :alt="event.eventName"
-                class="agenda-thumb rounded-3 d-none d-sm-block flex-shrink-0"
-              />
+                class="agenda-thumb rounded-3 d-none d-sm-block flex-shrink-0" />
 
               <div>
                 <div class="d-flex flex-wrap align-items-center gap-2 mb-1">
-                  <span class="badge bg-dark border border-secondary text-warning">
+                  <span
+                    class="badge bg-dark border border-secondary text-warning">
                     {{ event.timeFormatted }}
                   </span>
                   <span class="event-category">{{ event.eventCategory }}</span>
                   <span
                     class="availability-badge position-static py-0 px-2"
-                    :class="getAvailabilityBadgeClass(event.availabilityStatus)"
-                  >
+                    :class="
+                      getAvailabilityBadgeClass(event.availabilityStatus)
+                    ">
                     {{ event.availabilityStatus }}
                   </span>
                 </div>
                 <h5
                   class="fw-bold text-white mb-1"
-                  style="cursor: pointer;"
-                  @click="goToEventDetails(event._id)"
-                >
+                  style="cursor: pointer"
+                  @click="goToEventDetails(event._id)">
                   {{ event.eventName }}
                 </h5>
                 <p class="small text-secondary-light mb-0">
-                  <i class="bi bi-person-badge text-warning me-1"></i>{{ event.artistName }} &nbsp;|&nbsp;
-                  <i class="bi bi-geo-alt text-warning me-1"></i>{{ event.venueName }}, {{ event.location }}
+                  <i class="bi bi-person-badge text-warning me-1"></i
+                  >{{ event.artistName }} &nbsp;|&nbsp;
+                  <i class="bi bi-geo-alt text-warning me-1"></i
+                  >{{ event.venueName }}, {{ event.location }}
                 </p>
               </div>
             </div>
 
-            <div class="d-flex flex-wrap align-items-center justify-content-between justify-content-lg-end gap-4 pt-2 pt-lg-0 border-top border-lg-0 border-secondary border-opacity-25">
+            <div
+              class="d-flex flex-wrap align-items-center justify-content-between justify-content-lg-end gap-4 pt-2 pt-lg-0 border-top border-lg-0 border-secondary border-opacity-25">
               <div class="text-lg-end">
                 <span class="small fw-semibold text-white">
-                  {{ event.remainingTickets > 0 ? `${event.remainingTickets} Seats Left` : 'Waitlist Only' }}
+                  {{
+                    event.remainingTickets > 0
+                      ? `${event.remainingTickets} Seats Left`
+                      : "Waitlist Only"
+                  }}
                 </span>
               </div>
 
               <div class="text-lg-end">
                 <small class="d-block card-starting-text">Starting at</small>
-                <span class="fw-bold card-price">{{ formatPrice(event.startingPrice) }}</span>
+                <span class="fw-bold card-price">{{
+                  formatPrice(event.startingPrice)
+                }}</span>
               </div>
 
               <button
                 type="button"
                 class="btn btn-sm px-3 py-2"
-                :class="event.availabilityStatus === 'Sold Out' ? 'btn-secondary disabled' : 'btn-login'"
+                :class="
+                  event.availabilityStatus === 'Sold Out'
+                    ? 'btn-secondary disabled'
+                    : 'btn-login'
+                "
                 :disabled="event.availabilityStatus === 'Sold Out'"
-                @click="goToEventDetails(event._id)"
-              >
+                @click="goToEventDetails(event._id)">
                 <i class="bi bi-ticket-perforated me-1"></i>
-                {{ event.availabilityStatus === 'Sold Out' ? 'Sold Out' : 'Select Seats' }}
+                {{
+                  event.availabilityStatus === "Sold Out"
+                    ? "Sold Out"
+                    : "Select Seats"
+                }}
               </button>
             </div>
           </div>
@@ -794,17 +867,25 @@ const goToEventDetails = (eventId) => {
       <section v-else class="text-center py-5 my-4 filter-panel rounded-4">
         <i class="bi bi-calendar-x display-4 text-warning mb-3 d-block"></i>
         <h4 class="fw-bold text-white">No Matching Events Found</h4>
-        <p class="text-secondary-light small mx-auto mb-4" style="max-width: 440px;">
-          No events match your current search or selected date range. Try clearing your filters or adjusting your date range.
+        <p
+          class="text-secondary-light small mx-auto mb-4"
+          style="max-width: 440px">
+          No events match your current search or selected date range. Try
+          clearing your filters or adjusting your date range.
         </p>
-        <button type="button" class="btn btn-login px-4 py-2" @click="resetFilters">
-          <i class="bi bi-arrow-counterclockwise me-1"></i>Clear Filters &amp; View All
+        <button
+          type="button"
+          class="btn btn-login px-4 py-2"
+          @click="resetFilters">
+          <i class="bi bi-arrow-counterclockwise me-1"></i>Clear Filters &amp;
+          View All
         </button>
       </section>
 
       <!-- 5. VIP MEMBERSHIP & PRESALE PROMOTION BANNER -->
       <section class="py-3">
-        <div class="card event-card p-4 p-md-5 rounded-4 border-warning border-opacity-50 position-relative overflow-hidden">
+        <div
+          class="card event-card p-4 p-md-5 rounded-4 border-warning border-opacity-50 position-relative overflow-hidden">
           <div class="row align-items-center g-4">
             <div class="col-lg-8">
               <span class="hero-badge mb-2 d-inline-block p-2">
@@ -814,20 +895,32 @@ const goToEventDetails = (eventId) => {
                 Unlock Bronze, Silver &amp; Gold Presale Privileges
               </h3>
               <p class="text-secondary-light small mb-3">
-                Subscribe to a Shapipy Membership tier to enjoy automatic ticket discounts at checkout, priority 48-hour presale access, and complimentary lounge hospitality on featured shows.
+                Subscribe to a Shapipy Membership tier to enjoy automatic ticket
+                discounts at checkout, priority 48-hour presale access, and
+                complimentary lounge hospitality on featured shows.
               </p>
               <div class="d-flex flex-wrap gap-4 pt-1">
                 <div>
-                  <span class="fs-5 fw-bold text-warning d-block">Up to 20%</span>
-                  <span class="extra-small text-uppercase text-secondary-light">Ticket Discounts</span>
+                  <span class="fs-5 fw-bold text-warning d-block"
+                    >Up to 20%</span
+                  >
+                  <span class="extra-small text-uppercase text-secondary-light"
+                    >Ticket Discounts</span
+                  >
                 </div>
                 <div>
                   <span class="fs-5 fw-bold text-white d-block">48-Hour</span>
-                  <span class="extra-small text-uppercase text-secondary-light">Early Presale Access</span>
+                  <span class="extra-small text-uppercase text-secondary-light"
+                    >Early Presale Access</span
+                  >
                 </div>
                 <div>
-                  <span class="fs-5 fw-bold text-warning d-block">Priority</span>
-                  <span class="extra-small text-uppercase text-secondary-light">VIP Seat Selection</span>
+                  <span class="fs-5 fw-bold text-warning d-block"
+                    >Priority</span
+                  >
+                  <span class="extra-small text-uppercase text-secondary-light"
+                    >VIP Seat Selection</span
+                  >
                 </div>
               </div>
             </div>
@@ -839,7 +932,6 @@ const goToEventDetails = (eventId) => {
           </div>
         </div>
       </section>
-
     </div>
   </main>
 </template>
@@ -847,11 +939,19 @@ const goToEventDetails = (eventId) => {
 <style scoped>
 .main-wrapper {
   background:
-    radial-gradient(circle at 85% 20%, rgba(158, 28, 78, 0.16), transparent 50%),
-    radial-gradient(circle at 20% 50%, rgba(243, 198, 79, 0.08), transparent 50%),
+    radial-gradient(
+      circle at 85% 20%,
+      rgba(158, 28, 78, 0.16),
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 20% 50%,
+      rgba(243, 198, 79, 0.08),
+      transparent 50%
+    ),
     var(--bg-primary);
   min-height: 100vh;
-  font-family: 'Montserrat', sans-serif;
+  font-family: "Montserrat", sans-serif;
 }
 
 .text-secondary-light {
@@ -871,7 +971,11 @@ const goToEventDetails = (eventId) => {
 
 /* Announcements & Promo Banner */
 .promo-ticker-bar {
-  background: linear-gradient(90deg, rgba(20, 20, 22, 0.95) 0%, rgba(158, 28, 78, 0.18) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(20, 20, 22, 0.95) 0%,
+    rgba(158, 28, 78, 0.18) 100%
+  );
   border: 1px solid rgba(243, 198, 79, 0.3);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.45);
 }
@@ -1123,7 +1227,11 @@ const goToEventDetails = (eventId) => {
 .event-card {
   background-color: var(--bg-surface);
   border: 1px solid var(--border-subtle);
-  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    background-color 0.3s ease;
 }
 
 .event-card:hover {
@@ -1201,7 +1309,11 @@ const goToEventDetails = (eventId) => {
   bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(180deg, transparent 0%, rgba(11, 11, 12, 0.92) 100%);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(11, 11, 12, 0.92) 100%
+  );
 }
 
 .event-category {
