@@ -1,5 +1,5 @@
 <script setup>
-import { useGlobalStore} from '../stores/global.js';
+import { useGlobalStore } from '../stores/global.js';
 const { user } = useGlobalStore();
 </script>
 
@@ -77,6 +77,16 @@ const { user } = useGlobalStore();
                     <router-link to=#>Privacy Policy</router-link>
                     <router-link to=#>Terms of Service</router-link>
                 </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Simple Admin Footer -->
+    <footer class="footer-section py-4 mt-auto" v-else>
+        <div class="container d-flex flex-column flex-sm-row justify-content-center align-items-center gap-2 small">
+            <div>
+                <i class="bi bi-shield-lock-fill me-1 footer-text-gold"></i>
+                <span class="footer-text-main fw-semibold">G-ONE</span> Admin Panel &bull; &copy; 2026
             </div>
         </div>
     </footer>

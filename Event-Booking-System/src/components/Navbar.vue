@@ -92,12 +92,12 @@ const handleSelectEvent = (event) => {
 						</button>
 						<ul class="dropdown-menu dropdown-menu-end navbar-user-dropdown shadow-lg rounded-4 mt-2" aria-labelledby="mobileUserMenuDropdown">
 							<li>
-								<router-link class="dropdown-item d-flex align-items-center gap-2" to="/profile">
+								<router-link class="dropdown-item d-flex align-items-center gap-2" to="/profile" v-if="!user?.isAdmin">
 									<i class="bi bi-person"></i>My Profile
 								</router-link>
 							</li>
 							<li>
-								<router-link class="dropdown-item d-flex align-items-center gap-2" to="/MyTickets">
+								<router-link class="dropdown-item d-flex align-items-center gap-2" to="/MyTickets" v-if="!user?.isAdmin">
 									<i class="bi bi-ticket-perforated"></i>My Ticket
 								</router-link>
 							</li>
@@ -286,12 +286,12 @@ const handleSelectEvent = (event) => {
 						</button>
 						<ul class="dropdown-menu dropdown-menu-end navbar-user-dropdown shadow-lg rounded-4 mt-2" aria-labelledby="desktopUserMenuDropdown">
 							<li>
-								<router-link class="dropdown-item d-flex align-items-center gap-2" to="/profile">
+								<router-link class="dropdown-item d-flex align-items-center gap-2" to="/profile" v-if="!user?.isAdmin">
 									<i class="bi bi-person"></i>My Profile
 								</router-link>
 							</li>
 							<li>
-								<router-link class="dropdown-item d-flex align-items-center gap-2" to="/MyTickets">
+								<router-link class="dropdown-item d-flex align-items-center gap-2" to="/MyTickets" v-if="!user?.isAdmin">
 									<i class="bi bi-ticket-perforated"></i>My Ticket
 								</router-link>
 							</li>
