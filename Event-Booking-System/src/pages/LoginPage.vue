@@ -1,7 +1,7 @@
 <script setup>
-import { ref, watch } from 'vue';
-import { Notyf } from 'notyf';
-import {useGlobalStore} from "../stores/global.js";
+import { ref, watch } from "vue";
+import { Notyf } from "notyf";
+import { useGlobalStore } from "../stores/global.js";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -13,38 +13,43 @@ const email = ref("");
 const password = ref("");
 
 watch([email, password], (currentValue) => {
-
-    if(currentValue.every(input => input !== "")){
-        isEnabled.value = true;
-    }
-    else
-    {
-        isEnabled.value = false;
-    }
+  if (currentValue.every((input) => input !== "")) {
+    isEnabled.value = true;
+  } else {
+    isEnabled.value = false;
+  }
 });
 
-function handleSubmit (event){
-    event.preventDefault();
-    localStorage.setItem("email", email.value);
-    getUserDetails (email.value);
+function handleSubmit(event) {
+  event.preventDefault();
+  localStorage.setItem("email", email.value);
+  getUserDetails(email.value);
 
-    notyf.success("Login Successful");
+  notyf.success("Login Successful");
 
-    email.value = "";
-    password.value = "";
-    router.push({ path : '/'});    
+  const enteredEmail = email.value;
+  email.value = "";
+  password.value = "";
+
+  // Redirect based on whether the email is admin@mail.com
+  if (enteredEmail === "admin@mail.com") {
+    router.push({ path: "/adminEventList" });
+  } else {
+    router.push({ path: "/" });
+  }
 }
 </script>
 
 <template>
   <div
     data-bs-theme="dark"
-    class="login-page container-fluid min-vh-100 d-flex justify-content-center align-items-start pt-5 pb-5 px-3"
-  >
-    <div class="card login-card w-100 mt-3 mt-md-4 rounded-4 shadow-lg overflow-hidden">
+    class="login-page container-fluid min-vh-100 d-flex justify-content-center align-items-start pt-5 pb-5 px-3">
+    <div
+      class="card login-card w-100 mt-3 mt-md-4 rounded-4 shadow-lg overflow-hidden">
       <div class="login-card-accent"></div>
 
-      <div class="card-body p-4 p-md-5 d-flex flex-column justify-content-between">
+      <div
+        class="card-body p-4 p-md-5 d-flex flex-column justify-content-between">
         <!-- Header with Centered Bootstrap Icon -->
         <div class="text-center mb-4 pb-3 border-bottom login-border-subtle">
           <div class="login-icon-container mb-3 mx-auto">
@@ -62,7 +67,9 @@ function handleSubmit (event){
         <form @submit="handleSubmit" class="d-flex flex-column gap-3">
           <!-- Email Address -->
           <div>
-            <label for="email" class="form-label fw-semibold small login-form-label">
+            <label
+              for="email"
+              class="form-label fw-semibold small login-form-label">
               Email Address
             </label>
             <input
@@ -72,12 +79,13 @@ function handleSubmit (event){
               class="form-control form-control-lg login-custom-input"
               placeholder="name@example.com"
               autocomplete="email"
-              required
-            />
+              required />
           </div>
           <!-- Password -->
           <div>
-            <label for="password" class="form-label fw-semibold small login-form-label">
+            <label
+              for="password"
+              class="form-label fw-semibold small login-form-label">
               Password
             </label>
             <div class="input-group input-group-lg">
@@ -88,14 +96,12 @@ function handleSubmit (event){
                 class="form-control login-custom-input border-end-0"
                 placeholder="Enter your password"
                 autocomplete="current-password"
-                required
-              />
+                required />
               <button
                 type="button"
                 class="btn login-custom-toggle-btn border-start-0 px-3"
-                @click="showPassword = !showPassword"
-              >
-                {{ showPassword ? 'Hide' : 'Show' }}
+                @click="showPassword = !showPassword">
+                {{ showPassword ? "Hide" : "Show" }}
               </button>
             </div>
           </div>
@@ -104,19 +110,26 @@ function handleSubmit (event){
             <button
               type="submit"
               class="btn btn-lg login-submit-btn fw-bold py-3"
-              :disabled="!isEnabled"
-            >
+              :disabled="!isEnabled">
               Sign In <span class="ms-1">→</span>
             </button>
           </div>
           <!-- Footer Links: Forgot Password & Create Account -->
-          <div class="d-flex justify-content-between align-items-center login-text-muted small mt-1">
-            <router-link to="/forgot-password" class="login-gold-link" @click.prevent>
+          <div
+            class="d-flex justify-content-between align-items-center login-text-muted small mt-1">
+            <router-link
+              to="/forgot-password"
+              class="login-gold-link"
+              @click.prevent>
               Forgot password?
             </router-link>
             <p class="mb-0">
               Don't have an account?
-              <router-link to="/register" class="login-gold-link fw-semibold ms-1">Create an account</router-link>
+              <router-link
+                to="/register"
+                class="login-gold-link fw-semibold ms-1"
+                >Create an account</router-link
+              >
             </p>
           </div>
         </form>
@@ -226,7 +239,8 @@ function handleSubmit (event){
 
 .login-custom-input:focus {
   border-color: var(--gold-accent);
-  box-shadow: 0 0 0 0.2rem color-mix(in srgb, var(--gold-accent) 22%, transparent);
+  box-shadow: 0 0 0 0.2rem
+    color-mix(in srgb, var(--gold-accent) 22%, transparent);
 }
 
 .input-group:focus-within .login-custom-input,
@@ -241,7 +255,9 @@ function handleSubmit (event){
   border: none;
   border-radius: 0.65rem;
   font-size: 1rem;
-  transition: background-color 0.2s ease, transform 0.15s ease;
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease;
 }
 
 .login-submit-btn:hover:not(:disabled),
