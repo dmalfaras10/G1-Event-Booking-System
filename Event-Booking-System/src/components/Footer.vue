@@ -160,4 +160,16 @@ const { user } = useGlobalStore();
       </div>
     </div>
   </footer>
+
+  <!-- Simple Admin Footer -->
+  <footer class="footer-section py-4 mt-auto" v-else>
+    <div
+      class="container d-flex flex-column flex-sm-row justify-content-center align-items-center gap-2 small">
+      <div>
+        <i class="bi bi-shield-lock-fill me-1 footer-text-gold"></i>
+        <span class="footer-text-main fw-semibold">G-ONE</span> Admin Panel
+        &bull; &copy; 2026
+      </div>
+    </div>
+  </footer>
 </template>

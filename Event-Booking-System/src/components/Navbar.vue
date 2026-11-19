@@ -97,14 +97,16 @@ const handleSelectEvent = (event) => {
               <li>
                 <router-link
                   class="dropdown-item d-flex align-items-center gap-2"
-                  to="/profile">
+                  to="/profile"
+                  v-if="!user?.isAdmin">
                   <i class="bi bi-person"></i>My Profile
                 </router-link>
               </li>
               <li>
                 <router-link
                   class="dropdown-item d-flex align-items-center gap-2"
-                  to="/MyTickets">
+                  to="/MyTickets"
+                  v-if="!user?.isAdmin">
                   <i class="bi bi-ticket-perforated"></i>My Ticket
                 </router-link>
               </li>
@@ -351,14 +353,16 @@ const handleSelectEvent = (event) => {
               <li>
                 <router-link
                   class="dropdown-item d-flex align-items-center gap-2"
-                  to="/profile">
+                  to="/profile"
+                  v-if="!user?.isAdmin">
                   <i class="bi bi-person"></i>My Profile
                 </router-link>
               </li>
               <li>
                 <router-link
                   class="dropdown-item d-flex align-items-center gap-2"
-                  to="/MyTickets">
+                  to="/MyTickets"
+                  v-if="!user?.isAdmin">
                   <i class="bi bi-ticket-perforated"></i>My Ticket
                 </router-link>
               </li>
